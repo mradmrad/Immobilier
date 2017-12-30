@@ -1,0 +1,100 @@
+<div id="page_content_inner">
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+            {{ form_errors(form) }}
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE856;</i>
+                            </span>
+                            {{ form_label(form.title,   "Titre"  ) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-title':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.title) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row" style="margin-top: 33px;">
+                        <div class="uk-input-group">
+                            {{ form_widget(form.showCalendar) }}
+                            {{ form_label(form.showCalendar,   " Afficher cette tache dans le calendrier "  ) }}
+
+                        </div>
+                        <span>     {{ form_errors(form.showCalendar) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row uk-form-row">
+                        <span class="uk-form-help-block">{{ form_label(form.icon, "Icône" ) }}</span>
+                        <div class="dynamic_radio uk-margin-small-top">
+                            {% for child in form.icon %}
+                                <span class="icheck-inline">
+                                     <i class="md-icon md-list-addon-icon material-icons">{{ child.vars.value }}</i>
+                                    {{ form_widget(child) }}
+                                </span>
+                            {% endfor %}
+                            <span>{{ form_errors(form.icon) }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        {{ form_widget(form.class, {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                        <span class="uk-form-help-block">Cliquez pour selectionner</span>
+                        <span>     {{ form_errors(form.class) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    {{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var domName = $('#sbc_bienbundle_typetache_title');
+        var oldname = domName.val().toUpperCase();
+        domName.on('change', function () {
+            var name = domName.val().toUpperCase();
+            var url = '{{ path('typetache_bytitle', {'title': 'titlE'}) }}';
+            url = url.replace('titlE', name);
+            if (name !== oldname) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('title', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Ce type de tâche existe déjà',
+                                    fr: "Ce type de tâche existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('title', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domName.parsley().validate();
+                    }
+                });
+            }
+        });
+    });
+</script>

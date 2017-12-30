@@ -1,0 +1,18 @@
+message_index:
+    path:      /
+    defaults: {_controller: MessageBundle:Message:index}
+    methods:  [GET, POST]
+
+message_list:
+    path:      /list/{id}
+    defaults: {_controller: MessageBundle:Message:list}
+    methods:  [GET, POST]
+    options:
+        expose: false
+
+message_add:
+    path:      /add
+    defaults:
+        _controller: MessageBundle:Message:add
+    methods:  [GET, POST]
+

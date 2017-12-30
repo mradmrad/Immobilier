@@ -1,0 +1,749 @@
+{#<div id="page_content_inner">#}
+
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                             <i class="material-icons">&#xE55E;</i>
+                            </span>
+
+                            <select id="gouvernorat" data-md-selectize data-md-selectize-bottom
+                                    onchange="getGouvernorats(this)" placeholder="Choisir une gouvenrnorat">
+                                <option></option>
+                                {% for gouvernorat in gouvernorats %}
+                                    <option value="{{ gouvernorat.id }}"> {{ gouvernorat.name }}</option>
+                                {% endfor %}
+
+                            </select>
+                            <span class="uk-form-help-block">Gouvernorat</span>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE55F;</i>
+                            </span>
+
+                            <select id="ville" data-md-selectize data-md-selectize-bottom onchange="getVilles(this)"
+                                    placeholder="Choisir une ville">
+                            </select>
+                            <span class="uk-form-help-block">Ville</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                         style="padding-top: 22px;"
+                    >
+                        <div class="uk-input-group">
+                            <a hidden id="ajouterVille" title="Ajouter une ville" data-uk-modal="{target:'#modal-ajouterVille'}"><i
+                                        class="material-icons md-24">&#xE146;</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE569;</i>
+                            </span>
+                            <select id="localite" data-md-selectize data-md-selectize-bottom
+                                    onchange="getLocalites(this)" placeholder="Choisir une localité">
+                            </select>
+                            <span class="uk-form-help-block">Localité</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                         style="padding-top: 22px;"
+                    >
+                        <div class="uk-input-group">
+                            <a hidden id="ajouterLocalite" title="Ajouter une localité" data-uk-modal="{target:'#modal-ajouterLocalite'}"><i
+                                        class="material-icons md-24">&#xE146;</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon"><i class="material-icons">&#xE566;</i>  </span>
+                            {#{{ form_label(form.rue, "Rue"|trans) }}#}
+                            <select id="rue" name="sbc_geotunisiebundle_adresse_rue" data-md-selectize
+                                    data-md-selectize-bottom
+                                    placeholder="Choisir une rue">
+                            </select>
+                            {#{{ form_widget(form.rue) }}#}
+                            <span class="uk-form-help-block">Rue</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                         style="padding-top: 22px;"
+                    >
+                        <div class="uk-input-group">
+                            <a hidden id="ajouterRue" title="Ajouter une rue" data-uk-modal="{target:'#modal-ajouterRue'}"><i
+                                        class="material-icons md-24">&#xE146;</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+            </div>
+
+            <form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        <div class="parsley-row"
+                                {#style="padding-top: 22px;"#}
+                        >
+                            <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE84F;</i>
+                            </span>
+                                <label> Adresse</label>
+                                {#{{ form_widget(form.name, {'attr': {'class': 'md-input', 'required':'','data-parsley-name':'1'}}) }}#}
+                                <input type="text" id="adresseName" class="md-input" required data-parsley-adresse="1"
+                                       name="adresse"
+                                       value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-1-1">
+                        <button type="button" class="md-btn md-btn-primary" onclick="newAdresse(this)">Save</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+{#</div>#}
+
+<div class="uk-modal" id="modal-ajouterVille">
+    <div class="uk-modal-dialog">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-modal-header"><h2>Ajouter une ville</h2></div>
+        <form method="POST" name="form_ville" action="#" class="uk-form-stacked">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE55E;</i>
+                            </span>
+
+                            <input id="gov" class="md-input" name="" type="text" value="" readonly />
+                            <input id="govValue" name="gouvernoratt" type="hidden" value="" />
+                            <span class="uk-form-help-block">Gouvernorat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE55F;</i>
+                            </span>
+                            <label>Ville</label>
+                            <input id="villeName" class="md-input" name="villeName" type="text" value=""
+                                   data-parsley-ville="3" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE0DA;</i>
+                            </span>
+                            <label>Code postal</label>
+                            <input id="postCodeName" class="md-input" name="postCodeName" type="number" value=""
+                                   data-parsley-postcode="3" required data-parsley-maxlength="4"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="uk-modal-footer uk-text-left">
+            <button type="button" class="md-btn md-btn-primary" onclick="newVille(this)">Save</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="uk-modal" id="modal-ajouterLocalite">
+    <div class="uk-modal-dialog">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-modal-header"><h2>Ajouter une localité</h2></div>
+        <form method="POST" name="form_localite" action="#">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE55F;</i>
+                            </span>
+
+                            <input id="vill" class="md-input" name="" type="text" value="" readonly/>
+
+                            <input id="villValue" name="villee" type="hidden" value=""/>
+                            <span class="uk-form-help-block">Ville</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE569;</i>
+                            </span>
+                            <label>Localité</label>
+                            <input id="localiteName" class="md-input" name="localiteName" type="text" value=""
+                                   data-parsley-localite="3" required/>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="uk-modal-footer uk-text-left">
+            <button type="button" class="md-btn md-btn-primary" onclick="newLocalite()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="uk-modal" id="modal-ajouterRue">
+    <div class="uk-modal-dialog">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-modal-header"><h2>Ajouter une rue</h2></div>
+        <form method="POST" name="form_rue" action="#">
+            <div class="uk-grid" data-uk-grid-margin>
+
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE569;</i>
+                            </span>
+
+                            <input id="local" class="md-input" name="" type="text" value="" readonly/>
+                            <input id="localValue" name="localitee" type="hidden" value=""/>
+                            <span class="uk-form-help-block">Localité</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                               <i class="material-icons">&#xE566;</i>
+                            </span>
+                            <label>Rue</label>
+                            <input id="rueName" class="md-input" name="rueName" type="text" value=""
+                                   data-parsley-rue="3" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="uk-modal-footer uk-text-left">
+            <button type="button" class="md-btn md-btn-primary" onclick="newRue()">Save</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var ville = $('#ville');
+    var localite = $('#localite');
+    var rue = $('#rue');
+    var gouvernorat = $('#gouvernorat');
+
+    var gov = $('#gov');
+    var local = $('#local');
+    var vill = $('#vill');
+
+    var govValue = $('#govValue');
+    var localValue = $('#localValue');
+    var villValue = $('#villValue');
+
+    function getGouvernorats(select) {
+        var gouvernorat = $(select).val();
+        gov.val($(select).text());
+        govValue.val(gouvernorat);
+        var url = '{{ path('villes_bygouvernorat') }}';
+        var villes = ville[0].selectize;
+        villes.clearOptions();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: 'q=' + gouvernorat,
+            success: function (data) {
+                if (data != null) {
+                    $.each(data, function (key, element) {
+                        villes.addOption({
+                            text: element.text,
+                            value: element.value
+                        });
+                    });
+                    $('#ajouterVille').show();
+                }
+                else {
+                    ville.html("<option>No Data </option>");
+                }
+            },
+            error: function (exception) {
+                console.log(exception.responseText);
+                ville.html("<option>ERROR 500</option>");
+            }
+        });
+    }
+
+    function getVilles(select) {
+        var ville = $(select).val();
+        vill.val($(select).text());
+        villValue.val(ville);
+        var url = '{{ path('localites_byville') }}';
+        var localites = localite[0].selectize;
+        localites.clearOptions();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: 'q=' + ville,
+            success: function (data) {
+                if (data != null) {
+                    $.each(data, function (key, element) {
+                        localites.addOption({
+                            text: element.text,
+                            value: element.value
+                        });
+                    });
+                    $('#ajouterLocalite').show();
+                }
+                else {
+                    localite.html("<option>No Data </option>");
+                }
+            },
+            error: function (exception) {
+                console.log(exception.responseText);
+                localite.html("<option>ERROR 500</option>");
+            }
+        });
+    }
+
+    function getLocalites(select) {
+        var localite = $(select).val();
+        local.val($(select).text());
+        localValue.val(localite);
+        var url = '{{ path('rues_bylocalite') }}';
+        var rues = rue[0].selectize;
+        rues.clearOptions();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: 'q=' + localite,
+            success: function (data) {
+                if (data != null) {
+                    $.each(data, function (key, element) {
+                        rues.addOption({
+                            text: element.text,
+                            value: element.value
+                        });
+                    });
+                    $('#ajouterRue').show();
+                }
+                else {
+                    rue.html("<option>No Data </option>");
+                }
+            },
+            error: function (exception) {
+                console.log(exception.responseText);
+                rue.html("<option>ERROR 500</option>");
+            }
+        });
+    }
+
+    function newVille() {
+        var villeName = $('#villeName');
+        var postCodeName = $('#postCodeName');
+
+        var villeNameIsValid = villeName.parsley().isValid();
+        var postCodeIsValid = postCodeName.parsley().isValid();
+
+        if (villeNameIsValid || postCodeIsValid) {
+
+            var url = '{{ path('ville_new') }}';
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                data: "ville=" + villeName.val() + "&codepostale=" + postCodeName.val() + "&gouvernorat=" + govValue.val(),
+                success: function (json) {
+                    console.log(JSON.stringify(json));
+                    if (json.success == false || json.message != '') {
+                        // declancher une exeption
+                        window.Parsley.addValidator('ville', {
+                            validateString: function (value) {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Cette ville existe déjà.',
+                                fr: "Cette ville existe déjà"
+                            }
+                        });
+
+                        villeName.on('change', function () {
+                            window.Parsley.addValidator('ville', {
+                                validateString: function (value) {
+                                    return true;
+                                }
+                            });
+                            villeName.parsley().validate();
+                        });
+
+                    } else {
+                        window.Parsley.addValidator('ville', {
+                            validateString: function (value) {
+                                return true;
+                            }
+                        });
+
+                        UIkit.modal.alert('La ville a été ajoutée avec succès');
+
+//                        var localite = $('#localite');
+                        var villes = ville[0].selectize;
+                        villes.addOption({
+                            text: json.villeName,
+                            value: json.id
+                        });
+                        villes.addItem(json.id);
+
+                    }
+                    villeName.parsley().validate();
+                },
+                error: function (json) {
+                    console.log(JSON.stringify(json));
+                    villeName.parsley().validate();
+
+                }
+            });
+
+        }
+        else {
+            villeName.parsley().validate();
+            postCodeName.parsley().validate();
+        }
+    }
+
+
+    function newLocalite() {
+
+        var localiteName = $('#localiteName');
+        var localiteNameIsValid = localiteName.parsley().isValid();
+
+        if (localiteNameIsValid) {
+
+            var url = '{{ path('localite_new') }}';
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                data: "localite=" + localiteName.val() + "&ville=" + villValue.val(),
+                success: function (json) {
+                    console.log(JSON.stringify(json));
+                    if (json.success == false || json.message != '') {
+                        // declancher une exeption
+                        window.Parsley.addValidator('localite', {
+                            validateString: function (value) {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Cette localité existe déjà.',
+                                fr: "Cette localité existe déjà"
+                            }
+                        });
+
+                        localiteName.on('change', function () {
+                            window.Parsley.addValidator('localite', {
+                                validateString: function (value) {
+                                    return true;
+                                }
+                            });
+                            localiteName.parsley().validate();
+                        });
+
+                    } else {
+                        window.Parsley.addValidator('localite', {
+                            validateString: function (value) {
+                                return true;
+                            }
+                        });
+
+                        UIkit.modal.alert('La localité a été ajoutée avec succès');
+
+//                        var ville = $('#ville');
+                        var localites = localite[0].selectize;
+                        localites.addOption({
+                            text: json.localiteName,
+                            value: json.id
+                        });
+                        localites.addItem(json.id);
+
+                    }
+                    localiteName.parsley().validate();
+                },
+                error: function (json) {
+                    console.log(JSON.stringify(json));
+                    localiteName.parsley().validate();
+
+                }
+            });
+
+        }
+        else {
+            localiteName.parsley().validate();
+
+        }
+
+    }
+    function newRue() {
+
+
+        var rueName = $('#rueName');
+        var rueNameIsValid = rueName.parsley().isValid();
+
+        if (rueNameIsValid) {
+
+            var url = '{{ path('rue_new') }}';
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                data: "rue=" + rueName.val() + "&localite=" + localValue.val(),
+                success: function (json) {
+                    console.log(JSON.stringify(json));
+                    if (json.success == false || json.message != '') {
+                        // declancher une exeption
+                        window.Parsley.addValidator('rue', {
+                            validateString: function (value) {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Cette rue existe déjà.',
+                                fr: "Cette rue existe déjà"
+                            }
+                        });
+
+                        rueName.on('change', function () {
+                            window.Parsley.addValidator('rue', {
+                                validateString: function (value) {
+                                    return true;
+                                }
+                            });
+                            rueName.parsley().validate();
+                        });
+
+                    } else {
+                        window.Parsley.addValidator('rue', {
+                            validateString: function (value) {
+                                return true;
+                            }
+                        });
+
+                        UIkit.modal.alert('La rue a été ajoutée avec succès');
+
+//                        var rue = $('#rue');
+                        var rues = rue[0].selectize;
+                        rues.addOption({
+                            text: json.rueName,
+                            value: json.id
+                        });
+                        rues.addItem(json.id);
+
+                    }
+                    rueName.parsley().validate();
+                },
+                error: function (json) {
+                    console.log(JSON.stringify(json));
+                    rueName.parsley().validate();
+
+                }
+            });
+
+        }
+        else {
+            rueName.parsley().validate();
+
+        }
+
+    }
+
+
+    function newAdresse() {
+
+
+        var adresseName = $('#adresseName');
+        var adresseValide = adresseName.parsley().isValid();
+
+        var rueVal = $('#rue').val();
+        if (adresseValide) {
+
+            $name = $('#adresseName').val();
+            $rue = $('#rue').val();
+            var urlVerif = '{{ path('adresse_bynameandrue', {'name': 'namE', 'rue': 'ruE'}) }}';
+            urlVerif = urlVerif.replace('namE', $name);
+            urlVerif = urlVerif.replace('ruE', $rue);
+            $.ajax({
+                async: true,
+                type: "GET",
+                url: urlVerif,
+                success: function (json) {
+                    console.log(JSON.stringify(json));
+                    if (json.success == true) {
+                        // declancher une exeption
+                        window.Parsley.addValidator('adresse', {
+                            validateString: function (value) {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Cette adresse existe déjà.',
+                                fr: "Cette adresse existe déjà"
+                            }
+                        });
+
+                        adresseName.on('change', function () {
+                            window.Parsley.addValidator('adresse', {
+                                validateString: function (value) {
+                                    return true;
+                                }
+                            });
+                            adresseName.parsley().validate();
+                        });
+
+                    } else {
+                        window.Parsley.addValidator('adresse', {
+                            validateString: function (value) {
+                                return true;
+                            }
+                        });
+
+                        // req insertion
+                        var url = '{{ path('adresse_add') }}';
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            url: url,
+                            data: "adresse=" + adresseName.val() + "&rue=" + rueVal,
+
+                            success: function (json) {
+                                console.log(JSON.stringify(json));
+                                if (json.success == false || json.message != '') {
+                                    // declancher une exeption
+                                    window.Parsley.addValidator('adresse', {
+                                        validateString: function (value) {
+                                            return false;
+                                        },
+                                        messages: {
+                                            en: 'Erreur d\'ajout de l\'adresse.',
+                                            fr: "Erreur d\'ajout de l\'adresse."
+                                        }
+                                    });
+
+                                    adresseName.on('change', function () {
+                                        window.Parsley.addValidator('adresse', {
+                                            validateString: function (value) {
+                                                return true;
+                                            }
+                                        });
+                                        adresseName.parsley().validate();
+                                    });
+
+                                } else {
+                                    window.Parsley.addValidator('adresse', {
+                                        validateString: function (value) {
+                                            return true;
+                                        }
+                                    });
+
+                                    UIkit.modal.alert('L\'adresse a été ajoutée avec succès');
+
+
+                                }
+                                adresseName.parsley().validate();
+                            },
+                            error: function (json) {
+                                console.log(JSON.stringify(json));
+                                adresseName.parsley().validate();
+
+                            }
+                        });
+                        // req insertion
+                    }
+                    adresseName.parsley().validate();
+                }
+            });
+        }
+        else {
+            adresseName.parsley().validate();
+
+        }
+
+    }
+
+
+</script>

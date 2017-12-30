@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Adresses list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for adresse in adresses %}
+            <tr>
+                <td><a href="{{ path('adresse_show', { 'id': adresse.id }) }}">{{ adresse.id }}</a></td>
+                <td>{{ adresse.name }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('adresse_show', { 'id': adresse.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('adresse_edit', { 'id': adresse.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('adresse_new') }}">Create a new adresse</a>
+        </li>
+    </ul>
+{% endblock %}

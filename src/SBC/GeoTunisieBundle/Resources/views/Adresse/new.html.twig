@@ -1,0 +1,41 @@
+{% extends "ImmobilierBundle::layout.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {% trans %}  Ajouter une adresse{% endtrans %} - {{ parent() }}
+{% endblock %}
+
+{% block jshead %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    {{ include("@GeoTunisie/Adresse/form.html.twig") }}
+
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+
+    <script>
+        // load parsley config (altair_admin_common.js)
+        altair_forms.parsley_validation_config();
+    </script>
+
+    {% javascripts output="js/compiled/mainValidationWithMask.js"
+    'bundles/immobilier/bower_components/parsleyjs/dist/parsley.min.js'
+    'bundles/immobilier/assets/js/pages/forms_validation.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function ($) {
+            $('#postCodeName').mask('0000');
+        });
+    </script>
+
+{% endblock %}

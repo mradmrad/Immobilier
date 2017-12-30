@@ -1,0 +1,20 @@
+geo_tunisie_adresse:
+    resource: "@GeoTunisieBundle/Resources/config/routing/adresse.yml"
+    prefix:   /adresse
+
+geo_tunisie_rue:
+    resource: "@GeoTunisieBundle/Resources/config/routing/rue.yml"
+    prefix:   /rue
+
+geo_tunisie_ville:
+    resource: "@GeoTunisieBundle/Resources/config/routing/ville.yml"
+    prefix:   /ville
+
+geo_tunisie_localite:
+    resource: "@GeoTunisieBundle/Resources/config/routing/localite.yml"
+    prefix:   /localite
+
+geo_tunisie_gouvernorat:
+    resource: "@GeoTunisieBundle/Resources/config/routing/gouvernorat.yml"
+    prefix:   /gouvernorat
+

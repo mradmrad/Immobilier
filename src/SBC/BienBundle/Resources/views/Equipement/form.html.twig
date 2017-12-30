@@ -1,0 +1,67 @@
+<div id="page_content_inner">
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+            {{ form_errors(form) }}
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon  material-icons">&#xE531;</i>
+                            </span>
+                            {{ form_label(form.name,   "Nom" ) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-name':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.name) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    {{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var domName = $('#sbc_bienbundle_equipement_name');
+        var oldname = domName.val().toUpperCase();
+        domName.on('change', function () {
+            var name = domName.val().toUpperCase();
+            var url = '{{ path('equiepement_byname', {'name': 'namE'}) }}';
+            url = url.replace('namE', name);
+            if (name !== oldname) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('name', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Cet équipement existe déjà',
+                                    fr: "Cet équipement existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('name', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domName.parsley().validate();
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,295 @@
+{% extends 'base.html.twig' %}
+
+{% block page_header %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <h1>{{ supplier.code }} - {{ supplier.denomination }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Tiers / <a href="{{ path('supplier_index') }}">Fournisseurs</a> / Détails fournisseur</span>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Statistiques
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+                            <div class="md-list-content">
+                                <span class="uk-text-small uk-text-muted uk-display-block">Date création</span>
+                                <span class="md-list-heading uk-text-large uk-text-success">{{ supplier.dateCreation|date('d/m/Y H:i:s') }}</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="md-list-content">
+                                <span class="uk-text-small uk-text-muted uk-display-block">Date modification</span>
+                            <span class="md-list-heading uk-text-large">
+                                {% if supplier.dateUpdate %}
+                                    {{ supplier.dateUpdate|date('d/m/Y H:i:s') }}
+                                {% else %}
+                                    Pas de modification
+                                {% endif %}
+                            </span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="md-list-content">
+                                <span class="uk-text-small uk-text-muted uk-display-block">Nombre de factures</span>
+                                <span class="md-list-heading uk-text-large">120</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="md-list-content">
+                                <span class="uk-text-small uk-text-muted uk-display-block">SKU</span>
+                                <span class="md-list-heading uk-text-large">4319572394</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--=======================DETAILS==============================-->
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Détails
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium">
+                        <div class="uk-width-large-1-2">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Code</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    <span class="uk-text-large uk-text-middle">{{ supplier.code }}</span>
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Dénomination</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    <span class="uk-text-large uk-text-middle">{{ supplier.denomination }}</span>
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Identifiant</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.identifier }}
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Activité</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.activity }}
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Téléphone</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.tel }}
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Fax</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.fax }}
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Site web</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    <a href="http://{{ supplier.website }}" target="_blank">{{ supplier.website }}</a>
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider uk-hidden-large">
+                        </div>
+                        <div class="uk-width-large-1-2">
+                            <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom"><strong>Etats</strong></span>
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Passager</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {% if supplier.passenger %}
+                                        <i class="material-icons uk-text-success md-24">&#xE5CA;</i>
+                                    {% else %}
+                                        <i class="material-icons uk-text-danger md-24">&#xE14C;</i>
+                                    {% endif %}
+                                </div>
+
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Actif</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {% if not supplier.archived %}
+                                        <i class="material-icons uk-text-success md-24">&#xE5CA;</i>
+                                    {% else %}
+                                        <i class="material-icons uk-text-danger md-24">&#xE14C;</i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom"><strong>{{ supplier.mainAddress.title }}</strong></span>
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Adresse</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.mainAddress.address }}
+                                </div>
+                            </div>
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Cité</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.mainAddress.city }}
+                                </div>
+                            </div>
+                            <div class="uk-grid uk-grid-small">
+                                <div class="uk-width-large-1-3">
+                                    <span class="uk-text-muted uk-text-small">Gouvernorat</span>
+                                </div>
+                                <div class="uk-width-large-2-3">
+                                    {{ supplier.mainAddress.governorate }}
+                                </div>
+                            </div>
+                            <hr class="uk-grid-divider">
+                            <p>
+                                <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Autre détails</span>
+                                {{ supplier.moreInformations }}
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Contacts / Adresses secondaires
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-2-10">
+                            <span class="uk-display-block uk-margin-small-top uk-text-large">Contacts</span>
+                        </div>
+                        <div class="uk-width-medium-8-10">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="uk-width-2-10">Dénomination</th>
+                                        <th class="uk-width-3-10">Description</th>
+                                        <th class="uk-width-2-10 uk-text-center">Adresse mail</th>
+                                        <th class="uk-width-3-10 uk-text-center">Tél</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for contact in supplier.contacts %}
+                                        <tr>
+                                            <td>{{ contact.denomination }}</td>
+                                            <td>{{ contact.description }}</td>
+                                            <td class="uk-text-center">{{ contact.mail }}</td>
+                                            <td class="uk-text-center">{{ contact.tel }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4" class="uk-text-center">La liste des contacts est vide</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-2-10">
+                            <span class="uk-display-block uk-margin-small-top uk-text-large">Adresse secondaires</span>
+                        </div>
+                        <div class="uk-width-medium-8-10 ">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Adresse</th>
+                                        <th>Cité</th>
+                                        <th>Gouvernorat</th>
+                                        <th>Code postal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for address in supplier.addresses %}
+                                        <tr>
+                                            <td>{{ address.title }}</td>
+                                            <td>{{ address.address }}</td>
+                                            <td>{{ address.city }}</td>
+                                            <td>{{ address.governorate }}</td>
+                                            <td>{{ address.zipCode }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="5" class="uk-text-center">La liste des adresse est vide</td>
+                                        </tr>
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <div class="md-fab md-fab-accent md-fab-sheet">
+            <i class="material-icons">&#xE913;</i>
+            <div class="md-fab-sheet-actions">
+                <a href="{{ path('supplier_edit', { 'code': supplier.code }) }}" class="md-color-white"><i class="material-icons md-color-white">&#xE254;</i> Modifier</a>
+                <a href="javascript:void(0)" class="md-color-white" onclick="deleteTiers('{{ supplier.code }}')"><i class="material-icons md-color-white">&#xE872;</i> Supprimer</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function deleteTiers(code) {
+            UIkit.modal.confirm(
+                    'Confirmez-vous la suppression de ce fournisseur ?',
+                    function(){
+                        var url = "{{ path('supplier_delete', {'code': 'code_tiers'}) }}";
+                        url = url.replace('code_tiers', code);
+                        window.location.href = url;
+                    },
+                    {labels: {'Ok': 'Oui', 'Cancel': 'Annuler'}});
+        }
+    </script>
+{% endblock %}

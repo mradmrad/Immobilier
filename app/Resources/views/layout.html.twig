@@ -1,0 +1,550 @@
+<!doctype html>
+<!--[if lte IE 9]>
+<html class="lte-ie9" lang="fr"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="fr"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <title>{% block title %}Green Duck immobilier{% endblock %}</title>
+    {% block css %}
+        {% stylesheets output="css/compiled/main.css" filter="cssrewrite"
+        'bundles/immobilier/bower_components/uikit/css/uikit.almost-flat.min.css'
+        'bundles/immobilier/assets/icons/flags/flags.min.css'
+        'bundles/immobilier/assets/css/main.min.css'
+        'bundles/immobilier/assets/css/themes/themes_combined.min.css'
+        'bundles/immobilier/assets/css/ie.css'
+        'bundles/immobilier/assets/css/themes/_theme_g.css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('icon.ico') }}"/>
+    {% endblock %}
+    {% block jshead %}
+        {% javascripts output="js/compiled/mainheader.js"
+        'bundles/immobilier/jquery-3.1.1/jquery-3.1.1.min.js'
+        'bundles/immobilier/moment/moment.js'
+        'bundles/immobilier/timeLeft/timeLeft.js' %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
+</head>
+<body class="sidebar_main_open sidebar_main_swipe app_theme_g">
+<!-- main header -->
+<header id="header_main">
+    <div class="header_main_content">
+        <nav class="uk-navbar">
+            <!-- main sidebar switch -->
+            <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
+                <span class="sSwitchIcon"></span>
+            </a>
+            <!-- secondary sidebar switch -->
+            <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
+                <span class="sSwitchIcon"></span>
+            </a>
+            <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+                <a href="{{ path('reclamation_index') }}" class="top_menu_toggle"><i class="material-icons">feedback</i>
+                    Feedback</a>
+            </div>
+            <div class="uk-navbar-flip">
+                <ul class="uk-navbar-nav user_actions">
+                    <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                        <a href="#" class="user_action_icon" onclick="setNotificationsSeen();">
+                            <i class="material-icons md-24 md-light">&#xE7F4;</i>
+                            <span class="uk-badge" id="numberofnotifcations" style="visibility: hidden;"></span>
+                        </a>
+                        <div class="uk-dropdown uk-dropdown-xlarge">
+                            <div class="md-card-content">
+                                <ul class="uk-tab uk-tab-grid"
+                                    data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                    <li class="uk-width-2-2">
+                                        <a class="js-uk-prevent uk-text-small"
+                                           onclick="goToAllNotifications()">
+                                            Afficher tout
+                                        </a>
+                                    </li>
+                                    <script type="text/javascript">
+                                        function goToAllNotifications() {
+                                            url = "#";
+                                            $(location).attr("href", url);
+                                        }
+                                    </script>
+                                </ul>
+                                <ul id="header_alerts" class="uk-switcher uk-margin">
+                                    <li>
+                                        <ul class="md-list md-list-addon" id="notifications">
+                                        </ul>
+                                        <div class="uk-text-center uk-margin-top uk-margin-small-bottom"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+
+                    {#<script>#}
+
+                    {#$(document).ready(function () {#}
+                    {#//                            alert('aaaa');#}
+                    {#refreshNotification();#}
+                    {#});#}
+
+                    {#function refreshNotification() {#}
+
+                    {#var $notification = $('#notifications');#}
+                    {#var $numberofnotifcations = $('#numberofnotifcations');#}
+
+                    {#// ICI ON SET LE LOOP : 5000 = 5 secondes#}
+                    {#setTimeout('refreshNotification();', 5000);#}
+                    {#$.ajax({#}
+
+                    {#async: true,#}
+                    {#type: "GET",#}
+                    {#url: "#",#}
+                    {#success: function (json) {#}
+                    {#console.log(JSON.stringify(json));#}
+                    {#$nomreNotificationsNonVus = 0;#}
+
+                    {#if (json.length > 0) {#}
+                    {#$notification.html("");#}
+                    {#$.each(json, function (key, notification) {#}
+                    {#if (notification.seen == false) {#}
+                    {#$nomreNotificationsNonVus++;#}
+                    {#$notification.append(" <li>" +#}
+                    {#" <div class='md-list-addon-element'>" +#}
+                    {#" <i class='" + notification.class + "'>" + notification.icon +#}
+                    {#" </i></div>" +#}
+                    {#"<div class='md-list-content'>" +#}
+                    {#"<span class='md-list-heading'><a href='../" + notification.link + "' >" + notification.title +#}
+                    {#" </a></span>" +#}
+                    {#" <span class='uk-text-small uk-text-muted'>" + notification.content + "</span>" +#}
+                    {#" <span class='uk-text-small uk-text-muted'>" + timeLeft(new Date(notification.creationdate.date)) + "</span>" +#}
+                    {#"</div>" +#}
+                    {#" </li>");#}
+                    {#}#}
+                    {#else {#}
+                    {#$notification.append(" <li>" +#}
+                    {#" <div class='md-list-addon-element'>" +#}
+                    {#" <i class='" + notification.class + " ' >" + notification.icon +#}
+                    {#" </i></div>" +#}
+                    {#"<div class='md-list-content'>" +#}
+                    {#"<span class='md-list-heading'><a href='../" + notification.link + "' >" + notification.title +#}
+                    {#" </a></span>" +#}
+                    {#" <span class='uk-text-small uk-text-muted'>" + notification.content + "</span>" +#}
+                    {#" <span class='uk-text-small uk-text-muted'>" + timeLeft(new Date(notification.creationdate.date)) + "</span>" +#}
+                    {#"</div>" +#}
+                    {#" </li>");#}
+                    {#}#}
+                    {#});#}
+                    {#}#}
+                    {#else{#}
+                    {#$notification.html("");#}
+                    {#$notification.append(" <li>" +#}
+                    {#" <div class='md-list-addon-element'>" +#}
+                    {#" <i class=''>"  +#}
+                    {#" </i></div>" +#}
+                    {#"<div class='md-list-content'>" +#}
+                    {#"<span class='md-list-heading'><a href='#' >Pas de notification(s)"  +#}
+                    {#" </a></span>" +#}
+                    {#" <span class='uk-text-small uk-text-muted'>vous n\'avez aucune notification pour l\'instant</span>" +#}
+
+                    {#"</div>" +#}
+                    {#" </li>");#}
+
+                    {#}#}
+
+                    {#if ($nomreNotificationsNonVus == 0) {#}
+                    {#$('#numberofnotifcations').css('visibility', 'hidden');#}
+                    {#}#}
+                    {#else {#}
+                    {#$('#numberofnotifcations').css('visibility', 'visible');#}
+                    {#$numberofnotifcations.html($nomreNotificationsNonVus);#}
+                    {#}#}
+                    {#$numberofnotifcations.trigger("change");#}
+                    {#}#}
+                    {#});#}
+                    {#}#}
+
+                    {#function setNotificationsSeen() {#}
+                    {#$.ajax({#}
+                    {#async: true,#}
+                    {#type: "GET",#}
+                    {#url: "#",#}
+                    {#success: function (json) {#}
+                    {#}#}
+                    {#});#}
+                    {#}#}
+                    {#</script>#}
+
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                            {% if app.user.personnel is null %}
+                                <a href="#" class="user_action_image">
+                                    <img class="md-user-image"
+                                         src="{{ asset('bundles/immobilier/assets/img/avatars/avatar_01.png') }}"
+                                         alt=""/>
+                                </a>
+                            {% else %}
+                                <a href="{{ vich_uploader_asset(app.user.personnel, 'pictureFile') }}"
+                                   class="user_action_image">
+                                    <img class="md-user-image"
+                                         src="{{ vich_uploader_asset(app.user.personnel, 'pictureFile') }}"
+                                         alt="{{ app.user.personnel.pictureName }}"/>
+                                </a>
+                            {% endif %}
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav js-uk-prevent">
+                                    <li>
+                                        <a href="{{ path('fos_user_profile_show') }}">Mon profil</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('fos_user_security_logout') }}">
+                                            <i class="fa fa-sign-out pull-right"></i>
+                                            Déconnexion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <a href="{{ path('fos_user_security_login') }}" class="user-profile dropdown-toggle"
+                           aria-expanded="false">
+                            Connexion <span class=" fa fa-angle-down"></span>
+                        </a>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<!-- main header end -->
+<!-- main sidebar -->
+<aside id="sidebar_main">
+    <div class="sidebar_main_header">
+        <div style="padding-top: 15px;">
+            <a href="{{ path('immobilier_dashboard') }}" class="sSidebar_hide sidebar_logo_large">
+                <img class="logo_regular" src="{{ asset('logo-2.png') }}" alt="logo_green_duck" height="50"
+                     width="250"/>
+            </a>
+        </div>
+    </div>
+    {% set current_route_name = app.request.attributes.get('_route') %}
+    <div class="menu_section">
+        <ul>
+            <li title="Accueil" {% if current_route_name == 'immobilier_dashboard' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('immobilier_dashboard') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE88A;</i>#}
+                        <img src="{{ asset('icons/Acceuil.jpg') }}">
+                    </span>
+                    <span class="menu_title">Accueil</span>
+                </a>
+            </li>
+            <li title="Tableau de bord" {% if current_route_name == 'meeting_index' or current_route_name == 'meeting_new' or current_route_name == 'meeting_show' or current_route_name == 'meeting_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('meeting_index') }}">
+                    <span class="menu_icon">
+                         <img src="{{ asset('icons/Tableau de Bord.jpg') }}">
+                        {#<i class="material-icons">&#xE916;</i>#}
+                    </span>
+                    <span class="menu_title">Tableau de bord</span>
+                </a>
+            </li>
+            <li title="Clients" {% if current_route_name == 'client_index' or current_route_name == 'client_new' or current_route_name == 'client_show' or current_route_name == 'client_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('client_index') }}">
+                    <span class="menu_icon">
+                         <img src="{{ asset('icons/clients.jpg') }}">
+                        {#<i class="material-icons">&#xE7EF;</i>#}
+                    </span>
+                    <span class="menu_title">Clients</span>
+                </a>
+
+            </li>
+            <li title="Requêtes" {% if current_route_name == 'requete_index' or current_route_name == 'requete_new' or current_route_name == 'requete_show' or current_route_name == 'requete_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('requete_index') }}">
+                    <span class="menu_icon">
+                         <img src="{{ asset('icons/requêtes.jpg') }}">
+                        {#<i class="material-icons">&#xE91F;</i>#}
+                    </span>
+                    <span class="menu_title">Requêtes</span>
+                </a>
+            </li>
+            <li title="Base de données" {% if current_route_name == 'bien_index_alltypes' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('bien_index_alltypes') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE638;</i>#}
+                         <img src="{{ asset('icons/base de donné.jpg') }}">
+                    </span>
+                    <span class="menu_title">Base de données</span>
+                </a>
+            </li>
+            <li title="Recherches" {% if current_route_name == 'bien_index' or current_route_name == 'bien_new' or current_route_name == 'bien_show' or current_route_name == 'bien_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('bien_index') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE8B6;</i>#}
+                     <img src="{{ asset('icons/recherche.jpg') }}">
+                    </span>
+                    <span class="menu_title">Recherches</span>
+                </a>
+            </li>
+            <li title="Nouvelles" {% if current_route_name == 'nouvelle_index' or current_route_name == 'nouvelle_new' or current_route_name == 'nouvelle_show' or current_route_name == 'nouvelle_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('nouvelle_index') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE7F1;</i>#}
+                     <img src="{{ asset('icons/NOUVELLE.png') }}">
+                    </span>
+                    <span class="menu_title">Nouvelles</span>
+                </a>
+            </li>
+            <li title="Acquisitions" {% if current_route_name == 'acquisition_index' or current_route_name == 'acquisition_transfert' or current_route_name == 'acquisition_new' or current_route_name == 'acquisition_show' or current_route_name == 'acquisition_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('acquisition_index') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE7EE;</i>#}
+                     <img src="{{ asset('icons/Acquisition.jpg') }}">
+                    </span>
+                    <span class="menu_title">Acquisitions</span>
+                </a>
+            </li>
+            <li title="Mandats" {% if current_route_name == 'mandat_index' or current_route_name == 'mandat_transfert' or current_route_name == 'mandat_new' or current_route_name == 'mandat_new_child' or current_route_name == 'mandat_show' or current_route_name == 'mandat_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('mandat_index') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE24D;</i>#}
+                     <img src="{{ asset('icons/mandat.jpg') }}">
+                    </span>
+                    <span class="menu_title">Mandats</span>
+                </a>
+            </li>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <li title="Paramètres" {% if current_route_name == 'typecontrat_index' or current_route_name == 'typecontrat_new' or current_route_name == 'typecontrat_edit' or current_route_name == 'typecontrat_show' or current_route_name == 'typetache_index' or current_route_name == 'typetache_new' or current_route_name == 'typetache_edit' or current_route_name == 'typetache_show' or current_route_name == 'agency_index' or current_route_name == 'agency_new' or current_route_name == 'agency_edit' or current_route_name == 'agency_show' or current_route_name == 'commodite_index' or current_route_name == 'commodite_new' or current_route_name == 'commodite_edit' or current_route_name == 'commodite_show' or current_route_name == 'origine_index' or current_route_name == 'origine_new' or current_route_name == 'origine_edit' or current_route_name == 'origine_show' or current_route_name == 'typebien_index' or current_route_name == 'typebien_new' or current_route_name == 'typebien_edit' or current_route_name == 'typebien_show' or current_route_name == 'category_index' or current_route_name == 'category_new' or current_route_name == 'category_edit' or current_route_name == 'category_show' or current_route_name == 'equipement_index' or current_route_name == 'equipement_new' or current_route_name == 'equipement_edit' or current_route_name == 'equipement_show' or current_route_name == 'agency_index' or current_route_name == 'agency_new' or current_route_name == 'agency_edit' or current_route_name == 'agency_show' %} class="current_section" {% endif %}>
+                    <a href="#">
+                        <span class="menu_icon">
+                             <img src="{{ asset('icons/parametre.jpg') }}">
+                            {#<i class="material-icons">&#xE869;</i>#}
+                        </span>
+                        <span class="menu_title">Paramètres</span>
+                    </a>
+                    <ul>
+                        {% if app.user.id == 1 or app.user.id == 2  %}
+                        <li title="Zoning" {% if current_route_name == 'typecontrat_index' or current_route_name == 'typecontrat_new' or current_route_name == 'typecontrat_edit' or current_route_name == 'typecontrat_show' or current_route_name == 'typetache_index' or current_route_name == 'typetache_new' or current_route_name == 'typetache_edit' or current_route_name == 'typetache_show' or current_route_name == 'agency_index' or current_route_name == 'agency_new' or current_route_name == 'agency_edit' or current_route_name == 'agency_show' or current_route_name == 'commodite_index' or current_route_name == 'commodite_new' or current_route_name == 'commodite_edit' or current_route_name == 'commodite_show' or current_route_name == 'origine_index' or current_route_name == 'origine_new' or current_route_name == 'origine_edit' or current_route_name == 'origine_show' or current_route_name == 'typebien_index' or current_route_name == 'typebien_new' or current_route_name == 'typebien_edit' or current_route_name == 'typebien_show' or current_route_name == 'category_index' or current_route_name == 'category_new' or current_route_name == 'category_edit' or current_route_name == 'category_show' or current_route_name == 'equipement_index' or current_route_name == 'equipement_new' or current_route_name == 'equipement_edit' or current_route_name == 'equipement_show' or current_route_name == 'agency_index' or current_route_name == 'agency_new' or current_route_name == 'agency_edit' or current_route_name == 'agency_show' %} class="current_section" {% endif %}>
+                            <a href="#">
+                                <span class="menu_icon"><i class="material-icons">track_changes</i></span>
+                                <span class="menu_title">Zoning</span>
+                            </a>
+                            <ul>
+                                <li title="Villes" {% if current_route_name == 'ville_index' or current_route_name == 'ville_add' %} class="act_item" {% endif %}>
+                                    <a href="{{ path('ville_index') }}">
+                                        <span class="menu_title">Villes</span>
+                                    </a>
+                                </li>
+                                <li title="Localités" {% if current_route_name == 'localite_index' or current_route_name == 'localite_add' %} class="act_item" {% endif %}>
+                                    <a href="{{ path('localite_index') }}">
+                                        <span class="menu_title">Localités</span>
+                                    </a>
+                                </li>
+                                <li title="Localités" {% if current_route_name == 'rue_index' or current_route_name == 'rue_add' %} class="act_item" {% endif %}>
+                                    <a href="{{ path('rue_index') }}">
+                                        <span class="menu_title">Rues</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        {% endif %}
+                        <li title="Agences" {% if current_route_name == 'agency_index' or current_route_name == 'agency_new' or current_route_name == 'agency_edit' or current_route_name == 'agency_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('agency_index') }}">
+                                <span class="menu_title">Agences</span>
+                            </a>
+                        </li>
+                        <li title="Equipements" {% if current_route_name == 'equipement_index' or current_route_name == 'equipement_new' or current_route_name == 'equipement_edit' or current_route_name == 'equipement_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('equipement_index') }}">
+
+                                <span class="menu_title">Equipements</span>
+                            </a>
+                        </li>
+                        <li title="Catégories" {% if current_route_name == 'category_index' or current_route_name == 'category_new' or current_route_name == 'category_edit' or current_route_name == 'category_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('category_index') }}">
+                                <span class="menu_title">Catégories</span>
+                            </a>
+                        </li>
+                        <li title="Types de bien" {% if current_route_name == 'typebien_index' or current_route_name == 'typebien_new' or current_route_name == 'typebien_edit' or current_route_name == 'typebien_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('typebien_index') }}">
+                                <span class="menu_title">Types de bien</span>
+                            </a>
+                        </li>
+
+
+                        <li title="Origines " {% if current_route_name == 'origine_index' or current_route_name == 'origine_new' or current_route_name == 'origine_edit' or current_route_name == 'origine_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('origine_index') }}">
+
+                                <span class="menu_title">Origines/Promotions</span>
+                            </a>
+                        </li>
+                        <li title="Commodités " {% if current_route_name == 'commodite_index' or current_route_name == 'commodite_new' or current_route_name == 'commodite_edit' or current_route_name == 'commodite_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('commodite_index') }}">
+                                <span class="menu_title">Commodités</span>
+                            </a>
+                        </li>
+                        <li title="Types de tâche " {% if current_route_name == 'typetache_index' or current_route_name == 'typetache_new' or current_route_name == 'typetache_edit' or current_route_name == 'typetache_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('typetache_index') }}">
+                                <span class="menu_title">Types de tâche</span>
+                            </a>
+                        </li>
+                        <li title="Types de mandat" {% if current_route_name == 'typecontrat_index' or current_route_name == 'typecontrat_new' or current_route_name == 'typecontrat_edit' or current_route_name == 'typecontrat_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('typecontrat_index') }}">
+                                <span class="menu_title">Types de mandat</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li title="Utilisateurs" {% if current_route_name == 'user_index_disabled' or current_route_name == 'user_index' or current_route_name == 'user_edit' or current_route_name == 'user_show' or current_route_name == 'fos_user_profile_edit' or current_route_name == 'fos_user_registration_register' or current_route_name == 'fos_user_profile_show' or current_route_name == 'personnel_index' or current_route_name == 'personnel_new' or current_route_name == 'personnel_edit' or current_route_name == 'personnel_show' %} class="current_section" {% endif %}>
+                    <a href="{{ path('personnel_index') }}">
+                        <span class="menu_icon">
+                             <img src="{{ asset('icons/Utilisateurs.jpg') }}">
+                            {#<i class="material-icons">&#xE7FD;</i>#}
+                        </span>
+                        <span class="menu_title">Utilisateurs</span>
+                    </a>
+                    <ul>
+                        <li title="Peronnels" {% if current_route_name == 'personnel_index' or current_route_name == 'personnel_new' or current_route_name == 'personnel_edit' or current_route_name == 'personnel_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('personnel_index') }}">
+                                <span class="menu_title">Personnels</span>
+                            </a>
+
+                        </li>
+                        <li title="Droits d'accès" {% if current_route_name == 'user_index' or current_route_name == 'user_edit' or current_route_name == 'user_show' or current_route_name == 'fos_user_profile_edit' or current_route_name == 'fos_user_registration_register' or current_route_name == 'fos_user_profile_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('user_index') }}">
+                                <span class="menu_title">Droits d'accès</span>
+                            </a>
+                        </li>
+                        <li title="Utilisateurs désactivés" {% if current_route_name == 'user_index_disabled' %} class="act_item" {% endif %}>
+                            <a href="{{ path('user_index_disabled') }}">
+                                <span class="menu_title">Utilisateurs désactivés</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li title="Rapports" {% if current_route_name=='immobilier_agencyreport' or current_route_name == 'goal_new' or current_route_name == 'goal_edit' or current_route_name == 'goal_show' %} class="current_section" {% endif %}>
+                    <a href="{{ path('personnel_index') }}">
+                        <span class="menu_icon">
+                         <img src="{{ asset('icons/rapport.jpg') }}">
+                            {#<i class="material-icons">&#xE85C;</i>#}
+                        </span>
+                        <span class="menu_title">Rapports</span>
+                    </a>
+                    <ul>
+                        <li title="Objectifs" {% if current_route_name == 'tableau_de_bord' or current_route_name == 'goal_index' or current_route_name == 'goal_new' or current_route_name == 'goal_edit' or current_route_name == 'goal_show' %} class="act_item" {% endif %}>
+                            <a href="{{ path('goal_index') }}">
+                                <span class="menu_title">Objectifs</span>
+                            </a>
+                        </li>
+                        <li title="Rapport agence" {% if current_route_name == 'immobilier_agencyreport' %} class="act_item" {% endif %}>
+                            <a href="{{ path('immobilier_agencyreport') }}">
+                                <span class="menu_title">Rapports agence</span>
+                            </a>
+                        </li>
+                        <li title="Historique des pages " {% if current_route_name == 'tableau_de_bord' %} class="act_item" {% endif %}>
+                            <a href="{{ path('tableau_de_bord') }}">
+                                <span class="menu_title">Historique des pages</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li title="Messages" {% if  current_route_name == 'message_index' %} class="current_section" {% endif %}>
+                    <a href="{{ path('message_index') }}">
+                        <span class="menu_icon">
+                         <img src="{{ asset('icons/messages.jpg') }}">
+                            {#<i class="material-icons">&#xE0C9;</i>#}
+                        </span>
+                        <span class="menu_title">Messages</span>
+                    </a>
+
+                </li>
+            {% endif %}
+            <li title="Rappels" {% if current_route_name == 'remind_index' or current_route_name == 'remind_new' or current_route_name == 'remind_show' or current_route_name == 'remind_edit' %} class="act_section current_section" {% endif %}>
+                <a href="{{ path('remind_index') }}">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE855;</i>#}
+                     <img src="{{ asset('icons/rappels.jpg') }}">
+                    </span>
+                    <span class="menu_title">Rappels</span>
+                </a>
+            </li>
+            <li title="Archives" >
+
+                <a onclick="UIkit.modal.alert('Ce menu est en cours de construction.')">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE855;</i>#}
+                        <img src="{{ asset('icons/Arhive.jpg') }}">
+                    </span>
+                    <span class="menu_title">Archives</span>
+                </a>
+            </li>
+            <li title="Documents">
+                <a onclick="UIkit.modal.alert('Ce menu est en cours de construction.')">
+                    <span class="menu_icon">
+                        {#<i class="material-icons">&#xE855;</i>#}
+                        <img src="{{ asset('icons/Documements_Agence.png') }}">
+                    </span>
+                    <span class="menu_title">Documents</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</aside><!-- main sidebar end -->
+<div id="page_content" style="display: none">
+    {% block body %}
+    {% endblock %}
+    {#<footer id="footer">#}
+        {#©#}
+        {#<script> document.write(new Date().getFullYear()); </script>#}
+        {#- <a target="_blank" href="http://www.sbc.tn">Smart Business Challenge</a>#}
+    {#</footer>#}
+</div>
+{% block js %}
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' === document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+    {% javascripts output="js/compiled/main.js"
+    'bundles/immobilier/assets/js/common.min.js'
+    'bundles/immobilier/assets/js/uikit_custom.min.js'
+    'bundles/immobilier/assets/js/altair_admin_common.min.js'
+    'bundles/immobilier/bower_components/matchMedia/matchMedia.js'
+    'bundles/immobilier/bower_components/matchMedia/matchMedia.addListener.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("bower_components/dense/src/dense.js", function () {
+                    altair_helpers.retina_images();
+                });
+            }
+            if (Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+            $('#page_content').fadeIn('slow');
+        });
+        $window.load(function () {
+            altair_helpers.ie_fix();
+        });
+    </script>
+{% endblock %}
+</body>
+</html>

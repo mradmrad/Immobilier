@@ -1,0 +1,163 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    {% stylesheets output="css/compiled/mainWithDropify.css" filter="cssrewrite"
+    'bundles/immobilier/assets/skins/dropify/css/dropify.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+{% block title %}
+    Modifier un personnel - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Personnels</a></li>
+            <li><span>Modifier un personnel</span></li>
+        </ul>
+        <h1>Formulaire de modification du personnel</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">veuillez bien remplir les champs</span>
+    </div>
+    {{ include("PersonnelBundle:Personnel:form.html.twig") }}
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        altair_forms.parsley_validation_config();
+    </script>
+    {% javascripts output="js/compiled/mainWithDropify.js"
+    'bundles/immobilier/assets/js/custom/dropify/dist/js/dropify.min.js'
+    'bundles/immobilier/assets/js/kendoui_custom.min.js'
+    'bundles/immobilier/assets/js/pages/forms_file_input.min.js'
+    'bundles/immobilier/bower_components/parsleyjs/dist/parsley.min.js'
+    'bundles/immobilier/assets/js/pages/forms_validation.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(function () {
+            var domCode = $('#sbc_personnelbundle_personnel_code');
+
+            var domPhoneNumber = $('#sbc_personnelbundle_personnel_phonenumber');
+            var domAgencyPhoneNumber = $('#sbc_personnelbundle_personnel_agencyPhoneNumber');
+            var domcin = $('#sbc_personnelbundle_personnel_cin');
+            var picture = $('#sbc_personnelbundle_personnel_pictureFile');
+            domcin.mask('00 00 00 00');
+            domPhoneNumber.mask('00 000 000');
+            domAgencyPhoneNumber.mask('00 000 000');
+            $('.dropify-clear').on('click', function () {
+                picture.prop('required', false);
+            });
+            picture.dropify({
+                defaultFile: '{{ vich_uploader_asset(personnel, 'pictureFile') }}',
+                messages: {
+                    'default': 'Cliquez ou Glissez / déposez un fichier ici',
+                    'replace': 'Cliquez ou Glissez / déposez un fichier ici pour remplacer',
+                    'remove': 'Supprimer',
+                    'error': 'Une erreur s\'est survenue'
+                }
+            });
+            var oldcode = domCode.val().toUpperCase();
+            domCode.on('change', function () {
+                var code = domCode.val().toUpperCase();
+                var url = '{{ path('personnel_bycode', {'code': 'codE'}) }}';
+                url = url.replace('codE', code);
+                if (code !== oldcode) {
+                    $.ajax({
+                        async: true,
+                        type: "POST",
+                        url: url,
+                        success: function (json) {
+                            if (json.success) {
+                                window.Parsley.addValidator('code', {
+                                    validateString: function () {
+                                        return false;
+                                    },
+                                    messages: {
+                                        en: 'Ce code existe déjà',
+                                        fr: "Ce code existe déjà"
+                                    }
+                                });
+                            } else {
+                                window.Parsley.addValidator('code', {
+                                    validateString: function () {
+                                        return true;
+                                    }
+                                });
+                            }
+                            domCode.parsley().validate();
+                        }
+                    });
+                }
+            });
+
+            var oldphonenumber = domPhoneNumber.val().toUpperCase();
+            domPhoneNumber.on('change', function () {
+                var phoneNumber = domPhoneNumber.val().toUpperCase();
+                var url = '{{ path('personnel_byphonenumber', {'phonenumber': 'phoneNumber'}) }}';
+                url = url.replace('phoneNumber', phoneNumber);
+                if (phoneNumber !== oldphonenumber) {
+                    $.ajax({
+                        async: true,
+                        type: "POST",
+                        url: url,
+                        success: function (json) {
+                            if (json.success) {
+                                window.Parsley.addValidator('phonenumber', {
+                                    validateString: function () {
+                                        return false;
+                                    },
+                                    messages: {
+                                        en: 'Ce téléphone existe déjà',
+                                        fr: "Ce téléphone existe déjà"
+                                    }
+                                });
+                            } else {
+                                window.Parsley.addValidator('phonenumber', {
+                                    validateString: function () {
+                                        return true;
+                                    }
+                                });
+                            }
+                            domPhoneNumber.parsley().validate();
+                        }
+                    });
+
+                }
+            });
+            var oldcin = domcin.val().toUpperCase();
+            domcin.on('change', function () {
+                var cin = domcin.val().toUpperCase();
+                var url = '{{ path('personnel_bycin', {'cin': 'ciN'}) }}';
+                url = url.replace('ciN', cin);
+                if (cin !== oldcin) {
+                    $.ajax({
+                        async: true,
+                        type: "POST",
+                        url: url,
+                        success: function (json) {
+                            if (json.success === true) {
+                                window.Parsley.addValidator('cin', {
+                                    validateString: function () {
+                                        return false;
+                                    },
+                                    messages: {
+                                        en: 'Ce CIN existe déjà',
+                                        fr: "Ce CIN existe déjà"
+                                    }
+                                });
+                            } else {
+                                window.Parsley.addValidator('cin', {
+                                    validateString: function () {
+                                        return true;
+                                    }
+                                });
+                            }
+                            domcin.parsley().validate();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %} 

@@ -1,0 +1,1907 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    {% stylesheets output="css/compiled/mainWithDropifyAndKedouiComobox.css" filter="cssrewrite"
+    'bundles/immobilier/assets/skins/dropify/css/dropify.css'
+    'bundles/immobilier/bower_components/kendo-ui/styles/kendo.common-material.min.css'
+    'bundles/immobilier/bower_components/kendo-ui/styles/kendo.material.min.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+{% block title %}
+    Lecture d'un mandat - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Mandats</a></li>
+            <li><span>Afficher un mandat</span></li>
+        </ul>
+        <h1>{{ mandat.numero }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">{{ mandat.creationDate|date('d/m/Y') }}</span>
+    </div>
+    <div id="page_content_inner">
+        <script src="https://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
+        <div class="md-card ">
+            <div class="md-card-content">
+                <div class="uk-grid">
+                    <div class="uk-width-1-1">
+                        <ul class="uk-tab" data-uk-tab="{connect:'#tabs'}" id="tabs_1">
+                            <li class="uk-active"><a href="#">Propriètaire</a></li>
+                            <li><a href="#">Bien</a></li>
+                            <li><a href="#">Mandat</a></li>
+                            <li><a href="#">Historique</a></li>
+                            <li><a href="#">Rendez-Vous</a></li>
+                            <li><a href="#">Visites</a></li>
+                            <li><a href="#">Offres</a></li>
+                            {% set accepted = false %}
+                            {% for offre in mandat.offres %}
+                                {% if offre.status ==  constant('\\SBC\\BienBundle\\Entity\\Offre::ACCEPTED') %}
+                                    {% set accepted = true %}
+                                    <li><a href="#">Comission</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <ul id="tabs" class="uk-switcher uk-margin">
+                            <li>
+                                <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#proprietaires'}">
+                                    <li class="uk-active"><a href="#">Propiétaires</a></li>
+                                    <li><a href="#">Procurations</a></li>
+                                    <li><a href="#">En qualité de</a></li>
+                                </ul>
+                                <ul id="proprietaires" class="uk-switcher uk-margin">
+                                    <li>
+                                        <div class="md-card">
+                                            <div class="md-card-toolbar">
+                                                <h3 class="md-card-toolbar-heading-text">
+                                                    Détails des propriétaires
+                                                </h3>
+                                            </div>
+                                            <div class="md-card-content medium-padding">
+                                                {% if  mandat.acquisition.bien.owners|length ==0 %}
+                                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                                        <span class="uk-badge uk-badge-danger">  Pas de propriétaires </span>
+                                                    </div>
+                                                {% endif %}
+                                                {% for owner in mandat.acquisition.bien.owners %}
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination</span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            <a href="{{ path('client_show', { 'code': owner.client.code }) }}">
+                                                                                {{ owner.client.denomination }}
+                                                                            </a>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone  </span>
+                                                                        <span class="md-list-heading uk-text-large"> {{ owner.client.tel }}</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ owner.client.code }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ owner.client.identifier }}</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-card">
+                                            <div class="md-card-toolbar">
+                                                <h3 class="md-card-toolbar-heading-text">
+                                                    Détails des procurations
+                                                </h3>
+                                            </div>
+                                            <div class="md-card-content medium-padding">
+                                                {% if  mandat.acquisition.bien.procurations|length ==0 %}
+                                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                                        <span class="uk-badge uk-badge-danger">  Pas de procurations </span>
+                                                    </div>
+                                                {% endif %}
+                                                {% for procuration in mandat.acquisition.bien.procurations %}
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination p  </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            <a href="{{ path('client_show', { 'code': procuration.client.code }) }}">
+                                                                                {{ procuration.client.denomination }}
+                                                                            </a>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone P </span>
+                                                                        <span class="md-list-heading uk-text-large"> {{ procuration.client.tel }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code P  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ procuration.client.code }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant P  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ procuration.client.identifier }}</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  PP </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            <a href="{{ path('client_show', { 'code': procuration.representant.code }) }}">
+                                                                                {{ procuration.representant.denomination }}
+                                                                            </a>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone PP </span>
+                                                                        <span class="md-list-heading uk-text-large"> {{ procuration.representant.tel }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code PP  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ procuration.representant.code }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant PP  </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ procuration.representant.identifier }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-card">
+                                            <div class="md-card-toolbar">
+                                                <h3 class="md-card-toolbar-heading-text">
+                                                    Détails en qualité de
+                                                </h3>
+                                            </div>
+                                            <div class="md-card-content medium-padding">
+                                                {% if  mandat.acquisition.bien.representants|length ==0 %}
+                                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                                        <span class="uk-badge uk-badge-danger">  Pas de en qualité de </span>
+                                                    </div>
+                                                {% endif %}
+                                                {% for representant in mandat.acquisition.bien.representants %}
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination p  </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            <a href="{{ path('client_show', { 'code': representant.client.code }) }}">
+                                                                                {{ representant.client.denomination }}
+                                                                            </a>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone P </span>
+                                                                        <span class="md-list-heading uk-text-large"> {{ representant.client.tel }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code P  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ representant.client.code }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant P  </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ representant.client.identifier }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  PP </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            <a href="{{ path('client_show', { 'code': representant.representant.code }) }}">
+                                                                                {{ representant.representant.denomination }}
+                                                                            </a>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone PP </span>
+                                                                        <span class="md-list-heading uk-text-large"> {{ representant.representant.tel }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code PP  </span>
+                                                                        <span class="md-list-heading uk-text-large">  {{ representant.representant.code }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant PP  </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ representant.representant.identifier }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                     data-uk-grid-margin>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Titre
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('bien_show',
+                                                        { 'id': mandat.acquisition.bien.id }) }}">
+                                                                {{ mandat.acquisition.bien.title }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Superficie terrain
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.acquisition.bien.totalArea|number_format(3, ',', ' ') }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Superficie couverte
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.acquisition.bien.coveredArea|number_format(3, ',', ' ') }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Nature
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.acquisition.bien.nature }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Chambre(s)
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.acquisition.bien.bedroom }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Salle(s) de bain
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.acquisition.bien.bathroom }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Agence
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('agency_show',
+                                                        { 'id': mandat.acquisition.bien.agency.id }) }}">
+                                                                {{ mandat.acquisition.bien.agency }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Créé par
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('personnel_show',
+                                                        { 'id': mandat.acquisition.bien.createdBy.id }) }}">
+                                                                {{ mandat.acquisition.bien.createdBy }} </a>
+                                                        </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Adresse
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.acquisition.bien.address }}
+                                                        , {{ mandat.acquisition.bien.address.rue }}
+                                                        , {{ mandat.acquisition.bien.address.rue.localite }}
+                                                        , {{ mandat.acquisition.bien.address.rue.localite.ville }}
+                                                        , {{ mandat.acquisition.bien.address.rue.localite.ville.gouvernorat }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-card-content">
+                                    <div class="uk-grid">
+                                        <div class="uk-width-1-1">
+                                            <ul class="uk-tab"
+                                                data-uk-tab="{connect:'#tabsMandat'}"
+                                                id="tabs_2">
+                                                <li class="uk-active"><a href="#">Déscription et statut du mandat</a>
+                                                </li>
+                                                <li><a href="#">Prix & Conditions </a></li>
+                                                <li><a href="#">Durée du mandat </a></li>
+                                                <li><a href="#">Type du mandat </a></li>
+                                                <li><a href="#">Visite du bien</a></li>
+                                                <li><a href="#">Honoraires </a></li>
+                                                <li><a href="#">Observation</a></li>
+                                            </ul>
+                                            <ul id="tabsMandat" class="uk-switcher uk-margin">
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                {% if mandat.mandatParent is not null %}
+                                                                    <li>
+                                                                        <div class="md-list-content">
+                                                                            <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                Parent
+                                                                            </span>
+                                                                            <span class="md-list-heading uk-text-large">
+                                                                                {{ mandat.mandatParent.numero }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endif %}
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Type du mandat
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.typeMandat }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Numéro
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.numero }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Provenance
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.provenance }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Usage
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.usage }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Titre
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.titre }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Confomité
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {% if mandat.isConforme %}
+                                                                                Conforme aux normes de construction et d'urbanisme en vigeur
+                                                                            {% else %}
+                                                                                Non conforme aux normes de construction d'urbanisme
+                                                                            {% endif %}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                {% if not mandat.isConforme %}
+                                                                    <li>
+                                                                        <div class="md-list-content">
+                                                                            <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                Confomité pour
+                                                                            </span>
+                                                                            <span class="md-list-heading uk-text-large">
+                                                                                {{ mandat.isNotConformeFor }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endif %}
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Hypothèque
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.hypotheque }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                {% if mandat.hypotheque == 'Hypotheque de' %}
+                                                                    <li>
+                                                                        <div class="md-list-content">
+                                                                            <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                Hypothèque de
+                                                                            </span>
+                                                                            <span class="md-list-heading uk-text-large">
+                                                                                {{ mandat.hypothequeFor }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                {% endif %}
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Frais de corporité
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.fraisDeCorporite }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Période de Frais de corporité
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.periodeFraisDeCorporite }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Etat du bien
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.etatBien }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            {% if mandat.etatBien == 'Loue' %}
+                                                                <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                                     data-uk-grid-margin>
+                                                                    <div class="uk-width-medium-1-2">
+                                                                        <ul class="md-list">
+                                                                            <li>
+                                                                                <div class="md-list-content">
+                                                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                        Loué à
+                                                                                    </span>
+                                                                                    <span class="md-list-heading uk-text-large">
+                                                                                        {{ mandat.loueA }}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="uk-width-medium-1-4">
+                                                                        <ul class="md-list">
+                                                                            <li>
+                                                                                <div class="md-list-content">
+                                                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                        Loyer mensuel
+                                                                                    </span>
+                                                                                    <span class="md-list-heading uk-text-large">
+                                                                                        {{ mandat.loyeMensuel }}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="uk-width-medium-1-4">
+                                                                        <ul class="md-list">
+                                                                            <li>
+                                                                                <div class="md-list-content">
+                                                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                        Date fin loyer
+                                                                                    </span>
+                                                                                    <span class="md-list-heading uk-text-large">
+                                                                                        {{ mandat.dateFinLoyer|date('d/m/Y') }}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Prix de vente demandé
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.prixDeVenteDemande|number_format(3, ',', ' ') }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Pourcentage réglement
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.pourcentageRegelement }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Intervale min signature
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.intervalMinSignatureActe }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Prix de vente demandé en texte
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.prixDeVenteDemandeTexte }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Forme réglement
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.formeReglement }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Intervale max signature
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.intervalMaxSignatureActe }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Consigne
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.consigne }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Date début effet mandat
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.dateDebutEffetMandat|date('d/m/Y') }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Date expiration effet mandat
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.dateExpirationEffetMandat|date('d/m/Y') }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Résolu ou tacitement renouvelé
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.resoluOuRenouvele }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Exclusif ou non
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {% if mandat.isExclusif %}
+                                                                                Exclusif et irrévocable durant la période convenue au point 3
+                                                                            {% else %}
+                                                                                Non exclusif et irrévocable durant la période convenue au point 3
+                                                                            {% endif %}
+
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                        Promotions
+                                                                    </span>
+                                                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                                                        {% if  mandat.promotions|length ==0 %}
+                                                                            <span class="uk-badge uk-badge-danger">
+                                                                                pas de promotions
+                                                                            </span>
+                                                                        {% endif %}
+                                                                        {% for promotion in  mandat.promotions %}
+                                                                            <div class="parsley-row">
+                                                                                <span class="uk-badge uk-badge-success">
+                                                                                    {{ promotion }}
+                                                                                </span>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Autres
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.autresPromotion }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Moyens de visite
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.visite }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        {% if mandat.visite == 'Contacter Mr/Mme' %}
+                                                            <div class="uk-width-medium-1-2">
+                                                                <ul class="md-list">
+                                                                    <li>
+                                                                        <div class="md-list-content">
+                                                                            <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                                Contacter
+                                                                            </span>
+                                                                            <span class="md-list-heading uk-text-large">
+                                                                                {{ mandat.contactVisite }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Honoraire
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.montantHonoraireAgent|number_format(3, ',', ' ') }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Honoraire en texte
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.montantHonoraireAgentTexte }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                                         data-uk-grid-margin>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Note
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.note|raw }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <ul class="md-list">
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Fait à
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.faitA }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="md-list-content">
+                                                                        <span class="uk-text-small uk-text-muted uk-display-block">
+                                                                            Fait le
+                                                                        </span>
+                                                                        <span class="md-list-heading uk-text-large">
+                                                                            {{ mandat.faitLe|date('d/m/Y') }}
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Historique
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        {% if  mandat.taches|length == 0 %}
+                                            <div class="uk-margin-bottom uk-text-center uk-position-relative">
+
+                                                <span class="uk-badge uk-badge-danger">
+                                                    pas encore d'hystorique
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="md-card-content">
+                                                <table id="tableTaches" class="uk-table uk-table-hover" cellspacing="0"
+                                                       width="100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Titre</th>
+                                                        <th>Date de creation</th>
+                                                        <th>Effectuée par</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for tache in mandat.taches %}
+                                                        <tr>
+                                                            <td>
+                                                                <a title="{{ tache.typeTache.title }}"
+                                                                   href=""
+                                                                   data-uk-modal="{target:'#modal-afficherTache'}"
+                                                                   onclick="UIkit.modal.alert( 'Déscription: {{ tache.description|e('js') }}', {
+                                                                           labels: {
+                                                                           Ok: 'Fermer'
+                                                                           }
+                                                                           }) "
+                                                                   data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}">
+                                                                    <i class="md-icon md-list-addon-icon material-icons uk-text-{{ tache.typeTache.class }}">
+                                                                        {{ tache.typeTache.icon|raw }}
+                                                                    </i>
+                                                                    {{ tache.typeTache }}
+                                                                </a>
+                                                            </td>
+                                                            <td>  {{ tache.creationDate|date('d/m/Y') }}</td>
+                                                            <td>
+                                                                <a href="{{ path('personnel_show', { 'id': tache.personnel.id }) }}">
+                                                                    {{ tache.personnel }}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                {% if  mandat.meetings|length == 0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-badge uk-badge-danger">
+                                            pas encore de rendez-vous
+                                        </span>
+                                    </div>
+                                {% else %}
+                                    <table id="tableTaches" class="uk-table uk-table-hover" cellspacing="0"
+                                           width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Titre</th>
+                                            <th>Date début</th>
+                                            <th>Date fin</th>
+                                            <th>Etat</th>
+                                            <th>Rendez-vous pour</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for meeting in mandat.meetings %}
+                                            <tr>
+                                                <td>
+                                                    <a data-uk-modal="{target:'#modal-afficherRemind'}"
+                                                       data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}"
+                                                       onclick="openMeetingModal('{{ meeting.title }}',
+                                                               '{{ meeting.beginDate|date('m/m/Y H:m') }}',
+                                                               '{{ meeting.finishDate|date('m/m/Y H:m') }}',
+                                                               '{{ meeting.remindFors|join(' - ') }}', '{{ meeting.createdBy }}')">
+                                                        {{ meeting.title }}
+                                                    </a>
+                                                </td>
+                                                <td>  {{ meeting.beginDate|date('d/m/Y H:m') }}</td>
+                                                <td>  {{ meeting.finishDate|date('d/m/Y H:m') }}</td>
+                                                <td>
+                                                    {% if meeting.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::DONE') %}
+                                                        <span class="uk-badge uk-badge-success"> {{ meeting.status }}</span>
+                                                    {% elseif meeting.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::CONFIRMED') %}
+                                                        <span class="uk-badge uk-badge-default"> {{ meeting.status }}</span>
+                                                    {% elseif meeting.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::NOT_CONFIRMED') %}
+                                                        <span class="uk-badge uk-badge-warning"> {{ meeting.status }}</span>
+                                                    {% elseif meeting.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::CANCELLED') %}
+                                                        <span class="uk-badge uk-badge-danger"> {{ meeting.status }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% for remindFor in meeting.remindFors %}
+                                                        <a href="{{ path('personnel_show',
+                                                        { 'id': remindFor.id }) }}">
+                                                            {{ remindFor }} {% if not loop.last %} - {% endif %}
+                                                        </a>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                            </li>
+
+                            <li>
+                                {% if  mandat.visites|length == 0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                         <span class="uk-badge uk-badge-danger">
+                                            pas encore de visites
+                                         </span>
+
+                                    </div>
+                                {% else %}
+                                    <table id="tableTaches" class="uk-table uk-table-hover" cellspacing="0"
+                                           width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Titre</th>
+                                            <th>Date début</th>
+                                            <th>Date fin</th>
+                                            <th>Etat</th>
+                                            <th>Visite pour</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for visite in mandat.visites %}
+                                            <tr>
+                                                <td>
+                                                    <a data-uk-modal="{target:'#modal-afficherVisite'}"
+                                                       data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}"
+                                                       onclick="openVisitModal('{{ visite.title }}',
+                                                               '{{ visite.beginDate|date('m/m/Y H:m') }}',
+                                                               '{{ visite.finishDate|date('m/m/Y H:m') }}',
+                                                               '{{ visite.remindFors|join(' - ') }}', '{{ visite.createdBy }}')">
+                                                        {{ visite.title }}
+                                                    </a>
+                                                </td>
+                                                <td>  {{ visite.beginDate|date('d/m/Y H:m') }}</td>
+                                                <td>  {{ visite.finishDate|date('d/m/Y H:m') }}</td>
+                                                <td>
+                                                    {% if visite.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::DONE') %}
+                                                        <span class="uk-badge uk-badge-success"> {{ visite.status }}</span>
+                                                    {% elseif visite.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::CONFIRMED') %}
+                                                        <span class="uk-badge uk-badge-default"> {{ visite.status }}</span>
+                                                    {% elseif visite.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::NOT_CONFIRMED') %}
+                                                        <span class="uk-badge uk-badge-warning"> {{ visite.status }}</span>
+                                                    {% elseif visite.status ==  constant('\\SBC\\BienBundle\\Entity\\Meeting::CANCELLED') %}
+                                                        <span class="uk-badge uk-badge-danger"> {{ visite.status }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% for remindFor in visite.remindFors %}
+                                                        <a href="{{ path('personnel_show',
+                                                        { 'id': remindFor.id }) }}">
+                                                            {{ remindFor }} {% if not loop.last %} - {% endif %}
+                                                        </a>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                            </li>
+
+
+                            <li>
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Offres
+                                            <a id="addOffre" title="Ajouter une offre"
+                                               data-uk-modal="{target:'#modal-addOffre'}">
+                                                <i class="material-icons md-24">&#xE146;</i>
+                                            </a>
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        {% if  mandat.offres|length == 0 %}
+                                            <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                                <span class="uk-badge uk-badge-danger">
+                                                    pas encore d'offres
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="md-card-content">
+                                                <table id="tableOffres" class="uk-table uk-table-hover" cellspacing="0"
+                                                       width="100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Date création</th>
+                                                        <th>Etat</th>
+                                                        <th>crée par</th>
+                                                        <th>Proposé par</th>
+                                                        <th>Prix proposé</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for offre in mandat.offres %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ offre.code }}
+                                                            </td>
+                                                            <td>  {{ offre.creationDate|date('d/m/Y H:m') }}</td>
+                                                            <td>
+                                                                {% if offre.status ==  constant('\\SBC\\BienBundle\\Entity\\Offre::EN_COURS') %}
+                                                                    <span class="uk-badge uk-badge-warning">{{ offre.status }}</span>
+                                                                {% elseif offre.status ==  constant('\\SBC\\BienBundle\\Entity\\Offre::ACCEPTED') %}
+                                                                    <span class="uk-badge uk-badge-success">{{ offre.status }}</span>
+                                                                {% else %}
+                                                                    <span class="uk-badge uk-badge-danger">{{ offre.status }}</span>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ path('personnel_show', { 'id': offre.createdBy.id }) }}">
+                                                                    {{ offre.createdBy }}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ path('client_show', { 'code': offre.proposedBy.code }) }}">
+                                                                    {{ offre.proposedBy }}</a>
+                                                            </td>
+                                                            <td>  {{ offre.proposedPrice|number_format(3, ',', ' ') }}</td>
+                                                            <td>
+                                                                {% if offre.status ==  constant('\\SBC\\BienBundle\\Entity\\Offre::EN_COURS') %}
+                                                                    <a href="javascript:void(0)"
+                                                                       data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}"
+                                                                       title="Refuser"
+                                                                       onclick="UIkit.modal.confirm('Voulez vous vraiment refuser cette offre ?',
+                                                                               function(){ refuserOffre({{ offre.id }});}
+                                                                               ,
+                                                                               {
+                                                                               labels: {
+                                                                               Ok: 'Oui',
+                                                                               Cancel: 'Non'
+                                                                               }
+                                                                               });">
+                                                                        <i class="md-icon material-icons">&#xE14C;</i>
+                                                                    </a>
+                                                                {% endif %}
+                                                                {% if accepted == false %}
+                                                                    <a href="javascript:void(0)"
+                                                                       data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}"
+                                                                       title="Accepter"
+                                                                       onclick="UIkit.modal.confirm('Voulez vous vraiment accepter cette offre ?',
+                                                                               function(){ accepterOffre({{ offre.id }});}
+                                                                               ,
+                                                                               {
+                                                                               labels: {
+                                                                               Ok: 'Oui',
+                                                                               Cancel: 'Non'
+                                                                               }
+                                                                               });">
+                                                                        <i class="md-icon material-icons">&#xE876;</i>
+                                                                    </a>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                     data-uk-grid-margin>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Comission en TND
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.montantHonoraireAgent|number_format(3, ',', ' ') }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">
+                                                        Comission en Texte
+                                                    </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        {{ mandat.montantHonoraireAgentTexte }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-modal" id="modal-addOffre">
+            <div class="uk-modal-dialog">
+                <button type="button" class="uk-modal-close uk-close"></button>
+                <div class="uk-modal-header"><h2>Ajouter une offre</h2></div>
+                <form method="POST" name="form_offre" action="#" class="uk-form-stacked" id="form_validation">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                                    <label for="codeOffre">Code</label>
+                                    <input id="codeOffre" value="" class="md-input" data-parsley-codeoffre="3"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2" style="padding-left: 0;padding-top: 10px">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                                    <select class="kendoComboBox select" title="proposedBy" id="proposedBy">
+                                        <option></option>
+                                        {% for client in clients %}
+                                            <option value="{{ client.code }}">{{ client.denomination }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {#<span class="uk-form-help-block">Proposé par</span>#}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                                    <label for="proposedPrice">Prix à proposer</label>
+                                    <input id="proposedPrice" value="" class="md-input money"
+                                           data-parsley-proposedprice="3"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2" style="padding-left: 0">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                                    <label for="proposedPriceText">Prix à proposer en texte</label>
+                                    <input id="proposedPriceText" value="" class="md-input"
+                                           data-parsley-proposedpricetext="3"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="uk-modal-footer uk-text-left">
+                    <button type="button" class="md-btn md-btn-primary" onclick="newOffre(this)">
+                        Ajouter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper md-fab-speed-dial">
+        <a class="md-fab md-fab-primary" href="javascript:void(0)" data-uk-tooltip="{pos:'right'}"
+           title="Actions">
+            <i class="material-icons">&#xE55D;</i></a>
+        <div class="md-fab-wrapper-small">
+            {% for typeTache in typesTaches %}
+                <a title="{{ typeTache.title }}"
+                   class="md-fab md-fab-small md-fab-{{ typeTache.class }}" href=""
+                   data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}"
+                   data-uk-modal="{target:'#modal-ajouterTache'}"
+                   onclick="openTacheModal('{{ typeTache.title }}',
+                           '{{ typeTache.id }}',
+                           '{{ mandat.numero }}',
+                           '{{ mandat.id }}' )">
+                    <i class="material-icons">{{ typeTache.icon|raw }}</i>
+                </a>
+            {% endfor %}
+            <a class="md-fab md-fab-small md-fab-danger" href="javascript:void(0)"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Supprimer"
+               onclick="confirmDelete({{ mandat.id }})">
+                <i class="material-icons">&#xE92B;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab-success" href="{{ path('mandat_edit', {'id': mandat.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Modifier">
+                <i class="material-icons">&#xE3C9;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab" href="{{ path('mandat_new_child', {'id': mandat.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Nouveau sous mandat">
+                <i class="material-icons">&#xE15A;</i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        altair_forms.parsley_validation_config();
+    </script>
+    {% javascripts output="js/compiled/validationWithNumberFormat.js"
+    'bundles/immobilier/assets/js/kendoui_custom.min.js'
+    'bundles/immobilier/bower_components/parsleyjs/dist/parsley.min.js'
+    'bundles/immobilier/assets/js/pages/forms_validation.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js'
+    'bundles/immobilier/jquery-numberformatter/jshashtable-2.1.js'
+    'bundles/immobilier/jquery-numberformatter/jquery.numberformatter-1.2.4.js'
+    'bundles/immobilier/assets/js/kendoui_custom.js'
+    'bundles/immobilier/assets/js/pages/kendoui.js'%}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        function openTacheModal(typeTacheTitle, typeTacheId, mandatNumero, mandatId) {
+            UIkit.modal.confirm(' <div class=uk-modal-header><h2>Ajouter une tâche</h2></div>' +
+                '<form method=POST name=form_tacheNouvelle action=# class=uk-form-stacked form_validation>' +
+                '<div class=uk-grid data-uk-grid-margin>' +
+                ' <div class=uk-width-medium-1-2>' +
+                ' <div class=parsley-row>' +
+                ' <div class=uk-input-group>' +
+                ' <span class=uk-form-help-block>Type de Tache</span>' +
+                ' <input id=typeTache class=md-input type=text value="' + typeTacheTitle + '" readonly/>' +
+                ' <input id=typeTacheValue name=typeTachee type=hidden value="' + typeTacheId + '" />' +
+                ' </div>' +
+                ' </div>' +
+                '  </div>' +
+                ' <div class=uk-width-medium-1-2>' +
+                '  <div class=parsley-row>' +
+                ' <div class=uk-input-group>' +
+                ' <span class=uk-form-help-block >Mandat</span>' +
+                ' <input id=mandat class=md-input type=text value="' + mandatNumero + '" readonly />' +
+                ' <input id=mandatValue name=mandatt type=hidden value="' + mandatId + '" />' +
+                ' </div>' +
+                ' </div>' +
+                ' </div>' +
+                ' </div>' +
+                '  <div class=uk-grid data-uk-grid-margin>' +
+                '  <div class=uk-width-medium-2-2>' +
+                '  <div class=parsley-row>' +
+                '  <div class=uk-input-group>' +
+                ' <span class=uk-form-help-block>Déscription</span>' +
+                '  <textarea id=descriptionn name=description></textarea>' +
+                ' </div>' +
+                ' </div>' +
+                '  </div>' +
+                ' </div>' +
+                '  <div class=uk-grid data-uk-grid-margin>' +
+                ' <div class=uk-width-medium-2-2>' +
+                '<div class="uk-margin-bottom uk-text-center uk-position-relative">' +
+                ' <a class="md-btn md-btn-primary" href="#"  title="Ajouter un rappel"  ' +
+                'data-uk-modal=" { target:\'#modal-ajouterT\' } " ' +
+                ' onclick=" openRemindModal()"><i class=\'material-icons\'>&#xE856;</i>Ajouter un rappel</a>' +
+                ' </div>' +
+                ' </div>' +
+                ' </div>' +
+                ' </form>', function () {
+                    ajouterTache(typeTacheId, mandatId);
+                }, {
+                    labels: {
+                        Ok: 'Ajouter',
+                        Cancel: 'Fermer'
+                    }
+                }
+            );
+            CKEDITOR.replace(descriptionn, {height: 150});
+        }
+        function confirmDelete(id, rueId) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer ce mandat ?',
+                function () {
+                    deleteIt(id, rueId);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                })
+        }
+        function deleteIt(id, rueID) {
+            var url = '{{ path('mandat_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('Le mandat a été supprimé avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }).on('hide.uk.modal', function () {
+                            history.back();
+                        });
+                        fillDataTable(rueID);
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer ce mandat pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer ce mandat pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+        function openMeetingModal(title, start, end, remindFor, createdBy) {
+            UIkit.modal.alert('' +
+                '<h3 class="heading_b uk-margin-medium-bottom">' +
+                'Informations sur le rendez-vous</h3><div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                '</div>' +
+                '<ul class="md-list">' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>' +
+                '<span class="md-list-heading uk-text-large">' + title +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Débute le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + start +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Se términe le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + end +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Rendez-vous pour</span>' +
+                '<span class="md-list-heading uk-text-large">' + remindFor +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Rendez-vous créé par</span>' +
+                '<span class="md-list-heading uk-text-large">' + createdBy +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '</ul>' +
+                '', {
+                labels: {
+                    Ok: 'Fermer'
+                }
+            });
+        }
+        function openVisitModal(title, start, end, remindFor, createdBy) {
+            UIkit.modal.alert('' +
+                '<h3 class="heading_b uk-margin-medium-bottom">' +
+                'Informations sur la visite</h3><div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                '</div>' +
+                '<ul class="md-list">' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>' +
+                '<span class="md-list-heading uk-text-large">' + title +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Débute le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + start +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Se términe le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + end +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Visite pour</span>' +
+                '<span class="md-list-heading uk-text-large">' + remindFor +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Visite créé par</span>' +
+                '<span class="md-list-heading uk-text-large">' + createdBy +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '</ul>' +
+                '', {
+                labels: {
+                    Ok: 'Fermer'
+                }
+            });
+        }
+        function openRemindModal() {
+            var calendarColorsWrapper = $('<div id="calendar_colors_wrapper"></div>');
+            var calendarColorPicker = altair_helpers.color_picker(calendarColorsWrapper).prop('outerHTML');
+            UIkit.modal.confirm(
+                '<h3 class="heading_b uk-margin-medium-bottom">Ajouter un rappel</h3>' +
+                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                ' <span class="uk-form-help-block">Couleur</span>' + calendarColorPicker +
+                '</div>' +
+                '<form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-large-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Personnel</span>' +
+                '<input id="personnel" class="md-input" value="{{ app.user.personnel.name }}"' +
+                ' name="personnel" type="text" readonly />' +
+                '<input id="personnelId" class="md-input" name="personnelId" ' +
+                'value="{{ app.user.personnel.id }}" type="hidden"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Requête</span>' +
+                '<input id="mandat" class="md-input uk-form-width-small" ' +
+                'name="requete" value="{{ mandat.numero }}" type="text" readonly />' +
+                '<input id="mandatID" class="md-input" name="mandatID" value="{{ mandat.id }}" type="hidden"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" style=" width: 150px;">' +
+                '<span class="uk-form-help-block">Titre</span>' +
+                '<input id="title" class="md-input" name="title" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-large" data-uk-grid-margin>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" ">' +
+                '<span class="uk-form-help-block">Date début</span>' +
+                '<input id="datestart" name="datestart" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}" ' +
+                'class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure début</span>' +
+                '<input id="timestart" name="timestart" required data-uk-timepicker="{start:8, end:19}" ' +
+                'class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-large" data-uk-grid-margin>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" >' +
+                '<span class="uk-form-help-block">Date fin</span>' +
+                '<input id="dateend" name="dateend"  data-uk-datepicker = "{format:\'DD-MM-YYYY\'}"' +
+                ' class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure fin</span>' +
+                '<input id="timeend"  name="timeend"  required data-uk-timepicker="{start:8, end:19}"' +
+                ' class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                ''
+                , function () {
+                    var title = $("#title");
+                    if (title.val() !== '') {
+                        var eventColor = $('#calendar_colors_wrapper').find('input').val();
+                        var url = '{{ path('remindmandat_add') }}';
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: 'title=' + title.val() + '&start=' + $('#datestart').val() + " " + $('#timestart').val()
+                            + '&end=' + $('#dateend').val() + " " + $('#timeend').val() + '&color=' + eventColor
+                            + '&mandat=' + $('#mandatID').val() + '&remindFor=' + $('#personnelId').val(),
+
+                            success: function () {
+                                UIkit.modal.alert('Le rappel a été ajouté avec succès.', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                })
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }, {
+                    labels: {
+                        Ok: 'Ajouter',
+                        Cancel: 'Fermer'
+                    }
+                });
+        }
+        function ajouterTache($typeTache, $mandat) {
+            var $description = CKEDITOR.instances['descriptionn'].getData();
+            var url = '{{ path('tache_mandat_new') }}';
+            var data = {
+                'typetache': $typeTache,
+                'mandat': $mandat,
+                'description': $description
+            };
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                dataType: 'json',
+                data: data,
+                success: function (json) {
+                    if (json.success === false || json.message !== '') {
+                        UIkit.modal.alert('erreur');
+                    } else {
+                        UIkit.modal.alert('La tâche a été ajoutée avec succès.', {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            location.reload(true);
+                        });
+                    }
+
+                },
+                error: function () {
+                    UIkit.modal.alert('exception contacter SBC', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+        function newOffre() {
+            var code = $('#codeOffre');
+            var codeIsValid = code.parsley().isValid();
+            if (codeIsValid) {
+                var url = '{{ path('offre_add') }}';
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    data: "code=" + code.val() + '&proposedBy=' + $('#proposedBy').val()
+                    + '&proposedPrice=' + $('#proposedPrice').val() + '&proposedPriceText=' + $('#proposedPriceText').val()
+                    + '&mandat=' + '{{ mandat.id }}',
+                    success: function (json) {
+                        if (json.success === false || json.message !== '') {
+                            window.Parsley.addValidator('codeoffre', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Ce code existe déjà.',
+                                    fr: "Ce code existe déjà"
+                                }
+                            });
+                            code.on('change', function () {
+                                window.Parsley.addValidator('code', {
+                                    validateString: function () {
+                                        return true;
+                                    }
+                                });
+                                code.parsley().validate();
+                            });
+                        } else {
+                            window.Parsley.addValidator('code', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                            UIkit.modal.alert('L\'offre a été ajoutée avec succès', {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }).on('hide.uk.modal', function () {
+                                location.reload(true);
+                            });
+                        }
+                        code.parsley().validate();
+                    },
+                    error: function () {
+                        code.parsley().validate();
+                    }
+                });
+            }
+            else {
+                code.parsley().validate();
+            }
+        }
+        function setFormatNumber() {
+            $('.numeric').blur(function () {
+                $(this).parseNumber({format: "######0.00", locale: "us"});
+                $(this).formatNumber({format: "######0.00", locale: "us"});
+            });
+            $('.money').blur(function () {
+                $(this).parseNumber({format: "#,##0.000", locale: "fr"});
+                $(this).formatNumber({format: '#,##0.000', locale: 'fr'});
+            });
+        }
+        function getClients(select) {
+//            $('#proposedBy').selectize({
+//                placeholder: 'Choisir un client....             ',
+//                hideSelected: true
+//            });
+            $('.select').kendoComboBox({
+                filter: "contains",
+                suggest: true
+            });
+            var clients = select[0].selectize;
+            clients.clearOptions();
+            var url = '{{ path('client_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            clients.addOption({
+                                text: element.text,
+                                value: element.value
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function (exception) {
+                    console.log(exception.responseText);
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+        function refuserOffre($id) {
+            var url = '{{ path('offre_refuser', {'id': 'iD'}) }}';
+            url = url.replace('iD', $id);
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('L\'offre a été refusée avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            location.reload(true);
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de refuser cette offre pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de refuser cette offre pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+        function accepterOffre($id) {
+            var url = '{{ path('offre_accepter', {'id': 'iD'}) }}';
+            url = url.replace('iD', $id);
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('L\'offre a été acceptée avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            location.reload(true);
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de accepter cette offre pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de accepter cette offre pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+        $(document).ready(function () {
+            setFormatNumber();
+            getClients($('#proposedBy'));
+        })
+    </script>
+{% endblock %}

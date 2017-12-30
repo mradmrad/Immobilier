@@ -1,0 +1,9 @@
+tache_requete_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:TacheRequete:new" }
+    methods:  [GET, POST]
+
+tache_requete_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:TacheRequete:delete" }
+    methods:  DELETE

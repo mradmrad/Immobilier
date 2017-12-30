@@ -1,0 +1,59 @@
+<div id="page_content_inner">
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            {{ form_start(form, {'attr': {'class': 'uk-form-stacked', 'id':'form-rue'}}) }}
+            {{ form_errors(form) }}
+
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row"
+                            {#style="padding-top: 22px;"#}
+                    >
+                        <div class="uk-input-group">
+                <span class="uk-input-group-addon">
+                    <i class="material-icons">home</i>
+                </span>
+                            Nom
+                            {{ form_widget(form.name, {'attr': {'class': 'md-input', 'required':''}}) }}
+                        </div>
+                        <span>   {{ form_errors(form.name) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+
+                            {#{{ form_label(form.gouvernorat, "Gouvernorat"|trans) }}#}
+                            <span class="uk-input-group-addon"><i class="material-icons">account_balance</i> </span>
+                            Ville
+                            {{ form_widget(form.ville, {'attr': {'data-md-selectize': '', 'data-md-selectize-bottom': '','required':'' , 'placeholder' : 'Ville'}}) }}
+
+                        </div>
+                        <span>     {{ form_errors(form.ville) }} </span>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+            {#<div class="uk-grid">#}
+            {#<div class="uk-width-1-1">#}
+            {#{{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}#}
+            {#</div>#}
+            {#</div>#}
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    <button type="submit" class="md-btn md-btn-primary" style="float: right">
+                        <i class="material-icons">&#xE161;</i>
+                    </button>
+                    {#{{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}#}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

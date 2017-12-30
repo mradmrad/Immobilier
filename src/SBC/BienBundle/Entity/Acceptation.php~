@@ -1,0 +1,160 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Acceptation
+ *
+ * @ORM\Table(name="acceptation")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\AcceptationRepository")
+ */
+class Acceptation
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identity", type="string", length=255, nullable=true)
+     */
+    private $identity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="delivered", type="string", length=255, nullable=true)
+     */
+    private $delivered;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="quality", type="string", length=255, nullable=true)
+     */
+    private $quality;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="society", type="string", length=255, nullable=true)
+     */
+    private $society;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="account", type="string", length=255, nullable=true)
+     */
+    private $account;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="acte", type="string", length=255, nullable=true)
+     */
+    private $acte;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reserve", type="string", length=255, nullable=true)
+     */
+    private $reserve;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contre_offre", type="string", length=255, nullable=true)
+     */
+    private $contreOffre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_o", type="string", length=255, nullable=true)
+     */
+    private $nameO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identity_o", type="string", length=255, nullable=true)
+     */
+    private $identityO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="delivered_o", type="string", length=255, nullable=true)
+     */
+    private $deliveredO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="quality_o", type="string", length=255, nullable=true)
+     */
+    private $qualityO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="society_o", type="string", length=255, nullable=true)
+     */
+    private $societyO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="account_o", type="string", length=255, nullable=true)
+     */
+    private $accountO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="acte_o", type="string", length=255, nullable=true)
+     */
+    private $acteO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reserve_o", type="string", length=255, nullable=true)
+     */
+    private $reserveO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contre_offre_o", type="string", length=255, nullable=true)
+     */
+    private $contreOffreO;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

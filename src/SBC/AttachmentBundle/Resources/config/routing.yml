@@ -1,0 +1,3 @@
+attachment_homepage:
+    path:     /
+    defaults: { _controller: AttachmentBundle:Default:index }

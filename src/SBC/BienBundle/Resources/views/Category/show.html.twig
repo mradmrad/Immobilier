@@ -1,0 +1,112 @@
+{% extends "::layout.html.twig" %}
+{% block title %}
+    Lecture d'une catégorie - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Catégories</a></li>
+            <li><span>Afficher une catégorie</span></li>
+        </ul>
+        <h1>{{ category.name }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">{{ category.creationDate|date('d/m/Y') }}</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-xLarge-8-10 uk-width-large-10-10">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Détails de la catégorie
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <ul class="md-list">
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Nom de la catégorie </span>
+                                    <span class="md-list-heading uk-text-large">{{ category.name }}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Date de création </span>
+                                    <span class="md-list-heading uk-text-large"> {{ category.creationDate|date('d/m/Y') }}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper md-fab-speed-dial">
+        <a class="md-fab md-fab-primary" href="javascript:void(0)" data-uk-tooltip="{pos:'right'}" title="Actions">
+            <i class="material-icons">&#xE55D;</i></a>
+        <div class="md-fab-wrapper-small">
+            <a class="md-fab md-fab-small md-fab-danger" href="javascript:void(0)"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Supprimer"
+               onclick="confirmDelete({{ category.id }})">
+                <i class="material-icons">&#xE92B;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab-success" href="{{ path('category_edit', {'id': category.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Modifier">
+                <i class="material-icons">&#xE3C9;</i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        function confirmDelete(id) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer cette catégorie ?',
+                function () {
+                    deleteIt(id);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                });
+        }
+        function deleteIt(id) {
+            var url = '{{ path('category_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('La catégorie a été supprimée avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            history.back();
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cette catégorie pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cette catégorie pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+    </script>
+{% endblock %}

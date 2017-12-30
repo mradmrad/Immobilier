@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gouvernorats list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Creationdate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gouvernorat in gouvernorats %}
+            <tr>
+                <td><a href="{{ path('gouvernorat_show', { 'id': gouvernorat.id }) }}">{{ gouvernorat.id }}</a></td>
+                <td>{{ gouvernorat.name }}</td>
+                <td>{% if gouvernorat.creationdate %}{{ gouvernorat.creationdate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gouvernorat_show', { 'id': gouvernorat.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gouvernorat_edit', { 'id': gouvernorat.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gouvernorat_new') }}">Create a new gouvernorat</a>
+        </li>
+    </ul>
+{% endblock %}

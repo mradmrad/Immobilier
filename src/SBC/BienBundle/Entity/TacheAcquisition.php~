@@ -1,0 +1,66 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TacheAcquisition
+ *
+ * @ORM\Table(name="tache_acquisition")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\TacheAcquisitionRepository")
+ */
+class TacheAcquisition extends  Tache
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Acquisition", inversedBy="taches")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $acquisition;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="beginDate", type="datetime")
+     */
+    protected $beginDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="finishDate", type="datetime")
+     */
+    protected $finishDate;
+
+
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Set acquisition
+     *
+     * @param \SBC\BienBundle\Entity\Acquisition $acquisition
+     *
+     * @return TacheAcquisition
+     */
+    public function setAcquisition(\SBC\BienBundle\Entity\Acquisition $acquisition)
+    {
+        $this->acquisition = $acquisition;
+
+        return $this;
+    }
+
+    /**
+     * Get acquisition
+     *
+     * @return \SBC\BienBundle\Entity\Acquisition
+     */
+    public function getAcquisition()
+    {
+        return $this->acquisition;
+    }
+}

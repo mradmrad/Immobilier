@@ -1,0 +1,325 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * OffreVente
+ *
+ * @ORM\Table(name="offre_vente")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\OffreVenteRepository")
+ */
+class OffreVente extends Offre
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="avance", type="integer", length=255 , nullable=true)
+     */
+    protected $avance;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="avance_type", type="string", length=255 , nullable=true)
+     */
+    protected $avanceType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="solde_type", type="string", length=255 , nullable=true)
+     */
+    protected $soldeType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modalite", type="string", length=255 , nullable=true)
+     */
+    protected $modalite;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="acte_min", type="integer", length=255 , nullable=true)
+     */
+    protected $acteMin;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="acte_max", type="integer", length=255 , nullable=true)
+     */
+    protected $acteMax;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="consigne", type="string", length=255 , nullable=true)
+     */
+    protected $consigne;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="consigne_date", type="datetime" , nullable=true)
+     */
+    protected $consigneDate;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="conditions", type="string", length=255 , nullable=true)
+     */
+    protected $conditions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Mandat", inversedBy="propositions" , cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $mandat;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set avance
+     *
+     * @param integer $avance
+     *
+     * @return OffreVente
+     */
+    public function setAvance($avance)
+    {
+        $this->avance = $avance;
+
+        return $this;
+    }
+
+    /**
+     * Get avance
+     *
+     * @return integer
+     */
+    public function getAvance()
+    {
+        return $this->avance;
+    }
+
+    /**
+     * Set avanceType
+     *
+     * @param string $avanceType
+     *
+     * @return OffreVente
+     */
+    public function setAvanceType($avanceType)
+    {
+        $this->avanceType = $avanceType;
+
+        return $this;
+    }
+
+    /**
+     * Get avanceType
+     *
+     * @return string
+     */
+    public function getAvanceType()
+    {
+        return $this->avanceType;
+    }
+
+    /**
+     * Set soldeType
+     *
+     * @param string $soldeType
+     *
+     * @return OffreVente
+     */
+    public function setSoldeType($soldeType)
+    {
+        $this->soldeType = $soldeType;
+
+        return $this;
+    }
+
+    /**
+     * Get soldeType
+     *
+     * @return string
+     */
+    public function getSoldeType()
+    {
+        return $this->soldeType;
+    }
+
+    /**
+     * Set modalite
+     *
+     * @param string $modalite
+     *
+     * @return OffreVente
+     */
+    public function setModalite($modalite)
+    {
+        $this->modalite = $modalite;
+
+        return $this;
+    }
+
+    /**
+     * Get modalite
+     *
+     * @return string
+     */
+    public function getModalite()
+    {
+        return $this->modalite;
+    }
+
+    /**
+     * Set acteMin
+     *
+     * @param integer $acteMin
+     *
+     * @return OffreVente
+     */
+    public function setActeMin($acteMin)
+    {
+        $this->acteMin = $acteMin;
+
+        return $this;
+    }
+
+    /**
+     * Get acteMin
+     *
+     * @return integer
+     */
+    public function getActeMin()
+    {
+        return $this->acteMin;
+    }
+
+    /**
+     * Set acteMax
+     *
+     * @param integer $acteMax
+     *
+     * @return OffreVente
+     */
+    public function setActeMax($acteMax)
+    {
+        $this->acteMax = $acteMax;
+
+        return $this;
+    }
+
+    /**
+     * Get acteMax
+     *
+     * @return integer
+     */
+    public function getActeMax()
+    {
+        return $this->acteMax;
+    }
+
+    /**
+     * Set consigne
+     *
+     * @param string $consigne
+     *
+     * @return OffreVente
+     */
+    public function setConsigne($consigne)
+    {
+        $this->consigne = $consigne;
+
+        return $this;
+    }
+
+    /**
+     * Get consigne
+     *
+     * @return string
+     */
+    public function getConsigne()
+    {
+        return $this->consigne;
+    }
+
+    /**
+     * Set consigneDate
+     *
+     * @param \DateTime $consigneDate
+     *
+     * @return OffreVente
+     */
+    public function setConsigneDate($consigneDate)
+    {
+        $this->consigneDate = $consigneDate;
+
+        return $this;
+    }
+
+    /**
+     * Get consigneDate
+     *
+     * @return \DateTime
+     */
+    public function getConsigneDate()
+    {
+        return $this->consigneDate;
+    }
+
+    /**
+     * Set conditions
+     *
+     * @param string $conditions
+     *
+     * @return OffreVente
+     */
+    public function setConditions($conditions)
+    {
+        $this->conditions = $conditions;
+
+        return $this;
+    }
+
+    /**
+     * Get conditions
+     *
+     * @return string
+     */
+    public function getConditions()
+    {
+        return $this->conditions;
+    }
+
+    public function __toString()
+    {
+        return '.....';
+    }
+}

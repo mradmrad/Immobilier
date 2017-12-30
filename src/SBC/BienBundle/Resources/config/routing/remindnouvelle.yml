@@ -1,0 +1,4 @@
+remindnouvelle_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:RemindNouvelle:add" }
+    methods:  [GET, POST]

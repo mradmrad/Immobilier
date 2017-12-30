@@ -1,0 +1,19 @@
+remind_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Remind:index" }
+    methods:  GET
+
+remind_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Remind:list" }
+    methods:  GET
+
+remind_edit:
+    path:     /edit
+    defaults: { _controller: "BienBundle:Remind:edit" }
+    methods:  [GET, POST]
+
+remind_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Remind:add" }
+    methods:  [GET, POST]

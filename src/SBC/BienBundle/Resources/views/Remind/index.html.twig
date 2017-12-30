@@ -1,0 +1,697 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {% stylesheets output="css/compiled/mainForCalendar.css" filter="cssrewrite"
+    'bundles/immobilier/bower_components/fullcalendar/dist/fullcalendar.min.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Liste des Rappels - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Rappels</a></li>
+            <li><span>Afficher tous les rappels</span></li>
+        </ul>
+        <h1>Liste des rappels</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Liste de tous les rappels</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="md-card">
+            <div class="md-card-content">
+                <div id="calendar_selectable"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainIndexForCalendar.js"
+    'bundles/immobilier/f/fullcalendar.min.js'
+    'bundles/immobilier/f/scheduler.min.js'
+    'bundles/immobilier/bower_components/fullcalendar/dist/locale/fr.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(function () {
+            var calendar_selectable = $('#calendar_selectable'),
+                calendarColorsWrapper = $('<div id="calendar_colors_wrapper"></div>');
+            var calendarColorPicker = altair_helpers.color_picker(calendarColorsWrapper).prop('outerHTML');
+            calendar_selectable.fullCalendar({
+                header: {
+                    left: 'title today',
+                    center: 'month',
+                    right: 'agendaDay,agendaWeek,listWeek prev,next'
+                },
+                buttonIcons: {
+                    prev: 'md-left-single-arrow',
+                    next: 'md-right-single-arrow',
+                    prevYear: 'md-left-double-arrow',
+                    nextYear: 'md-right-double-arrow'
+                },
+                buttonText: {
+                    today: ' ',
+                    month: ' ',
+                    week: ' ',
+                    day: ' '
+                },
+                views: {
+                    month: {
+                        selectable: false,
+                        editable: false
+                    }
+                },
+                locale: 'fr',
+                aspectRatio: 2.48,
+                defaultDate: moment(),
+                selectable: true,
+                selectHelper: true,
+                editable: true,
+                eventLimit: true,
+                timeFormat: '(HH)(:mm)',
+                defaultView: 'agendaDay',
+                slotDuration: '00:15:00',
+                scrollTime: '08:00',
+                resources: '{{ path('personnel_one') }}',
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                eventSources: '{{ path('remind_list') }}',
+                lazyFetching: false,
+                eventRender: function (event, element) {
+                    element.find('.fc-title').html("Titre:&nbsp;&nbsp;\"" + event.title + "\"&nbsp;-&nbsp;Pour:&nbsp;&nbsp;" + event.remindFor + "");
+                },
+                select: function (start, end, a, b, resources) {
+                    UIkit.modal.confirm('' +
+                        '<h3 class="heading_b uk-margin-medium-bottom">Ajouter un rappel</h3><div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                        ' <span class="uk-form-help-block">Couleur</span>' +
+                        calendarColorPicker +
+                        '</div>' +
+                        '<form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-2-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Personnel</span>' +
+                        '<input id="personnel" class="md-input" name="personnel" type="text" readonly />' +
+                        '<input id="personnelId" class="md-input" name="personnelId" type="hidden"  required />' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '<div>' +
+                        '<div >' +
+                        '<span class="uk-form-help-block"></span>' + '<span class="uk-form-help-block"></span>' +
+                        '<ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:\'#tabs_4\', animation:\'slide-horizontal\'}">' +
+                        '<li class="uk-active"><a href="#">nouvelle</a></li>' +
+                        '<li><a href="#">acquisition</a></li>' +
+                        '<li><a href="#">requête</a></li>' +
+                        '<li><a href="#">mandat</a></li>' +
+                        '</ul>' +
+                        '<ul id="tabs_4" class="uk-switcher uk-margin">' +
+                        '<li>' +
+                        '<form method="POST" name="form_nouvelle" action="#" class="uk-form-stacked" id="form_validation">' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-2-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Nouvelle</span>' +
+                        '<select id="nouvelles"></select>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-5-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Titre</span>' +
+                        '<input id="title_nouvelle" class="md-input" name="text" type="text" value="" required />' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '</li>' +
+                        '<li>' +
+                        '<form method="POST" name="form_acquisition" action="#" class="uk-form-stacked" id="form_validation">' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-2-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Acquisition</span>' +
+                        '<select id="acquisitions"></select>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-5-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Titre</span>' +
+                        '<input id="title_acquisition" class="md-input" name="text" type="text" value="" required />' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '</li>' +
+                        '<li>' +
+                        '<form method="POST" name="form_requete" action="#" class="uk-form-stacked" id="form_validation">' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-2-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Requête</span>' +
+                        '<select id="requetes"></select>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        ' <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-5-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Titre</span>' +
+                        '<input id="title_requete" class="md-input" name="text" type="text" value="" required />' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '</li>' +
+                        '<li>' +
+                        '<form method="POST" name="form_mandat" action="#" class="uk-form-stacked" id="form_validation">' +
+                        '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-2-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Mandat</span>' +
+                        '<select id="mandats"></select>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        ' <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                        '<div class="uk-width-large-5-2">' +
+                        '<div class="uk-form-row">' +
+                        '<div class="parsley-row">' +
+                        '<span class="uk-form-help-block">Titre</span>' +
+                        '<input id="title_mandat" class="md-input" name="text" type="text" value="" required />' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>' +
+                        '</div>' +
+                        ''
+                        , function () {
+                            if ($("#title_nouvelle").val() !== '') {
+                                var eventData,
+                                    eventColor = $('#calendar_colors_wrapper').find('input').val();
+                                eventData = {
+                                    title: $("#title_nouvelle").val(),
+                                    start: start,
+                                    end: end,
+                                    color: eventColor ? eventColor : '',
+                                    resourceId: $("#personnelId").val(),
+                                    remindFor: $("#personnel").val(),
+                                    createdBy: 'Vous'
+//                                    isNotified => $remind->getIsNotified()
+                                };
+                                var url = '{{ path('remindnouvelle_add') }}';
+                                $.ajax({
+                                    url: url,
+                                    type: 'POST',
+                                    data: 'title=' + eventData.title + '&start=' + eventData.start.format('Y-MM-DD HH:mm')
+                                    + '&end=' + eventData.end.format('Y-MM-DD HH:mm') + '&color=' + eventData.color
+                                    + '&nouvelle=' + $('#nouvelles').val() + '&remindFor=' + $('#personnelId').val(),
+                                    success: function () {
+                                        console.log(JSON.stringify(eventData));
+                                        calendar_selectable.fullCalendar('refetchEvents');
+                                    },
+                                    error: function () {
+                                        return false
+                                    }
+                                });
+                            }
+                            else if ($("#title_acquisition").val() !== '') {
+                                var eventDataa,
+                                    eventColore = $('#calendar_colors_wrapper').find('input').val();
+                                eventDataa = {
+                                    title: $("#title_acquisition").val(),
+                                    start: start,
+                                    end: end,
+                                    resourceId: $("#personnelId").val,
+                                    remindFor: $("#personnel").val(),
+                                    color: eventColore ? eventColore : '',
+                                    createdBy: 'Vous'
+                                };
+                                var urle = '{{ path('remindacquisition_add') }}';
+                                $.ajax({
+                                    url: urle,
+                                    type: 'POST',
+                                    data: 'title=' + eventDataa.title + '&start=' + eventDataa.start.format('Y-MM-DD HH:mm')
+                                    + '&end=' + eventDataa.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataa.color
+                                    + '&acquisition=' + $('#acquisitions').val() + '&remindFor=' + $('#personnelId').val(),
+                                    success: function () {
+                                        calendar_selectable.fullCalendar('refetchEvents');
+                                    },
+                                    error: function () {
+                                        UIkit.modal.alert('Erreur', {
+                                            labels: {
+                                                Ok: 'Fermer'
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else if ($("#title_requete").val() !== '') {
+                                var eventDataRequete,
+                                    eventColorRequete = $('#calendar_colors_wrapper').find('input').val();
+                                eventDataRequete = {
+                                    title: $("#title_requete").val(),
+                                    start: start,
+                                    end: end,
+                                    resourceId: $("#personnelId").val,
+                                    remindFor: $("#personnel").val(),
+                                    color: eventColorRequete ? eventColorRequete : '',
+                                    createdBy: 'Vous'
+                                };
+                                var urlRequete = '{{ path('remindrequete_add') }}';
+                                $.ajax({
+                                    url: urlRequete,
+                                    type: 'POST',
+                                    data: 'title=' + eventDataRequete.title + '&start=' + eventDataRequete.start.format('Y-MM-DD HH:mm')
+                                    + '&end=' + eventDataRequete.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataRequete.color
+                                    + '&requete=' + $('#requetes').val() + '&remindFor=' + $('#personnelId').val(),
+                                    success: function () {
+                                        calendar_selectable.fullCalendar('refetchEvents');
+                                    },
+                                    error: function () {
+                                        UIkit.modal.alert('Erreur', {
+                                            labels: {
+                                                Ok: 'Fermer'
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else if ($("#title_mandat").val() !== '') {
+                                var eventDataMandat,
+                                    eventColorMandat = $('#calendar_colors_wrapper').find('input').val();
+                                eventDataMandat = {
+                                    title: $("#title_mandat").val(),
+                                    start: start,
+                                    end: end,
+                                    resourceId: $("#personnelId").val,
+                                    remindFor: $("#personnel").val(),
+                                    color: eventColorMandat ? eventColorMandat : '',
+                                    createdBy: 'Vous'
+                                };
+                                var urlMandat = '{{ path('remindmandat_add') }}';
+                                $.ajax({
+                                    url: urlMandat,
+                                    type: 'POST',
+                                    data: 'title=' + eventDataMandat.title + '&start=' + eventDataMandat.start.format('Y-MM-DD HH:mm')
+                                    + '&end=' + eventDataMandat.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataMandat.color
+                                    + '&mandat=' + $('#mandats').val() + '&remindFor=' + $('#personnelId').val(),
+
+                                    success: function () {
+                                        calendar_selectable.fullCalendar('refetchEvents');
+                                    },
+                                    error: function () {
+                                        UIkit.modal.alert('Erreur', {
+                                            labels: {
+                                                Ok: 'Fermer'
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }, {
+                            labels: {
+                                Ok: 'Ajouter',
+                                Cancel: 'Fermer'
+                            }
+                        });
+
+                    altair_forms.init();
+                    altair_forms.parsley_validation_config();
+                    for (var k in b.calendar.resourceManager.resourcesById) {
+                        if (b.calendar.resourceManager.resourcesById.hasOwnProperty(k)) {
+                            $('#personnel').val(b.calendar.resourceManager.resourcesById[k].title);
+                            $('#personnelId').val(b.calendar.resourceManager.resourcesById[k].id);
+                        }
+                    }
+                    $('#nouvelles').selectize({
+                        placeholder: 'Choisir une nouvelle....             ',
+                        hideSelected: true
+                    });
+                    $('#acquisitions').selectize({
+                        placeholder: 'Choisir une acquisition....             ',
+                        hideSelected: true
+                    });
+                    $('#requetes').selectize({
+                        placeholder: 'Choisir une requête....             ',
+                        hideSelected: true
+                    });
+                    $('#mandats').selectize({
+                        placeholder: 'Choisir un mandat....             ',
+                        hideSelected: true
+                    });
+                    $('#clients').selectize({
+                        placeholder: 'Choisir un client....             ',
+                        hideSelected: true
+                    });
+                    getNouvelles($('#nouvelles'));
+                    getAcquisitions($('#acquisitions'));
+                    getRequetes($('#requetes'));
+                    getMandats($('#mandats'));
+                },
+                eventClick: function (calEvent) {
+                    UIkit.modal.confirm('' +
+                        '<h3 class="heading_b uk-margin-medium-bottom">' +
+                        'Informations sur le rappel</h3><div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                        '</div>' +
+                        '<ul class="md-list">' +
+                        '<li>' +
+                        '<div class="md-list-content">' +
+                        '<span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>' +
+                        '<span class="md-list-heading uk-text-large">' + calEvent.title +
+                        '</span>' +
+                        '</div>' +
+                        '</li>' +
+                        '<li>' +
+                        '<div class="md-list-content">' +
+                        '<span class="uk-text-small uk-text-muted uk-display-block">Débute le  </span>' +
+                        '<span class="md-list-heading uk-text-large">' + calEvent.start.format('Y-MM-DD HH:mm') +
+                        '</span>' +
+                        '</div>' +
+                        '</li>' +
+                        '<li>' +
+                        '<div class="md-list-content">' +
+                        '<span class="uk-text-small uk-text-muted uk-display-block">Se términe le  </span>' +
+                        '<span class="md-list-heading uk-text-large">' + calEvent.end.format('Y-MM-DD HH:mm') +
+                        '</span>' +
+                        '</div>' +
+                        '</li>' +
+                        '<li>' +
+                        '<div class="md-list-content">' +
+                        '<span class="uk-text-small uk-text-muted uk-display-block">Créé par</span>' +
+                        '<span class="md-list-heading uk-text-large">' + calEvent.createdBy +
+                        '</span>' +
+                        '</div>' +
+                        '</li>' +
+                        '<li>' +
+                        '<div class="md-list-content">' +
+                        '<span class="uk-text-small uk-text-muted uk-display-block">Pour</span>' +
+                        '<span class="md-list-heading uk-text-large">' + calEvent.remindFor +
+                        '</span>' +
+                        '</div>' +
+                        '</li>' +
+                        '</ul>' +
+                        '', function () {
+                            openUpdateModal(calEvent, calendar_selectable);
+                        }
+                        , {
+                            labels: {
+                                Cancel: 'Fermer',
+                                Ok: 'Modifier'
+                            }
+                        });
+                },
+                eventResize: function (calEvent) {
+                    editEvent(calEvent, calendar_selectable);
+                },
+                eventDrop: function (calEvent) {
+                    editEvent(calEvent, calendar_selectable);
+                },
+                viewRender: function () {
+                    calendar_selectable.fullCalendar('removeEvents');
+                }
+            });
+        });
+        function openUpdateModal(calEvent, calendar_selectable) {
+            UIkit.modal.confirm(
+                '<h3 class="heading_b uk-margin-medium-bottom">Modifier un rappel</h3>' +
+                '<form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-1">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" style=" width: 150px;">' +
+                '<span class="uk-form-help-block">Titre</span>' +
+                '<input id="title" class="md-input" name="title" type="text" value="' + calEvent.title + '" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" ">' +
+                '<span class="uk-form-help-block">Date début</span>' +
+                '<input id="datestart" name="datestart"  value="' + calEvent.start.format('DD-MM-Y') +
+                '" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}" class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure début</span>' +
+                '<input id="timestart" name="timestart" value="' + calEvent.start.format('HH:mm') +
+                '" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" >' +
+                '<span class="uk-form-help-block">Date fin</span>' +
+                '<input id="dateend" name="dateend" value="' + calEvent.end.format('DD-MM-Y') +
+                '" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}", class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure fin</span>' +
+                '<input id="timeend"  name="timeend"  value="' + calEvent.end.format('HH:mm') +
+                '" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                ''
+                , function () {
+                    var title = $("#title");
+                    var description = $("#description");
+
+                    if (title.val() !== '') {
+
+                        var url = '{{ path('remind_edit') }}';
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: 'title=' + title.val()
+                            + '&start=' + $('#datestart').val() + " " + $('#timestart').val()
+                            + '&end=' + $('#dateend').val() + " " + $('#timeend').val()
+                            + '&id=' + calEvent.id
+                          ,
+
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                                UIkit.modal.alert('Le rendez-vous a été modifié avec succès.', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }, {
+                    labels: {
+                        Ok: 'Modifier',
+                        Cancel: 'Fermer'
+                    }
+                });
+
+        }
+        function editEvent(calEvent) {
+
+            var url = '{{ path('remind_edit') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: 'id=' + calEvent.id + '&start=' + calEvent.start.format('Y-MM-DD HH:mm')
+                + '&end=' + calEvent.end.format('Y-MM-DD HH:mm') + '&remindFor=' + calEvent.resourceId,
+                success: function (data) {
+                    calEvent.remindFor = data.remindFor;
+                    calendar_selectable.fullCalendar('refetchEvents');
+                    UIkit.modal.alert('Succès', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+        function getNouvelles(select) {
+            var nouvelles = select[0].selectize;
+            nouvelles.clearOptions();
+            var url = '{{ path('nouvelle_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            nouvelles.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function getAcquisitions(select) {
+            var acquisitions = select[0].selectize;
+            acquisitions.clearOptions();
+            var url = '{{ path('acquisition_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            acquisitions.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+        function getRequetes(select) {
+            var requetes = select[0].selectize;
+            requetes.clearOptions();
+            var url = '{{ path('requete_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            requetes.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+        function getMandats(select) {
+            var mandats = select[0].selectize;
+            mandats.clearOptions();
+            var url = '{{ path('mandat_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            mandats.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}

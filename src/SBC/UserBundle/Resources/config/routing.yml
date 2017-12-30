@@ -1,0 +1,52 @@
+user_index:
+    path:     /utilisateur/liste
+    defaults: { _controller: UserBundle:Profile:index, enabled: 1 }
+
+user_index_disabled:
+    path:     /utilisateur/liste/desactives
+    defaults: { _controller: UserBundle:Profile:index, enabled: 0 }
+
+user_show:
+    path:     /utilisateur/{id}
+    defaults: { _controller: UserBundle:Profile:showUser }
+
+user_edit:
+    path:     /utilisateur/modifier/{id}
+    defaults: { _controller: UserBundle:Profile:editUser }
+
+user_delete:
+    path:     /utilisateur/supprimer/{id}
+    defaults: { _controller: UserBundle:Profile:delete }
+
+user_enable_or_disable:
+    path:     /utilisateur/enable-or-disable/{id}
+    defaults: { _controller: UserBundle:Profile:enableOrDisableUser }
+
+user_byemail:
+    path:      /by-email/{email}
+    defaults:
+        _controller: UserBundle:Profile:getUserByEmail
+
+user_byusername:
+    path:      /by-username/{username}
+    defaults:
+        _controller: UserBundle:Profile:getUserByUserName
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /utilisateur/profil
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /utilisateur/ajouter
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /utilisateur/resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /utilisateur/changer-mot-de-passe

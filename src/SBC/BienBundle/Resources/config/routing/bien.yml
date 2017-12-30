@@ -1,0 +1,29 @@
+bien_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Bien:index" }
+    methods:  [GET, POST]
+
+bien_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Bien:show" }
+    methods:  GET
+
+bien_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Bien:new" }
+    methods:  [GET, POST]
+
+bien_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Bien:edit" }
+    methods:  [GET, POST]
+
+bien_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Bien:delete" }
+    methods:  DELETE
+
+bien_index_alltypes:
+    path:     /base-de-donnee
+    defaults: { _controller: "BienBundle:Bien:indexAll" }
+    methods:  [GET, POST]

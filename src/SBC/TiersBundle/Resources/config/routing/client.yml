@@ -1,0 +1,37 @@
+client_index:
+    path:     /
+    defaults: { _controller: "TiersBundle:Client:index" }
+    methods:  GET
+
+client_show:
+    path:     /{code}/show
+    defaults: { _controller: "TiersBundle:Client:show" }
+    methods:  GET
+
+client_new:
+    path:     /new
+    defaults: { _controller: "TiersBundle:Client:new" }
+    methods:  [GET, POST]
+
+client_edit:
+    path:     /{code}/edit
+    defaults: { _controller: "TiersBundle:Client:edit" }
+    methods:  [GET, POST]
+
+client_delete:
+    path:     /{code}/delete
+    defaults: { _controller: "TiersBundle:Client:delete" }
+
+ajax_code_client_checker:
+    path:     /check-code/{code}
+    defaults: { _controller: "TiersBundle:Client:checkCode"}
+
+client_list:
+    path:     /list
+    defaults: { _controller: "TiersBundle:Client:list" }
+    methods:  [GET, POST]
+
+client_add:
+    path:     /add
+    defaults: { _controller: "TiersBundle:Client:add" }
+    methods:  [GET, POST]

@@ -1,0 +1,9 @@
+tache_nouvelle_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:TacheNouvelle:new" }
+    methods:  [GET, POST]
+
+tache_nouvelle_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:TacheNouvelle:delete" }
+    methods:  DELETE

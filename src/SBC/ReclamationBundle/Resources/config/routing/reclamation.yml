@@ -1,0 +1,33 @@
+reclamation_index:
+    path:     /
+    defaults: { _controller: "ReclamationBundle:Reclamation:index" }
+    methods:  GET
+    options:
+        expose: true
+
+reclamation_show:
+    path:     /{id}/show
+    defaults: { _controller: "ReclamationBundle:Reclamation:show" }
+    methods:  [GET, POST]
+
+reclamation_new:
+    path:     /new
+    defaults: { _controller: "ReclamationBundle:Reclamation:new" }
+    methods:  [GET, POST]
+
+reclamation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ReclamationBundle:Reclamation:edit" }
+    methods:  [GET, POST]
+
+reclamation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ReclamationBundle:Reclamation:delete" }
+
+reclamation_close:
+    path:     /{id}/close
+    defaults: { _controller: "ReclamationBundle:Reclamation:close" }
+
+comment_delete:
+    path:     /comment/{id}/delete
+    defaults: { _controller: "ReclamationBundle:Reclamation:deleteComment" }

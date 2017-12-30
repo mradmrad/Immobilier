@@ -1,0 +1,36 @@
+category_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Category:index" }
+    methods:  GET
+
+category_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Category:show" }
+    methods:  GET
+
+category_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Category:new" }
+    methods:  [GET, POST]
+
+category_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Category:edit" }
+    methods:  [GET, POST]
+
+category_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Category:delete" }
+    methods:  DELETE
+
+category_byname:
+    path:      /by-name/{name}
+    defaults:
+        _controller: BienBundle:Category:getCategoryByName
+    requirements:
+        name: .+
+
+category_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Category:list" }
+    methods:  [GET, POST]

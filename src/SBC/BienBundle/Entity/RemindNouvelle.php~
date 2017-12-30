@@ -1,0 +1,27 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * RemindNouvelle
+ *
+ * @ORM\Table(name="remind_nouvelle")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\RemindNouvelleRepository")
+ */
+class RemindNouvelle extends Remind
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Bien")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $nouvelle;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+

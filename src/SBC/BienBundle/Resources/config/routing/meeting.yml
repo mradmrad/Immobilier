@@ -1,0 +1,20 @@
+meeting_index:
+    path:     /tableau-de-bord
+    defaults: { _controller: "BienBundle:Meeting:index" }
+    methods:  GET
+
+meeting_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Meeting:list" }
+    methods:  GET
+
+
+meeting_edit:
+    path:     /edit
+    defaults: { _controller: "BienBundle:Meeting:edit" }
+    methods:  [GET, POST]
+
+meeting_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Meeting:delete" }
+    methods:  DELETE

@@ -1,0 +1,183 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: fr
+
+framework:
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          '%secret%'
+    router:
+        resource: '%kernel.root_dir%/config/routing.yml'
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   '%kernel.root_dir%/../var/sessions/kernel.environment'
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    debug:            '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     '%database_host%'
+        port:     '%database_port%'
+        dbname:   '%database_name%'
+        user:     '%database_user%'
+        password: '%database_password%'
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        dql:
+            string_functions:
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host:      '%mailer_host%'
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'
+    spool:     { type: memory }
+
+
+
+# FOSUser Configuration
+fos_user:
+    db_driver:     orm
+    # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
+    firewall_name: main
+    # Le nom du firewall derrière lequel on utilisera ces utilisateurs
+    user_class:    SBC\UserBundle\Entity\User
+    # La classe de l'entité User que nous utilisons
+    #autoriser l'envoie de mail si reset password
+    registration:
+        form:
+            type: SBC\UserBundle\Form\Type\RegistrationFormType
+            validation_groups: [UserValidation]
+    profile:
+        form:
+            type: SBC\UserBundle\Form\Type\ProfileFormType
+            validation_groups: [UserValidation]
+    service:
+        mailer: fos_user.mailer.twig_swift
+    from_email:
+            address: you@example.com
+            sender_name: You
+
+
+
+# Stof\DoctrineExtensionsBundle Configuration
+stof_doctrine_extensions:
+    orm:
+        default:
+            sluggable: true
+
+# Assetic
+assetic:
+    #node: /usr/bin/nodejs
+    debug:          '%kernel.debug%'
+    use_controller: false
+    bundles:
+        - "ImmobilierBundle"
+        - "FOSUserBundle"
+        - "GeoTunisieBundle"
+        - "PersonnelBundle"
+        - "UserBundle"
+        - "TiersBundle"
+        - "BienBundle"
+        - "AlphaVisitorTrackingBundle"
+    filters:
+        cssrewrite: ~
+#        jpegoptim:
+#            bin: /usr/local/bin/jpegoptim
+#            max: 20
+#            apply_to: "\.jpg$"
+    twig:
+        functions:
+            jpegoptim: ~
+
+#VichUploader
+vich_uploader:
+    db_driver: orm
+    mappings:
+            personnel_picture:
+                uri_prefix:         /demos/immobilier/web/fichiers/personnels/pictures
+                upload_destination: '%kernel.root_dir%/../web/fichiers/personnels/pictures'
+                inject_on_load:     false
+                delete_on_update:   true
+                delete_on_remove:   true
+                namer:
+                    service: vich_uploader.namer_property
+                    options: { property: 'code'}
+
+            bien_pictures:
+                uri_prefix:         /demos/immobilier/web/fichiers/biens/pictures
+                upload_destination: '%kernel.root_dir%/../web/fichiers/biens/pictures'
+                inject_on_load:     false
+                delete_on_update:   true
+                delete_on_remove:   true
+                namer: vich_uploader.namer_uniqid
+
+            bien_main_picture:
+                uri_prefix:         /demos/immobilier/web/fichiers/biens/pictures/main
+                upload_destination: '%kernel.root_dir%/../web/fichiers/biens/pictures/main'
+                inject_on_load:     false
+                delete_on_update:   true
+                delete_on_remove:   true
+                namer: vich_uploader.namer_uniqid
+
+            contrat_file:
+                uri_prefix:         /demos/immobilier/web/fichiers/contrats/pieces-jointes
+                upload_destination: '%kernel.root_dir%/../web/fichiers/contrats/pieces-jointes'
+                inject_on_load:     false
+                delete_on_update:   true
+                delete_on_remove:   true
+                namer: vich_uploader.namer_uniqid
+            uploaded_files:
+                uri_prefix:         /demos/immobilier/web/fichiers/reclamations
+                upload_destination: '%kernel.root_dir%/../web/fichiers/reclamations'
+                inject_on_load:     false
+                delete_on_update:   true
+                delete_on_remove:   true
+                namer: vich_uploader.namer_uniqid
+
+## LogTracker Configuration
+log_tracker:
+    app_name: 'Your app name'
+    sender_mail: 'your_mail@company.com'
+    handler_text: 'Text will be displayed when LogTrackerBundle handle the error'
+    recipients: ['haithemmrad22@gmail.com', 'arnaout.slimen@sbc.tn'] #you can add as much as you want of addresses

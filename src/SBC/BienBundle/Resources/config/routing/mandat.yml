@@ -1,0 +1,39 @@
+mandat_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Mandat:index" }
+    methods:  [GET, POST]
+
+mandat_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Mandat:list" }
+    methods:  [GET, POST]
+
+mandat_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Mandat:show" }
+    methods:  GET
+
+mandat_transfert:
+    path:     /transfert/{id}
+    defaults: { _controller: "BienBundle:Mandat:transfert" }
+    methods:  [GET, POST]
+
+mandat_new_child:
+    path:     /new-child/{id}
+    defaults: { _controller: "BienBundle:Mandat:newChild" }
+    methods:  [GET, POST]
+
+mandat_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Mandat:edit" }
+    methods:  [GET, POST]
+
+mandat_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Mandat:delete" }
+    methods:  DELETE
+
+mandat_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Mandat:new" }
+    methods:  [GET, POST]

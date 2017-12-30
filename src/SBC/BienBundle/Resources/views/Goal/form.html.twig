@@ -1,0 +1,335 @@
+<div id="page_content_inner">
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+            {{ form_errors(form) }}
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE0DA;</i>
+                            </span>
+                            {{ form_label(form.code,   "Code"  ) }}
+                            {{ form_widget(form.code) }}
+                        </div>
+                        <span> {{ form_errors(form.code) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE878;</i>
+                            </span>
+                            {{ form_label(form.beginDate,   "Date début"  ) }}
+                            {{ form_widget(form.beginDate) }}
+                        </div>
+                        <span> {{ form_errors(form.beginDate) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                             <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE878;</i>
+                            </span>
+                            {{ form_label(form.finishDate,   "Date fin"  ) }}
+                            {{ form_widget(form.finishDate) }}
+                        </div>
+                        <span> {{ form_errors(form.finishDate) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE84F;</i>
+                            </span>
+                            {{ form_widget(form.agency) }}
+                        </div>
+                        <span> {{ form_errors(form.agency) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE7FD;</i>
+                            </span>
+                            {{ form_widget(form.goalFor) }}
+                        </div>
+                        <span> {{ form_errors(form.goalFor) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE91F;</i>
+                            </span>
+                            {{ form_label(form.requeteGoal,   "Objectif requêtes" ) }}
+                            {{ form_widget(form.requeteGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.requeteGoal) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE8B6;</i>
+                            </span>
+                            {{ form_label(form.rechercheGoal,   "Objectif recherches"  ) }}
+                            {{ form_widget(form.rechercheGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.rechercheGoal) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE7F1;</i>
+                            </span>
+                            {{ form_label(form.nouvelleGoal,   "Objectif nouvelles"  ) }}
+                            {{ form_widget(form.nouvelleGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.nouvelleGoal) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE7EE;</i>
+                            </span>
+                            {{ form_label(form.acquisitionGoal,   "Objectif acquisition"  ) }}
+                            {{ form_widget(form.acquisitionGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.acquisitionGoal) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE24D;</i>
+                            </span>
+                            {{ form_label(form.mandatVenteGoal,   "Objectif mandats vente"  ) }}
+                            {{ form_widget(form.mandatVenteGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.mandatVenteGoal) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE24D;</i>
+                            </span>
+                            {{ form_label(form.mandatLocationGoal,   "Objectif mandats location"  ) }}
+                            {{ form_widget(form.mandatLocationGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.mandatLocationGoal) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE24D;</i>
+                            </span>
+                            {{ form_label(form.transactionVenteGoal,   "Objectif transactions vente"  ) }}
+                            {{ form_widget(form.transactionVenteGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.transactionVenteGoal) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE24D;</i>
+                            </span>
+                            {{ form_label(form.transactionLocationGoal,   "Objectif transactions location"  ) }}
+                            {{ form_widget(form.transactionLocationGoal) }}
+                        </div>
+                        <span> {{ form_errors(form.transactionLocationGoal) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    {{ form_widget(form.save) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<script>
+    function inverseDate(string) {
+        var arr = string.split('/');
+        return arr[2] + '/' + arr[1] + '/' + arr[0];
+    }
+    $(function () {
+        var domBeginDate = $('#sbc_bienbundle_goal_beginDate');
+        var domFinishDate = $('#sbc_bienbundle_goal_finishDate');
+        var domGoalFor = $('#sbc_bienbundle_goal_goalFor');
+        domBeginDate.on('change', function () {
+            var beginDate = domBeginDate.val();
+            var goalFor = domGoalFor.val();
+            var url = '{{ path('goal_checkifapersonnelhasagoal', {'id': 'iD'}) }}';
+            url = url.replace('iD', goalFor);
+            $.ajax({
+                async: true,
+                type: "GET",
+                url: url,
+                success: function (json) {
+                    if (json.success && new Date(json.goal.finishDate.date) >= new Date(inverseDate(beginDate))) {
+                        window.Parsley.addValidator('begin', {
+                            validateString: function () {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Il existe un objectif dans cette date',
+                                fr: "Il existe un objectif dans cette date"
+                            }
+                        });
+                    } else {
+                        window.Parsley.addValidator('begin', {
+                            validateString: function () {
+                                return true;
+                            }
+                        });
+                    }
+                    domBeginDate.parsley().validate();
+                }
+            });
+        });
+        domFinishDate.on('change', function () {
+            var beginDate = domBeginDate.val();
+            var finishDate = domFinishDate.val();
+            var goalFor = domGoalFor.val();
+            var url = '{{ path('goal_checkifapersonnelhasagoal', {'id': 'iD'}) }}';
+            url = url.replace('iD', goalFor);
+            $.ajax({
+                async: true,
+                type: "GET",
+                url: url,
+                success: function (json) {
+                    if (json.success && new Date(json.goal.finishDate.date) >= new Date(inverseDate(beginDate))
+                        && new Date(json.goal.finishDate.date) >= new Date(inverseDate(finishDate))) {
+                        window.Parsley.addValidator('finish', {
+                            validateString: function () {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Il existe un objectif dans cette date',
+                                fr: "Il existe un objectif dans cette date"
+                            }
+                        });
+                    } else {
+                        window.Parsley.addValidator('finish', {
+                            validateString: function () {
+                                return true;
+                            }
+                        });
+                    }
+                    domBeginDate.parsley().validate();
+                    domFinishDate.parsley().validate();
+                }
+            });
+        });
+        domGoalFor.on('change', function () {
+            var beginDate = domBeginDate.val();
+            var goalFor = domGoalFor.val();
+            var url = '{{ path('goal_checkifapersonnelhasagoal', {'id': 'iD'}) }}';
+            url = url.replace('iD', goalFor);
+            $.ajax({
+                async: true,
+                type: "GET",
+                url: url,
+                success: function (json) {
+                    if (json.success && new Date(json.goal.finishDate.date) >= new Date(inverseDate(beginDate))) {
+                        window.Parsley.addValidator('begin', {
+                            validateString: function () {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Il existe un objectif dans cette date',
+                                fr: "Il existe un objectif dans cette date"
+                            }
+                        });
+                        window.Parsley.addValidator('finish', {
+                            validateString: function () {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Il existe un objectif dans cette date',
+                                fr: "Il existe un objectif dans cette date"
+                            }
+                        });
+                    } else {
+                        window.Parsley.addValidator('begin', {
+                            validateString: function () {
+                                return true;
+                            }
+                        });
+                        window.Parsley.addValidator('finish', {
+                            validateString: function () {
+                                return true;
+                            }
+                        });
+                    }
+                    domBeginDate.parsley().validate();
+                    domFinishDate.parsley().validate();
+                }
+            });
+        });
+        var domcode = $('#sbc_bienbundle_goal_code');
+        var oldcode = domcode.val().toUpperCase();
+        domcode.on('change', function () {
+            var code = domcode.val().toUpperCase();
+            var url = '{{ path('goal_bycode', {'code': 'codE'}) }}';
+            url = url.replace('codE', code);
+            if (code !== oldcode) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('code', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Cet objectif existe déjà',
+                                    fr: "Cet objectif existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('code', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domcode.parsley().validate();
+                    }
+                });
+            }
+        });
+    });
+</script>

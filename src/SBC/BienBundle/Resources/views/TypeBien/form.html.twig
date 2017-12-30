@@ -1,0 +1,167 @@
+<div id="page_content_inner">
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+            {{ form_errors(form) }}
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                 <i class="md-list-addon-icon material-icons">&#xE86D;</i>
+                            </span>
+                            {{ form_label(form.name,   "Nom"  ) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-name':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.name) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE85D;</i>
+                            </span>
+                            <span class="uk-form-help-block">Catégorie</span>
+                            {{ form_widget(form.category,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.category) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                {#<i class="md-list-addon-icon material-icons">&#xE85D;</i>#}
+                            </span>
+                            {{ form_label(form.equipped,   "Equipé(e)"  ) }}
+                            {{ form_widget(form.equipped, {'attr': {'data-parsley-equipped':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.equipped) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                {#<i class="md-list-addon-icon material-icons">&#xE85D;</i>#}
+                            </span>
+                            {{ form_label(form.bedroom,   "Chambre(s)"  ) }}
+                            {{ form_widget(form.bedroom, {'attr': {'data-parsley-bedroom':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.bedroom) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                {#<i class="md-list-addon-icon material-icons">&#xE85D;</i>#}
+                            </span>
+                            {{ form_label(form.furnished,   "Meublé(e)"  ) }}
+                            {{ form_widget(form.furnished, {'attr': {'data-parsley-furnished':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.furnished) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                {#<i class="md-list-addon-icon material-icons">&#xE85D;</i>#}
+                            </span>
+                            {{ form_label(form.bathroom,   "Salle(s) de bain"  ) }}
+                            {{ form_widget(form.bathroom, {'attr': {'data-parsley-furnished':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.bathroom) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    {{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var domName = $('#sbc_bienbundle_typebien_name');
+        var domCategory = $('#sbc_bienbundle_typebien_category');
+        var oldname = domName.val().toUpperCase();
+        domName.on('change', function () {
+            var name = domName.val().toUpperCase();
+            var url = '{{ path('typebien_bynameandcategory', {'name': 'namE', 'category': 'categorY'}) }}';
+            url = url.replace('namE', name);
+            url = url.replace('categorY', domCategory.val());
+            if (name !== oldname) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('name', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Ce type de bien existe déjà',
+                                    fr: "Ce type de bien existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('name', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domName.parsley().validate();
+                    }
+                });
+            }
+        });
+        var oldcategory = domName.val().toUpperCase();
+        domCategory.on('change', function () {
+            var name = domName.val().toUpperCase();
+            var category = domCategory.val().toUpperCase();
+            var url = '{{ path('typebien_bynameandcategory', {'name': 'namE', 'category': 'categorY'}) }}';
+            url = url.replace('namE', name);
+            url = url.replace('categorY', category);
+
+            if (category !== oldcategory) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('name', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Ce type de bien existe déjà',
+                                    fr: "Ce type de bien existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('name', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domName.parsley().validate();
+                    }
+                });
+            }
+        });
+    });
+</script>

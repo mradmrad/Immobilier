@@ -1,0 +1,251 @@
+{% extends "::layout.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    Rapport agence - {{ parent() }}
+{% endblock %}
+
+
+{% block body %}
+
+<div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+    <ul id="breadcrumbs" style="float: right;">
+        <li><a href="#">Rapport agence</a></li>
+        <li><span>Rapport agence</span></li>
+    </ul>
+    <h1>Rapport agence</h1>
+    <span class="uk-text-muted uk-text-upper uk-text-small">Rapport agence</span>
+</div>
+<div id="page_content_inner">
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-1">
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Office total data Analisys
+                    </h3>
+                </div>
+
+                <div class="md-card-content">
+                    <table id="table1" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Titre</th>
+                            <th>Valeur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>IM2</td>
+                            <td>Nombre totale de biens ajoutés</td>
+                            <td>3927</td>
+                        </tr>
+                        <tr>
+                            <td>IM1</td>
+                            <td>Nouveaux biens ajoutés</td>
+                            <td>802</td>
+                        </tr>
+                        <tr>
+                            <td>IM3</td>
+                            <td>Contacts from recerca</td>
+                            <td>3127</td>
+                        </tr>
+                        <tr>
+                            <td>NT11</td>
+                            <td>New nouvelles (Vente)</td>
+                            <td>80</td>
+                        </tr>
+                        <tr>
+                            <td>NT12</td>
+                            <td>New nouvelles (Location)</td>
+                            <td>77</td>
+                        </tr>
+                        <tr>
+                            <td>NT13</td>
+                            <td>Totale nouvelles (Vente)</td>
+                            <td>65</td>
+                        </tr>
+                        <tr>
+                            <td>NT14</td>
+                            <td>Totale nouvelles (Location)</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td>NT17</td>
+                            <td>Owners contacted linked to notizia type "phone call or redirect call" type Acq</td>
+                            <td>245</td>
+                        </tr>
+                        <tr>
+                            <td>NT15</td>
+                            <td>Vendita appoitment (Vente)</td>
+                            <td>59</td>
+                        </tr>
+                        <tr>
+                            <td>NT16</td>
+                            <td>Appoitments of acquisition (Location)</td>
+                            <td>53</td>
+                        </tr>
+                        <tr>
+                            <td>NT3</td>
+                            <td>Appoitments of acquisition</td>
+                            <td>148</td>
+                        </tr>
+                        <tr>
+                            <td>IN1</td>
+                            <td>New letters of charge</td>
+                            <td>23</td>
+                        </tr>
+                        <tr>
+                            <td>IN1</td>
+                            <td>New letters of charge for rent</td>
+                            <td>36</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uk-grid" data-uk-grid-margin>
+        {% for personnel in agency.personnels %}
+        <div class="uk-width-medium-1-3">
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        {{ personnel }}
+                    </h3>
+                </div>
+
+                <div class="md-card-content">
+                    <table  class="uk-table uk-table-hover tables" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Titre</th>
+                            <th>Valeur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>IM2</td>
+                            <td>Nombre totale de biens ajoutés</td>
+                            <td>3927</td>
+                        </tr>
+                        <tr>
+                            <td>IM1</td>
+                            <td>Nouveaux biens ajoutés</td>
+                            <td>
+                                {% for value in stats.addedrecherches %}
+                                    {% if loop.index == personnel.id %}
+                                        {{ value }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>IM3</td>
+                            <td>Contacts from recerca</td>
+                            <td>3127</td>
+                        </tr>
+                        <tr>
+                            <td>NT11</td>
+                            <td>New nouvelles (Vente)</td>
+                            <td>80</td>
+                        </tr>
+                        <tr>
+                            <td>NT12</td>
+                            <td>New nouvelles (Location)</td>
+                            <td>77</td>
+                        </tr>
+                        <tr>
+                            <td>NT13</td>
+                            <td>Totale nouvelles (Vente)</td>
+                            <td>65</td>
+                        </tr>
+                        <tr>
+                            <td>NT14</td>
+                            <td>Totale nouvelles (Location)</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td>NT17</td>
+                            <td>Owners contacted linked to notizia type "phone call or redirect call" type Acq</td>
+                            <td>245</td>
+                        </tr>
+                        <tr>
+                            <td>NT15</td>
+                            <td>Vendita appoitment (Vente)</td>
+                            <td>59</td>
+                        </tr>
+                        <tr>
+                            <td>NT16</td>
+                            <td>Appoitments of acquisition (Location)</td>
+                            <td>53</td>
+                        </tr>
+                        <tr>
+                            <td>NT3</td>
+                            <td>Appoitments of acquisition</td>
+                            <td>148</td>
+                        </tr>
+                        <tr>
+                            <td>IN1</td>
+                            <td>New letters of charge</td>
+                            <td>23</td>
+                        </tr>
+                        <tr>
+                            <td>IN1</td>
+                            <td>New letters of charge for rent</td>
+                            <td>36</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% javascripts output="js/compiled/mainIndexWithTreeAndNumberFormat.js"
+    'bundles/immobilier/bower_components/datatables/media/js/jquery.dataTables.min.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/dataTables.buttons.js'
+    'bundles/immobilier/assets/js/custom/datatables/buttons.uikit.js'
+    'bundles/immobilier/bower_components/jszip/dist/jszip.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/pdfmake.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/vfs_fonts.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.colVis.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.html5.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.print.js'
+    'bundles/immobilier/assets/js/custom/datatables/datatables.uikit.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_datatables.min.js'
+    'bundles/immobilier/bower_components/jquery-ui/jquery-ui.min.js'
+    'bundles/immobilier/bower_components/jquery.fancytree/dist/jquery.fancytree-all.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_tree.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js'
+    'bundles/immobilier/jquery-numberformatter/jshashtable-2.1.js'
+    'bundles/immobilier/jquery-numberformatter/jquery.numberformatter-1.2.4.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+
+        $(document).ready(function () {
+            $('#table1, .tables').dataTable({
+                paging: false,
+                info: false,
+                sDom: '<"H"lfr>t<"F"ip>'
+
+            });
+        });
+    </script>
+
+{% endblock %}

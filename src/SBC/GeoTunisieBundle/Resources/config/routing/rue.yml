@@ -1,0 +1,53 @@
+rue_index:
+    path:     /liste
+    defaults: { _controller: "GeoTunisieBundle:Rue:index" }
+    methods:  GET
+
+rue_show:
+    path:     /afficher/{id}
+    defaults: { _controller: "GeoTunisieBundle:Rue:show" }
+    methods:  GET
+
+rue_new:
+    path:     /nouveau
+    defaults: { _controller: "GeoTunisieBundle:Rue:new" }
+    methods:  [GET, POST]
+
+rue_edit:
+    path:     /modifier/{id}
+    defaults: { _controller: "GeoTunisieBundle:Rue:edit" }
+    methods:  [GET, POST]
+
+rue_delete:
+    path:     /supprimer/{id}
+    defaults: { _controller: "GeoTunisieBundle:Rue:delete" }
+    methods:  DELETE
+
+rues_by_reg:
+    path:      /liste-rues-by-reg
+    defaults: { _controller: "GeoTunisieBundle:Rue:listeRuesByReg"}
+    methods:  GET
+
+rues_bylocalite:
+    path:     /rues-par-localite
+    defaults: { _controller: "GeoTunisieBundle:Rue:byLocalite" }
+    methods:  POST
+
+rue_byname:
+    path:     /rue-par-nom/{name}
+    defaults: { _controller: "GeoTunisieBundle:Rue:byName" }
+    methods:  [GET, POST]
+
+rue_list:
+    path:     /rue-liste
+    defaults: { _controller: "GeoTunisieBundle:Rue:listForAjax" }
+    methods:  [GET, POST]
+
+rue_list_rues:
+    path:     /rue-liste-rues
+    defaults: { _controller: "GeoTunisieBundle:Rue:listRues" }
+    methods:  [GET, POST]
+rue_add:
+    path:     /add
+    defaults: { _controller: "GeoTunisieBundle:Rue:newRue" }
+    methods:  [GET, POST]

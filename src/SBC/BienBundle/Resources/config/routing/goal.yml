@@ -1,0 +1,37 @@
+goal_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Goal:index" }
+    methods:  GET
+
+goal_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Goal:show" }
+    methods:  GET
+
+goal_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Goal:new" }
+    methods:  [GET, POST]
+
+goal_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Goal:edit" }
+    methods:  [GET, POST]
+
+goal_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Goal:delete" }
+    methods:  DELETE
+
+goal_bycode:
+    path:      /by-code/{code}
+    defaults:
+        _controller: BienBundle:Goal:findByCode
+    requirements:
+        code: .+
+
+goal_checkifapersonnelhasagoal:
+    path:      /check-if-a-personnel-has-a-goal/{id}
+    defaults:
+        _controller: BienBundle:Goal:checkIfAPersonnelHasAGoal
+    methods:  [GET, POST]

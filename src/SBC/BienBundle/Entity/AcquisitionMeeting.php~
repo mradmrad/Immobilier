@@ -1,0 +1,31 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * AcquisitionMeeting
+ *
+ * @ORM\Table(name="acquisition_meeting")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\AcquisitionMeetingRepository")
+ */
+class AcquisitionMeeting extends Meeting
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Acquisition")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $acquisition;
+
+
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+   
+}
+

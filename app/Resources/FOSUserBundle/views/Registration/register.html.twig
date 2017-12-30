@@ -1,0 +1,170 @@
+{% extends "::layout.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    Ajouter un utilisateur - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Utilisateurs</a></li>
+            <li><span>Ajouter un utilisateur</span></li>
+        </ul>
+        <h1>Formulaire d'ajout de l'utilisateur</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">veuillez bien remplir les champs</span>
+    </div>
+
+    <div id="page_content_inner">
+        <div class="md-card">
+            <div class="md-card-content large-padding">
+
+                <form action="{{ path('fos_user_registration_register') }}" method="POST" class="uk-form-stacked"
+                      id="form_validation">
+                    {{ form_errors(form) }}
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE87C;</i>
+                            </span>
+                                    {{ form_label(form.username,   "Pseudo"|trans  ) }}
+                                    {{ form_widget(form.username, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-username':'3'}}) }}
+                                </div>
+                                <span>     {{ form_errors(form.username) }} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE899;</i>
+                            </span>
+                                    {{ form_label(form.plainPassword.first,   "Mot de passe"|trans  ) }}
+                                    {{ form_widget(form.plainPassword.first, {'attr': {'class': 'md-input', 'required':''}}) }}
+                                </div>
+                                <span>     {{ form_errors(form.plainPassword.first) }} </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE897;</i>
+                            </span>
+                                    {{ form_label(form.plainPassword.second,   "Confirmer le mot de passe"|trans  ) }}
+                                    {{ form_widget(form.plainPassword.second, {'attr': {'class': 'md-input', 'required':''}}) }}
+                                </div>
+                                <span>     {{ form_errors(form.plainPassword.second) }} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                                     <span class="uk-input-group-addon">
+                                        <i class="material-icons">&#xE7FD;</i>
+                                     </span>
+                                    {{ form_widget(form.personnel, {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span class="uk-form-help-block">Personnel</span>
+                                </div>
+                                <span>     {{ form_errors(form.personnel) }} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="parsley-row">
+                                <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE32A;</i>
+                            </span>
+                                    {{ form_widget(form.roles.0, {'attr': { 'required':'','data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span class="uk-form-help-block">Rôle</span>
+                                </div>
+                                <span>     {{ form_errors(form.roles) }} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-1-1">
+                            {{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}
+                        </div>
+                    </div>
+                    {{ form_rest(form) }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script>
+        // load parsley config (altair_admin_common.js)
+        altair_forms.parsley_validation_config();
+    </script>
+
+    {% javascripts output="js/compiled/mainSimpleValidation.js"
+    'bundles/immobilier/assets/js/kendoui_custom.min.js'
+    'bundles/immobilier/bower_components/parsleyjs/dist/parsley.min.js'
+    'bundles/immobilier/assets/js/pages/forms_validation.min.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+
+
+        $username = $('#fos_user_registration_form_username');
+        $username.on('change', function () {
+            var url = '{{ path('user_byusername', {'username': 'usernamE'}) }}';
+            url = url.replace('usernamE', $username.val());
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                success: function (json) {
+                    console.log(JSON.stringify(json));
+                    if (json.success == true) {
+                        // declancher une exeption
+                        window.Parsley.addValidator('username', {
+                            validateString: function (value) {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Ce pseudo existe déjà.',
+                                fr: "Ce pseudo existe déjà."
+                            }
+                        });
+
+                    } else {
+                        window.Parsley.addValidator('username', {
+                            validateString: function (value) {
+                                return true;
+                            }
+                        });
+                    }
+                    $username.parsley().validate();
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Liste des types de tâche - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Types de tâche</a></li>
+            <li><span>Afficher tous les types de tâche</span></li>
+        </ul>
+        <h1>Liste des types de tâche</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Liste de tous les types de tâche</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="md-card uk-margin-medium-bottom">
+            <div class="md-card-content">
+                <div class="dt_colVis_buttons"></div>
+                <table id="dt_tableExport" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Icône</th>
+                        <th>Date de creation</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for typeTache in typeTaches %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('typetache_show', { 'id': typeTache.id }) }}"> {{ typeTache.title }} </a>
+                            </td>
+                            <td>
+                                <i class="md-icon md-list-addon-icon material-icons uk-text-{{ typeTache.class }}">{{ typeTache.icon|raw }}</i>
+                            </td>
+                            <td>  {{ typeTache.creationDate|date('d/m/Y') }}</td>
+                            <td>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}" title="Afficher"
+                                       href="{{ path('typetache_show', {'id': typeTache.id}) }}">
+                                        <i class="md-icon material-icons">&#xE417;</i>
+                                    </a>
+                                    <a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}" title="Modifier"
+                                       href="{{ path('typetache_edit', {'id': typeTache.id}) }}">
+                                        <i class="md-icon material-icons">&#xE150;</i>
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                       data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}" title="Supprimer"
+                                       onclick="confirmDelete({{ typeTache.id }})">
+                                        <i class="md-icon material-icons">&#xE872;</i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent md-fab-wave-light" href="{{ path('typetache_new') }}" id="typetache_add"
+           data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Ajouter type de tâche">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainIndex.js"
+    'bundles/immobilier/bower_components/datatables/media/js/jquery.dataTables.min.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/dataTables.buttons.js'
+    'bundles/immobilier/assets/js/custom/datatables/buttons.uikit.js'
+    'bundles/immobilier/bower_components/jszip/dist/jszip.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/pdfmake.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/vfs_fonts.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.colVis.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.html5.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.print.js'
+    'bundles/immobilier/assets/js/custom/datatables/datatables.uikit.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_datatables.min.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        function confirmDelete(id) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer ce type de tâche ?',
+                function () {
+                    deleteIt(id);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                })
+        }
+        function deleteIt(id) {
+            var url = '{{ path('typetache_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'delete',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('Le type de tâche a été supprimé avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            location.reload(true);
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer ce type de tâche pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer ce type de tâche pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+    </script>
+{% endblock %}

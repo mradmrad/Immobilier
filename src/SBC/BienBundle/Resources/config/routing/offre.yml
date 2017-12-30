@@ -1,0 +1,14 @@
+offre_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Offre:add" }
+    methods:  [GET, POST]
+
+offre_refuser:
+    path:     /{id}/refuser
+    defaults: { _controller: "BienBundle:Offre:refuser" }
+    methods:  [GET, POST]
+
+offre_accepter:
+    path:     /{id}/accepter
+    defaults: { _controller: "BienBundle:Offre:accepter" }
+    methods:  [GET, POST]

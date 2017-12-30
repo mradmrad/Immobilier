@@ -1,0 +1,1389 @@
+<div id="page_content_inner">
+    <script src="https://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
+    {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation' , 'onsubmit' : ' return my_validation()'}}) }}
+    {{ form_errors(form) }}
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Type requete
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">Nature</span>
+                                    {{ form_widget(form.natureRequete,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span>     {{ form_errors(form.natureRequete) }} </span>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Type de bien
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">Types de bien</span>
+                                    {{ form_widget(form.typeBiens, {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}} ) }}
+                                    <span>     {{ form_errors(form.typeBiens) }} </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Budget
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+                            <div class="uk-form-row">
+                            <div class="parsley-row">
+                            {{ form_label(form.budgetMin,   "Budget minimal"  ) }}
+                            {{ form_widget(form.budgetMin, {'attr': {'class': 'md-input money'}}) }}
+                            <span>     {{ form_errors(form.budgetMin) }} </span>
+                            </div>
+                            </div>
+                            <div class="uk-form-row">
+                            <div class="parsley-row">
+                                    {{ form_label(form.budgetMax,   "Budget maximal"  ) }}
+                                    {{ form_widget(form.budgetMax, {'attr': {'class': 'md-input money'}}) }}
+                                    <span>     {{ form_errors(form.budgetMax) }} </span>
+                            </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {#<div class="md-card">#}
+                {#<div class="md-card-toolbar">#}
+                    {#<h3 class="md-card-toolbar-heading-text">#}
+                        {#Superficie couverte#}
+                    {#</h3>#}
+                {#</div>#}
+                {#<div class="md-card-content">#}
+                    {#<ul class="md-list">#}
+                        {#<li>#}
+                            {#<div class="uk-form-row">#}
+                                {#<div class="parsley-row">#}
+                                    {#{{ form_label(form.coveredAreaMin,   "Superficie couverte minimale" ) }}#}
+                                    {#{{ form_widget(form.coveredAreaMin, {'attr': {'class': 'md-input numeric'}}) }}#}
+                                    {#<span>     {{ form_errors(form.coveredAreaMin) }} </span>#}
+                                {#</div>#}
+                            {#</div>#}
+                            {#<div class="uk-form-row">#}
+                                {#<div class="parsley-row">#}
+                                    {#{{ form_label(form.coveredAreaMax,   "Superficie couverte maximale"  ) }}#}
+                                    {#{{ form_widget(form.coveredAreaMax, {'attr': {'class': 'md-input numeric'}}) }}#}
+                                    {#<span>     {{ form_errors(form.coveredAreaMax) }} </span>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</li>#}
+                    {#</ul>#}
+                {#</div>#}
+            {#</div>#}
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Zones
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">Gouvernorats</span>
+                                    {{ form_widget(form.gouvernorats
+                                    , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':'' , 'onchange' : 'getVilles()'}} ) }}
+                                    <span>     {{ form_errors(form.gouvernorats) }} </span>
+                                </div>
+                            </div>
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">Villes</span>
+                                    {{ form_widget(form.villes
+                                    , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span>     {{ form_errors(form.villes) }} </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs', animation:'slide-horizontal'}">
+                <li><a href="#">Général</a></li>
+                <li><a href="#">Activités</a></li>
+                <li><a href="#">Propositions</a></li>
+                {#<li><a href="#">Rendez-vous</a></li>#}
+            </ul>
+            <ul id="tabs" class="uk-switcher uk-margin">
+                <li>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Général
+                    </h3>
+                    <div class="md-card-toolbar-actions">
+
+
+                    </div>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+                        <div class="uk-width-large-2-2">
+
+                            <div class="uk-grid">
+                                <div class="uk-width-large-1-2" style="*text-align:center">
+                                    <div class="uk-grid">
+                                        <div class="uk-width-large-1-2">
+                                          <span class="icheck-inline">
+                                          {{ form_widget(form.furnished) }}
+                                              {#<input type="checkbox" name="checkbox_demo_inline_mercury" id="checkbox_demo_inline_1" data-md-icheck />#}
+                                              <label for="sbc_bienbundle_requete_furnished" class="inline-label">Meublé</label>
+                                    </span>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+   <span class="icheck-inline">
+                                          {{ form_widget(form.notfurnished) }}
+       {#<input type="checkbox" name="checkbox_demo_inline_mercury" id="checkbox_demo_inline_1" data-md-icheck />#}
+       <label for="sbc_bienbundle_requete_furnished" class="inline-label">Non meublé</label>
+                                    </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="uk-grid">
+                                <div class="uk-width-large-1-2">
+                                    <div class="parsley-row">
+                                        {{ form_label(form.totalAreaMin,   "Superficie terrain minimale"  ) }}
+                                        {{ form_widget(form.totalAreaMin, {'attr': {'class': 'md-input numeric'}}) }}
+                                        <span>     {{ form_errors(form.totalAreaMin) }} </span>
+                                    </div>
+
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <div class="parsley-row">
+                                        {{ form_label(form.coveredAreaMin,   "Superficie couverte minimale"  ) }}
+                                        {{ form_widget(form.coveredAreaMin, {'attr': {'class': 'md-input numeric'}}) }}
+                                        <span>     {{ form_errors(form.coveredAreaMin) }} </span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="uk-grid">
+                                <div class="uk-width-1-2">
+                                    <div class="uk-form-row">
+                                        <div class="parsley-row">
+                                            {{ form_label(form.bedroom,   "Chambre(s)" ) }}
+                                            {{ form_widget(form.bedroom, {'attr': {'class': 'md-input',  'data-parsley-bedroom':'3'}}) }}
+                                            <span>     {{ form_errors(form.bedroom) }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <div class="uk-form-row">
+                                        <div class="parsley-row">
+                                            {{ form_label(form.bathroom,   "Salle(s) de bain"  ) }}
+                                            {{ form_widget(form.bathroom, {'attr': {'class': 'md-input'}}) }}
+                                            <span>     {{ form_errors(form.bathroom) }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">Equipements</span>
+                                    {{ form_widget(form.equipements, {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}} ) }}
+                                    <span>     {{ form_errors(form.equipements) }} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-large-2-2">
+
+                            <div class="uk-grid">
+                                <div class="uk-width-1-2">
+                                    <div class="parsley-row">
+                                        <div class="uk-grid uk-grid-small" data-uk-grid-margin>
+                                            <div class="uk-width-large-2-3">
+                                                <span class="uk-form-help-block">Demandeur</span>
+                                                {{ form_widget(form.client,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                                <span>     {{ form_errors(form.client) }} </span>
+                                            </div>
+                                            <div class="uk-width-large-1-3">
+                                                <div class="uk-form-row" style="padding-top: 30px;">
+                                                    <a id="addDemandeur" onclick="dropify()" title="Ajouter un demandeur"
+                                                       data-uk-modal="{target:'#modal-addDemandeur'}">
+                                                        <i class="material-icons md-24">&#xE146;</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-2">
+                                <div class="parsley-row">
+                                    <span class="uk-form-help-block">Date d'entrée souhaitée</span>
+                                    {{ form_widget(form.entryDate ) }}
+                                    <span>     {{ form_errors(form.entryDate) }} </span>
+                                </div>
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block">Vues</span>
+                                        {{ form_widget(form.view ) }}
+                                        <span>     {{ form_errors(form.view) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <div class="parsley-row">
+                                        <span class="uk-form-help-block">Orientation</span>
+                                        {{ form_widget(form.orientation ) }}
+                                        <span>     {{ form_errors(form.orientation) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-2" style="margin-top: 25px">
+                                    <div class="parsley-row">
+                                        {{ form_label(form.commodites , 'Commodités') }}
+                                        <a id="addCommodite" title="Ajouter une commodité"
+                                        data-uk-modal="{target:'#modal-addCommodite'}">
+                                        <i class="material-icons md-24">&#xE146;</i>
+                                        </a>
+                                        {{ form_widget(form.commodites
+                                        , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                        <span class="uk-form-help-block">Cliquez pour selectionner</span>
+                                        <span>     {{ form_errors(form.commodites) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-2" style="margin-top: 25px">
+                                    <div class="parsley-row">
+                                        {{ form_label(form.origines , 'Origines') }}
+                                        <a id="addCommodite" title="Ajouter un origine"
+                                           data-uk-modal="{target:'#modal-addOrigine'}">
+                                            <i class="material-icons md-24">&#xE146;</i>
+                                        </a>
+                                        {{ form_widget(form.origines
+                                        , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                        <span class="uk-form-help-block">Cliquez pour selectionner</span>
+                                        <span>     {{ form_errors(form.origines) }} </span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        {{ form_label(form.description, "Commentaires") }}
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                        <div class="uk-width-large-2-2">
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_widget(form.description, {'attr': {'class': 'md-input', 'name':'description',
+                                        'cols':'10', 'rows':'8', 'data-parsley-trigger':'keyup', 'data-parsley-validation-threshold':'10',
+                                        'data-parsley-minlength-message':'Come on! You need to enter at least a 20 caracters long comment..'}}) }}
+                                    <span> {{ form_errors(form.description) }} </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </li>
+                <li>
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <h3 class="md-card-toolbar-heading-text">
+                                Activités
+                            </h3>
+                        </div>
+                        <div class="md-card-content large-padding">
+                            <div class="md-card-content">
+                                {% if  requete.taches|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-badge uk-badge-danger"> Pas encore d'activités </span>
+                                    </div>
+                                {% else %}
+                                    <table id="tachestable" class="uk-table uk-table-hover" cellspacing="0"
+                                           width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Date de creation</th>
+                                            <th>Heure</th>
+                                            <th>Responsable</th>
+                                            <th>Mode</th>
+                                            <th>Statut</th>
+
+                                            <th>Déscription</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for tache in requete.taches %}
+                                            <tr>
+                                                {#<td>#}
+                                                {#<a title="{{ tache.typeTache.title }}" href=""#}
+                                                {#data-uk-modal="{target:'#modal-afficherTache'}"#}
+                                                {#onclick="UIkit.modal.alert( '{{ tache.description|e('js') }}') ;"#}
+                                                {#data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}">#}
+                                                {#<i class="md-icon md-list-addon-icon material-icons uk-text-{{ tache.typeTache.class }}">#}
+                                                {#{{ tache.typeTache.icon|raw }}</i>#}
+                                                {#{{ tache.typeTache }}#}
+                                                {#</a>#}
+                                                {#</td>#}
+                                                <td>  {{ tache.creationDate|date('d/m/Y') }}</td>
+                                                <td>{{ tache.creationDate|date('H:m') }}</td>
+                                                <td>
+                                                    <a href="{{ path('personnel_show', { 'id': tache.personnel.id }) }}">  {{ tache.personnel }} </a>
+                                                </td>
+                                                <td>
+                                                    {{ tache.typeTache.category }}
+                                                </td>
+                                                <td><i class="md-icon md-list-addon-icon material-icons uk-text-{{ tache.typeTache.class }}">
+                                                        {{ tache.typeTache.icon|raw }}</i>
+                                                    {{ tache.typeTache }}</td>
+                                                <td>{{ tache.description|raw }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {#{% for meeting in requete.meetings %}#}
+                                        {#<tr>#}
+                                        {#<td>#}
+                                        {#<a title="{{ meeting.title }}" href=""#}
+                                        {#data-uk-modal="{target:'#modal-afficherTache'}"#}
+                                        {#onclick="UIkit.modal.alert( '{{ meeting.description|e('js') }}') ;"#}
+                                        {#data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}">#}
+                                        {#<i class="md-icon md-list-addon-icon material-icons uk-text-{{ tache.typeTache.class }}">#}
+                                        {#{{ tache.typeTache.icon|raw }}</i>#}
+                                        {#{{ meeting.typeTache }}#}
+                                        {#</a>#}
+                                        {#</td>#}
+                                        {#<td>  {{ tache.creationDate|date('d/m/Y H:m') }}</td>#}
+                                        {#<td>#}
+                                        {#<a href="{{ path('personnel_show', { 'id': tache.personnel.id }) }}">  {{ tache.personnel }} </a>#}
+                                        {#</td>#}
+                                        {#</tr>#}
+                                        {#{% endfor %}#}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <h3 class="md-card-toolbar-heading-text">
+                                Propositions
+                            </h3>
+                        </div>
+                        <div class="md-card-content large-padding">
+                            {% if  requete.proposals|length ==0 %}
+                                <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                    <span class="uk-badge uk-badge-danger">  pas encore de propositions </span>
+                                </div>
+                            {% else %}
+                                <table id="propositionstable" class="uk-table uk-table-hover" cellspacing="0"
+                                       width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>Date de création</th>
+                                        <th>Heure</th>
+                                        <th>Statut</th>
+                                        <th>Proposé par</th>
+                                        <th>Proposé pour</th>
+                                        <th>Déscription</th>
+                                        <th>Propriété proposé</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for proposal in requete.proposals %}
+                                        <tr>
+                                            <td>  {{ proposal.creationDate|date('d/m/Y') }}</td>
+                                            <td>  {{ proposal.creationDate|date('H:m') }}</td>
+                                            <td>
+                                                {% if proposal.accepted %}
+                                                    Acceptée
+                                                {% else %}
+                                                    Réfusée par le client
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('personnel_show', { 'id': proposal.proposedBy.id }) }}">
+                                                    {{ proposal.proposedBy }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('client_show', { 'code': proposal.proposedFor.code }) }}">
+                                                    {{ proposal.proposedFor }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                jhg  {#{{ proposal.description|raw }}#}
+                                            </td>
+                                            <td><a href="{{ path('bien_show', {'id' : proposal.mandat.acquisition.bien.id}) }}">
+                                                    {{ proposal.mandat.acquisition.bien.title }}
+                                                </a> </td>
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <button class="md-fab md-fab-accent md-fab-wave-light" href="#" id="requete_add"
+                data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Valider" name="save">
+            <i class="material-icons">&#xE161;</i>
+        </button>
+    </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+</div>
+<div class="uk-modal" id="modal-addDemandeur" >
+    <form method="post" id="clientform" action="/demos/immobilier/web/app_dev.php/client/add">
+
+    <div class="uk-modal-dialog" style="width: 100%">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-modal-header"><h2>Ajouter un client</h2></div>
+        {#{{ form_start(clientform , {'attr' : {'id' : 'clientform' , 'action' : path('client_add')}}) }}#}
+
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Cin (recto-verso)
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+
+                        <div class="uk-width-medium-1-2">
+
+                            {{ form_widget(clientform.cinRecto.file, {'attr': {'class': ''  }}) }}
+                            <span> {{ form_errors(clientform.cinRecto.file) }} </span>
+                            {{ form_widget(clientform.cinRecto.description, {'attr': {'class': ''  }}) }}
+                        </div>
+                        <div class="uk-width-medium-1-2">
+
+                            {{ form_widget(clientform.cinVerso.file, {'attr': {'class': ''  }}) }}
+                            <span> {{ form_errors(clientform.cinRecto.file) }} </span>
+                            {{ form_widget(clientform.cinVerso.description, {'attr': {'class': ''  }}) }}
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="md-card">
+
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                        <div class="uk-form-row parsley-row">
+                            Nom :
+                            <label for="product_edit_manufacturer_control" id="label_nom">
+                            </label>
+                            <br>
+                            Prénom :
+                            <label for="product_edit_manufacturer_control" id="label_prenom">
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="md-card">
+
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+
+                        <div class="uk-form-row parsley-row">
+                            Portable :
+                            <label for="product_edit_manufacturer_control" id="tel_label"></label>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="md-card">
+
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+
+                        <div class="uk-form-row parsley-row">
+                            Email :
+
+                            <label for="product_edit_manufacturer_control" id="mail_label"></label>
+                            {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Préférences
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+                        <div class="uk-width-1-2">
+                            <label id="Lundi" style="color: red">Lundi</label><br>
+
+                            <label id="Mercredi" style="color: red">Mercredi</label><br>
+
+                            <label id="Vendredi" style="color: red">Vendredi</label><br>
+
+                            <label id="Dimanche" style="color: red">Dimanche</label><br>
+                        </div>
+                        <div class="uk-width-1-2">
+                            <label id="Mardi" style="color: red">Mardi</label><br>
+                            <label id="Jeudi" style="color: red">Jeudi</label><br>
+                            <label id="Samedi" style="color: red">Samedi</label><br>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-xLarge-8-10  uk-width-large-8-10">
+
+                    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+
+                        <!--==================================================-->
+                        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+                            <div class="md-card">
+                                <div class="md-card-toolbar">
+                                    <h3 class="md-card-toolbar-heading-text">
+                                        Détails
+                                    </h3>
+                                </div>
+                                <div class="md-card-content">
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-2-2">
+
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Prénom</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.prenom)  }}
+                                                </div>
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Nom</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.denomination)  }}
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Sexe</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.sexe) }}
+                                                </div>
+
+                                            </div>
+                                            <div class="uk-form-row parsley-row">
+                                                <label for="product_edit_sn_control">CIN / Registre commerciale</label>
+                                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                                {{ form_widget(clientform.identifier,{'attr': {'class': 'md-input'}}) }}
+                                            </div>
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-3">
+                                                    <label for="product_edit_manufacturer_control">Date de naissance</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.naissance)  }}
+                                                </div>
+                                                <div class="uk-width-large-1-3">
+                                                    <label for="product_edit_manufacturer_control">Lieu de naissance</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.birthplace)  }}
+                                                </div>
+                                                <div class="uk-width-large-1-3">
+                                                    <label for="product_edit_manufacturer_control">Nationalité</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.nationalite)  }}
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Situation familiale</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.familySituation) }}
+                                                </div>
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Niveau d'études</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.etude) }}
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Domaine</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.domaine) }}
+                                                </div>
+                                                <div class="uk-width-large-1-2">
+                                                    <label for="product_edit_manufacturer_control">Travail</label>
+                                                    {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                    {{ form_widget(clientform.travail , {'attr': {'class': 'md-input', 'id':'uk_dp_1', 'data-uk-datepicker':'{format:DD.MM.YYYY}'}})  }}
+                                                </div>
+
+                                            </div>
+
+                                            <div class="uk-form-row parsley-row">
+                                                <label for="product_edit_manufacturer_control">Adresse</label>
+                                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                {{ form_widget(clientform.mainAddress.address) }}
+                                            </div>
+                                            <div class="uk-grid">
+                                                <div class="uk-width-1-2">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Ville</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.mainAddress.city) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Code postal</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.mainAddress.zipCode) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-3">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Portable favoris</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.tel) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-large-1-3">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Portable 1</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.secondtel) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-large-1-3">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Portable 2</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.thirdtel) }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="uk-grid uk-form-row">
+
+                                            </div>
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-3">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Tél Bureau</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.telbureau) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-large-1-3">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Fixe</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.telfixe) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-large-1-3">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Fax</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.fax) }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="uk-grid uk-form-row">
+                                                <div class="uk-width-large-1-2">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Email</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.website) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-large-1-2">
+                                                    <div class="uk-form-row">
+                                                        <label for="product_edit_manufacturer_control">Email 2 </label>
+                                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                                        {{ form_widget(clientform.secondmail) }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="uk-form-row">
+                                                <label for="product_edit_sn_control">Origine</label>
+                                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                                {{ form_widget(clientform.origine) }}
+                                            </div>
+
+                                            {#<hr class="uk-grid-divider">#}
+                                            <div style="margin-top:30px;">
+                                                <label>Préférences</label>
+                                                <div class="uk-form-row parsley-row">
+                                                    {{ form_widget(clientform.preferences.lundi) }}
+                                                    Lundi
+                                                    {{ form_widget(clientform.preferences.mardi) }}
+                                                    Mardi
+                                                    {{ form_widget(clientform.preferences.mercredi) }}
+                                                    Mercredi
+
+
+
+
+
+                                                    {#</div>#}
+                                                    {#<div class="uk-form-row parsley-row">#}
+                                                    {{ form_widget(clientform.preferences.jeudi) }}
+                                                    jeudi
+                                                    {{ form_widget(clientform.preferences.vendredi) }}
+                                                    vendredi
+                                                    {{ form_widget(clientform.preferences.samedi) }}
+                                                    samedi
+                                                    {#</div>#}
+                                                    {#<div class="uk-form-row parsley-row">#}
+                                                    {{ form_widget(clientform.preferences.dimanche) }}
+                                                    dimanche
+                                                </div>
+                                                <div class="uk-grid uk-form-row">
+                                                    <div class="uk-width-1-2">
+                                                        De :
+                                                        {{ form_widget(clientform.preferences.heure) }}
+                                                    </div>
+                                                    <div class="uk-width-1-2">
+                                                        A :
+                                                        {{ form_widget(clientform.preferences.heureFin) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-form-row parsley-row">
+
+                                                    Notes de contact :
+                                                    {{ form_widget(clientform.preferences.note) }}
+                                                </div>
+                                            </div>
+                                            {#<hr class="uk-grid-divider">#}
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-form-row">
+                                <label for="product_edit_description_control">Autre détails</label>
+                                {#<textarea class="md-input" name="product_edit_description_control" id="product_edit_description_control" cols="30" rows="4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquam necessitatibus suscipit velit voluptatibus! Ab accusamus ad adipisci alias aliquid at atque consectetur, dicta dignissimos, distinctio dolores esse fugiat iste laborum libero magni maiores maxime modi nemo neque, nesciunt nisi nulla optio placeat quas quia quibusdam quis saepe sit ullam!</textarea>#}
+                                {{ form_widget(clientform.moreInformations) }}
+                            </div>
+                        </div>
+                    </div>
+
+        </div>
+        </div>
+
+        <div class="uk-modal-footer uk-text-left">
+            <button type="submit" class="md-btn md-btn-primary" onclick="newDemandeur(this)">
+                Ajouter
+            </button>
+        </div>
+    </div>
+        {{ form_end(clientform) }}
+</div>
+<div class="uk-modal" id="modal-addCommodite">
+    <div class="uk-modal-dialog">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-modal-header"><h2>Ajouter une commodité</h2></div>
+        <form method="POST" name="form_equipement" action="#" class="uk-form-stacked">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="material-icons">&#xE55C;</i>
+                                </span>
+                            <label for="commodite">Commodité</label>
+                            <input id="commodite" value="" class="md-input" data-parsley-commodite="3"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="uk-modal-footer uk-text-left">
+            <button type="button" class="md-btn md-btn-primary" onclick="newCommodite(this)">
+                Ajouter
+            </button>
+        </div>
+    </div>
+</div>
+<div class="uk-modal" id="modal-addOrigine">
+    <div class="uk-modal-dialog">
+        <button type="button" class="uk-modal-close uk-close"></button>
+        <div class="uk-modal-header"><h2>Ajouter un origine</h2></div>
+        <form method="POST" name="form_equipement" action="#" class="uk-form-stacked">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <i class="material-icons">&#xE023;</i>
+                                </span>
+                            <label for="origine">Origine</label>
+                            <input id="origine" value="" class="md-input" data-parsley-origine="3"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="uk-modal-footer uk-text-left">
+            <button type="button" class="md-btn md-btn-primary" onclick="newOrigine(this)">
+                Ajouter
+            </button>
+        </div>
+    </div>
+</div>
+{#<script src="{{ asset('bundles/immobilier/assets/js/uikit_custom.min.js')}}"></script>#}
+{#<!-- altair common functions/helpers -->#}
+{#<script src="{{ asset('bundles/immobilier/assets/js/altair_admin_common.min.js')}}"></script>#}
+<script src="{{ asset('js/compiled/mainWithDropify_dropify.min_1.js') }}"></script>
+
+<!--  form file input functions -->
+{#<script src="{{ asset('template/assets/js/kendoui_custom.min.js') }}"></script>#}
+    {#<script src="{{ asset('template/assets/js/kendoui_custom.min.js') }}"></script>#}
+<script src="{{ asset('bundles/immobilier/assets/js/pages/forms_file_input.min.js') }}"></script>
+
+<script>
+
+
+
+    $(function () {
+        setFormatNumber();
+        CKEDITOR.replace('sbc_bienbundle_requete_description', {
+            height: 250
+        });
+        var domReference = $('#sbc_bienbundle_requete_reference');
+        var oldReference = domReference.val().toUpperCase();
+        domReference.on('change', function () {
+            var reference = domReference.val().toUpperCase();
+            var url = '{{ path('requete_byreference', {'reference': 'referencE'}) }}';
+            url = url.replace('referencE', reference);
+            if (reference !== oldReference) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('reference', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Cette référence existe déjà',
+                                    fr: "Cette référence existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('reference', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domReference.parsley().validate();
+                    }
+                });
+            }
+        });
+
+    });
+
+    function setFormatNumber() {
+        $('.numeric').blur(function () {
+            $(this).parseNumber({format: "######0.00", locale: "us"});
+            $(this).formatNumber({format: "######0.00", locale: "us"});
+        });
+        $('.money').blur(function () {
+            $(this).parseNumber({format: "#,##0.000", locale: "fr"});
+            $(this).formatNumber({format: '#,##0.000', locale: 'fr'});
+        });
+    }
+
+    function newCommodite() {
+        var commodite = $('#commodite');
+        var commoditeIsValid = commodite.parsley().isValid();
+        if (commoditeIsValid) {
+            var url = '{{ path('commodite_add') }}';
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                data: "commodite=" + commodite.val(),
+                success: function (json) {
+                    if (json.success === false || json.message !== '') {
+                        window.Parsley.addValidator('commodite', {
+                            validateString: function () {
+                                return false;
+                            },
+                            messages: {
+                                en: 'cette commodité existe déjà.',
+                                fr: "Cette commodité équipement existe déjà"
+                            }
+                        });
+                        commodite.on('change', function () {
+                            window.Parsley.addValidator('commodite', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                            commodite.parsley().validate();
+                        });
+                    } else {
+                        window.Parsley.addValidator('commodite', {
+                            validateString: function () {
+                                return true;
+                            }
+                        });
+                        UIkit.modal.alert('La commodité a été ajoutée avec succès', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                        var commo = $('#sbc_bienbundle_requete_commodites');
+                        var commodites = commo[0].selectize;
+                        commodites.addOption({
+                            text: json.commoditeName,
+                            value: json.id
+                        });
+                        commodites.addItem(json.id);
+                    }
+                    commodite.parsley().validate();
+                },
+                error: function () {
+                    commodite.parsley().validate();
+                }
+            });
+        }
+        else {
+            commodite.parsley().validate();
+        }
+    }
+    function newOrigine() {
+        var origine = $('#origine');
+        var origineIsValid = origine.parsley().isValid();
+        if (origineIsValid) {
+            var url = '{{ path('origine_add') }}';
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                data: "origine=" + origine.val(),
+                success: function (json) {
+                    if (json.success === false || json.message !== '') {
+                        window.Parsley.addValidator('origine', {
+                            validateString: function () {
+                                return false;
+                            },
+                            messages: {
+                                en: 'Cet origine existe déjà.',
+                                fr: "Ce origine existe déjà"
+                            }
+                        });
+                        origine.on('change', function () {
+                            window.Parsley.addValidator('origine', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                            origine.parsley().validate();
+                        });
+                    } else {
+                        window.Parsley.addValidator('origine', {
+                            validateString: function () {
+                                return true;
+                            }
+                        });
+                        UIkit.modal.alert('L\'origine a été ajouté avec succès', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                        var origin = $('#sbc_bienbundle_requete_origines');
+                        var origines = origin[0].selectize;
+                        origines.addOption({
+                            text: json.origineName,
+                            value: json.id
+                        });
+                        origines.addItem(json.id);
+                    }
+                    origine.parsley().validate();
+                },
+                error: function () {
+                    origine.parsley().validate();
+                }
+            });
+        }
+        else {
+            origine.parsley().validate();
+        }
+    }
+    function newDemandeur() {
+        var frm = $('#clientform');
+
+
+        frm.submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+                    console.log('Submission was successful.');
+                    console.log(data);
+                    var client = $('#sbc_bienbundle_requete_client');
+                    var clients = client[0].selectize;
+                    clients.addOption({
+                    text: data.denomination
+                        ,
+                    value: data.code
+                    });
+//                    clients.addItem(data.id);
+                    UIkit.modal.alert('Le client a été ajouté avec succès', {
+                    labels: {
+                    Ok: 'Fermer'
+                    }
+                    });
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    console.log(data);
+                }
+            });
+        });
+
+
+
+
+    }
+
+    function getVilles() {
+        var gouvernorat = $('#sbc_bienbundle_requete_gouvernorats').val();
+        var ville = $('#sbc_bienbundle_requete_villes');
+        var url = '{{ path('villes_bygouvernorat') }}';
+        var villes = ville[0].selectize;
+        villes.clearOptions();
+        if (gouvernorat !== '') {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: 'q=' + gouvernorat,
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            villes.addOption({
+                                text: element.text,
+                                value: element.value
+                            });
+                            villes.open();
+                        });
+                    }
+                    else {
+                        ville.html("<option>No Data </option>");
+                    }
+                },
+                error: function () {
+                    ville.html("<option>ERROR 500</option>");
+                }
+            });
+        }
+    }
+    function dropify() {
+        var cin_recto= $('#sbc_tiersbundle_client_cinRecto_file');
+        var cin_verso = $('#sbc_tiersbundle_client_cinVerso_file');
+        $('#sbc_tiersbundle_client_cinRecto_description').css('width' , '-webkit-fill-available');
+        $('#sbc_tiersbundle_client_cinVerso_description').css('width' , '-webkit-fill-available');
+        $(function ($) {
+
+            $('.dropify-clear').on('click', function () {
+                cin_recto.prop('required', false);
+                cin_verso.prop('required', false);
+            });
+            cin_verso.dropify({
+                {#defaultFile: '{{ vich_uploader_asset(client.cinRecto, 'file') }}',#}
+                messages: {
+                    'default': 'Cliquez ici',
+                    'replace': 'Cliquez ici',
+                    'remove': 'Supprimer',
+                    'error': 'Une erreur s\'est survenue'
+                }
+            });
+            cin_recto.dropify({
+                {#defaultFile: '{{ vich_uploader_asset(client.cinRecto, 'file') }}',#}
+                messages: {
+                    'default': 'Cliquez ici',
+                    'replace': 'Cliquez ici ',
+                    'remove': 'Supprimer',
+                    'error': 'Une erreur s\'est survenue'
+                }
+            });
+            $('.dropify-wrapper').css('height' , '60%');
+        });
+        (function () {
+            /**add address and contact functions**/
+            var addressDOM = $('.address-block');
+            var contactDOM = $('.contact-block');
+            var _countAddress = addressDOM.children().length;
+            var _countContact = contactDOM.children().length;
+
+            $('#addAddress').on('click', function (e) {
+//                var addressForm = addressDOM.attr('data-prototype');
+                var addressForm = addressBlock();
+                addressForm = addressForm.replace(/__name__/g, _countAddress);
+                addressDOM.append(addressForm);
+                _countAddress++;
+                altair_md.init();
+                altair_forms.init();
+            });
+
+            $('#addContact').on('click', function (e) {
+//                var contactForm = contactDOM.attr('data-prototype');
+                var contactForm = contactBlock();
+                contactForm = contactForm.replace(/__name__/g, _countContact);
+                contactDOM.append(contactForm);
+                _countContact++;
+                altair_md.init();
+            });
+        })();
+
+        function addressBlock() {
+            block = '<div class="uk-width-medium-1-3 block-form">' +
+                '<div class="uk-form-row parsley-row">' +
+                '<label for="product_editnufacturer_control">Titre</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][title]" required/>' +
+                '</div>' +
+                '<div class="uk-form-row parsley-row">' +
+                '<label for="product_edit_manufacturer_control">Adresse</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][address]" required/>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<label for="product_edit_manufacturer_control">Cité</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][city]"/>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<label for="product_edit_manufacturer_control">Governorat</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][governorate]"/>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<label for="product_edit_manufacturer_control">Code postal</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][zipCode]"/>' +
+                '</div>' +
+                '<br>' +
+                '<div class="uk-width-medium-1-6">' +
+                '<a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>' +
+                '</div>' +
+                '</div>';
+
+            return block;
+        }
+
+        function contactBlock() {
+            block = '<div class="uk-width-medium-1-3 block-form">' +
+                '<div class="uk-form-row parsley-row">' +
+                '<label for="product_editnufacturer_control">Dénomination</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][denomination]" required/>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<label for="product_edit_manufacturer_control">Description</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][description]"/>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<label for="product_edit_manufacturer_control">Adresse mail</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][mail]"/>' +
+                '</div>' +
+                '<div class="uk-form-row parsley-row">' +
+                '<label for="product_edit_manufacturer_control">Téléphone</label>' +
+                '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][tel]" required/>' +
+                '</div>' +
+                '<br>' +
+                '<div class="uk-width-medium-1-6">' +
+                '<a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>' +
+                '</div>' +
+                '</div>';
+
+            return block;
+        }
+
+        function deleteBlock(btn) {
+            $(btn).closest('.block-form').remove();
+        }
+
+        $("#sbc_tiersbundle_client_preferences_lundi").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#Lundi').css('color' , 'red');
+            }
+            else
+            {
+                $('#Lundi').css('color' , 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_mardi").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#Mardi').css('color' , 'red');
+            }
+            else
+            {
+                $('#Mardi').css('color' , 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_mercredi").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#Mercredi').css('color' , 'red');
+            }
+            else
+            {
+                $('#Mercredi').css('color' , 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_jeudi").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#Jeudi').css('color' , 'red');
+            }
+            else
+            {
+                $('#Jeudi').css('color' , 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_vendredi").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#Vendredi').css('color' , 'red');
+            }
+            else
+            {
+                $('#Vendredi').css('color' , 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_samedi").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#samedi').css('color' , 'red');
+            }
+            else
+            {
+                $('#Samedi').css('color' , 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_dimanche").on('ifChanged', function(){
+            if ($(this).closest('div').hasClass('checked'))
+            {
+                $('#Dimanche').css('color' , 'red');
+            }
+            else
+            {
+                $('#Dimanche').css('color' , 'green');
+            }
+        });
+        function fill_labels() {
+
+            $('#label_prenom').html($('#sbc_tiersbundle_client_prenom').val());
+            $('#label_nom').html($('#sbc_tiersbundle_client_denomination').val());
+            $('#tel_label').html($('#sbc_tiersbundle_client_tel').val());
+            $('#mail_label').html($('#sbc_tiersbundle_client_website').val());
+        }
+    }
+
+
+</script>

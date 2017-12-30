@@ -1,0 +1,36 @@
+equipement_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Equipement:index" }
+    methods:  GET
+
+equipement_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Equipement:show" }
+    methods:  GET
+
+equipement_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Equipement:new" }
+    methods:  [GET, POST]
+
+equipement_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Equipement:edit" }
+    methods:  [GET, POST]
+
+equipement_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Equipement:delete" }
+    methods:  DELETE
+
+equiepement_byname:
+    path:      /by-name/{name}
+    defaults:
+        _controller: BienBundle:Equipement:getEquipementByName
+    requirements:
+        name: .+
+
+equipement_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Equipement:add" }
+    methods:  [GET, POST]

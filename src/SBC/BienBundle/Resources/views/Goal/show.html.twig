@@ -1,0 +1,459 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Lecture d'un objectif - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Objectifs</a></li>
+            <li><span>Afficher un objectif</span></li>
+        </ul>
+        <h1>{{ goal }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">{{ goal.creationDate|date('d/m/Y') }}</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-meduim-1-1 uk-width-medium-1-1">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Détails de l'objectif
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                            <div class="uk-width-large-1-2">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Code </span>
+                                            <span class="md-list-heading uk-text-large">{{ goal }}</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Date de création </span>
+                                            <span class="md-list-heading uk-text-large"> {{ goal.creationDate|date('d/m/Y') }}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="uk-width-large-1-2">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Créé par </span>
+                                            <span class="md-list-heading uk-text-large">
+                                                <a href="{{ path('personnel_show', { 'id': goal.createdBy.id }) }}">
+                                                    {{ goal.createdBy }}
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Objectif de </span>
+                                            <span class="md-list-heading uk-text-large">
+                                                <a href="{{ path('personnel_show', { 'id': goal.goalFor.id }) }}">
+                                                    {{ goal.goalFor }}
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                            <div class="uk-width-large-1-2">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Date début</span>
+                                            <span class="md-list-heading uk-text-large"> {{ goal.beginDate|date('d/m/Y') }}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="uk-width-large-1-2">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Date fin </span>
+                                            <span class="md-list-heading uk-text-large"> {{ goal.finishDate|date('d/m/Y') }}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif requêtes
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentRequetes  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentRequetes }}/100</span>
+                            </div>
+                        {% elseif percentRequetes  <40 or percentRequetes <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentRequetes }}/100</span>
+                            </div>
+
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentRequetes }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Requêtes éffecutées </span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentRequetes }}
+                                <noscript>{{ percentRequetes }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif recherches
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentRecherches <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentRecherches }}/100</span>
+                            </div>
+                        {% elseif percentRecherches  <40 or percentRecherches <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentRecherches }}/100</span>
+                            </div>
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentRecherches }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Recherches éffecutées</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentRecherches }}
+                                <noscript>{{ percentRecherches }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif nouvelles
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentNouvelles  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentNouvelles }}/100</span>
+                            </div>
+                        {% elseif percentNouvelles  <40 or percentNouvelles <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentNouvelles }}/100</span>
+                            </div>
+
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentNouvelles }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Nouvelles éffecutées</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentNouvelles }}
+                                <noscript>{{ percentNouvelles }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif acquisitions
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentAcquisitions  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentAcquisitions }}/100</span>
+                            </div>
+                        {% elseif percentAcquisitions  <40 or percentAcquisitions <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span
+                                        class="peity_orders_orange peity_data">{{ percentAcquisitions }}/100</span>
+                            </div>
+
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentAcquisitions }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Acquisitions éffecutées</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentAcquisitions }}
+                                <noscript>{{ percentAcquisitions }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif mandats vente
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentMandatsVente  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentMandatsVente }}/100</span>
+                            </div>
+                        {% elseif percentMandatsVente  <40 or percentMandatsVente <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentMandatsVente }}/100</span>
+                            </div>
+
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentMandatsVente }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Mandats vente éffecutés</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentMandatsVente }}
+                                <noscript>{{ percentMandatsVente }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif mandats location
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentMandatsLocation  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentMandatsLocation }}/100</span>
+                            </div>
+                        {% elseif percentMandatsLocation  <40 or percentMandatsLocation <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentMandatsLocation }}/100</span>
+                            </div>
+
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentMandatsLocation }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Mandats location éffecutés</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentMandatsLocation }}
+                                <noscript>{{ percentMandatsLocation }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif transactions vente
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentTransactionsVente  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentTransactionsVente }}/100</span>
+                            </div>
+                        {% elseif percentTransactionsVente  <40 or percentTransactionsVente <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentTransactionsVente }}/100</span>
+                            </div>
+
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentTransactionsVente }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Transactions vente éffecutés</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentTransactionsVente }}
+                                <noscript>{{ percentTransactionsVente }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-4 uk-width-medium-1-4">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Objectif transactions location
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        {% if percentTransactionsLocation  <40 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_red peity_data">{{ percentTransactionsLocation }}/100</span>
+                            </div>
+                        {% elseif percentTransactionsLocation  <40 or percentTransactionsLocation <60 %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders_orange peity_data">{{ percentTransactionsLocation }}
+                                    /100</span>
+                            </div>
+                        {% else %}
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right">
+                                <span class="peity_orders peity_data">{{ percentTransactionsLocation }}/100</span>
+                            </div>
+                        {% endif %}
+                        <span class="uk-text-muted uk-text-small">Transactions location éffecutés</span>
+                        <h2 class="uk-margin-remove">
+                            <span class="countUpMe">
+                                {{ percentTransactionsLocation }}
+                                <noscript>{{ percentTransactionsLocation }}</noscript>
+                            </span>
+                            %
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper md-fab-speed-dial">
+        <a class="md-fab md-fab-primary" href="javascript:void(0)" data-uk-tooltip="{pos:'right'}" title="Actions">
+            <i class="material-icons">&#xE55D;</i>
+        </a>
+        <div class="md-fab-wrapper-small">
+            <a class="md-fab md-fab-small md-fab-danger" href="javascript:void(0)"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Supprimer"
+               onclick="confirmDelete({{ goal.id }})">
+                <i class="material-icons">&#xE92B;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab-success" href="{{ path('goal_edit', {'id': goal.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Modifier">
+                <i class="material-icons">&#xE3C9;</i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/peitystats.js"
+    'bundles/immobilier/bower_components/peity/jquery.peity.min.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        document.onreadystatechange = function () {
+            if (document.readyState === "complete") {
+                console.log("a");
+                $(".peity_orders").peity("donut", {
+                    height: 45,
+                    width: 45,
+                    fill: ["#8bc34a", "#eee"]
+                });
+                $(".peity_orders_red").peity("donut", {
+                    height: 45,
+                    width: 45,
+                    fill: ["#a91101", "#eee"]
+                });
+                $(".peity_orders_orange").peity("donut", {
+                    height: 45,
+                    width: 45,
+                    fill: ["#ffa500", "#eee"]
+                });
+            }
+        };
+        function confirmDelete(id) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer cet objectif ?',
+                function () {
+                    deleteIt(id);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                });
+        }
+        function deleteIt(id) {
+            var url = '{{ path('goal_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('L\'objectif a été supprimé avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            history.back();
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cet objectif pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cet objectif pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+    </script>
+{% endblock %}

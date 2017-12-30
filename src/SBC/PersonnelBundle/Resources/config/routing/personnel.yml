@@ -1,0 +1,69 @@
+personnel_index:
+    path:     /
+    defaults: { _controller: "PersonnelBundle:Personnel:index" }
+    methods:  GET
+
+personnel_show:
+    path:     /afficher/{id}
+    defaults: { _controller: "PersonnelBundle:Personnel:show" }
+    methods:  GET
+
+personnel_new:
+    path:     /ajouter
+    defaults: { _controller: "PersonnelBundle:Personnel:new" }
+    methods:  [GET, POST]
+
+personnel_edit:
+    path:     /modifier/{id}
+    defaults: { _controller: "PersonnelBundle:Personnel:edit" }
+    methods:  [GET, POST]
+
+personnel_delete:
+    path:     /supprimer/{id}
+    defaults: { _controller: "PersonnelBundle:Personnel:delete" }
+    methods:  DELETE
+
+personnel_bycin:
+    path:      /by-cin/{cin}
+    defaults:
+        _controller: PersonnelBundle:Personnel:getPersonnelByCin
+
+personnel_bycode:
+    path:      /by-code/{code}
+    defaults:
+        _controller: PersonnelBundle:Personnel:getPersonnelByCode
+
+personnel_byphonenumber:
+    path:      /by-phone-number/{phonenumber}
+    defaults:
+        _controller: PersonnelBundle:Personnel:getPersonnelByPhoneNumber
+
+personnel_byemail:
+    path:      /by-email/{email}
+    defaults:
+        _controller: PersonnelBundle:Personnel:getPersonnelByEmail
+
+personnel_list:
+    path:     /list
+    defaults: { _controller: "PersonnelBundle:Personnel:list" }
+    methods:  [GET, POST]
+
+personnel_all_or_one:
+    path:     /all-or-one
+    defaults: { _controller: "PersonnelBundle:Personnel:allOrOneByRole" }
+    methods:  [GET, POST]
+
+personnel_one:
+    path:     /one
+    defaults: { _controller: "PersonnelBundle:Personnel:one" }
+    methods:  [GET, POST]
+
+personnel_byid:
+    path:      /by-id/{id}
+    defaults:
+        _controller: PersonnelBundle:Personnel:byId
+
+personnel_filter_taches:
+    path:      /filter-taches/{id}/{begin}/{end}
+    defaults:
+        _controller: PersonnelBundle:Personnel:filtredTaches

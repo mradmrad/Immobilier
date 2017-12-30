@@ -1,0 +1,31 @@
+typetache_index:
+    path:     /
+    defaults: { _controller: "BienBundle:TypeTache:index" }
+    methods:  GET
+
+typetache_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:TypeTache:show" }
+    methods:  GET
+
+typetache_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:TypeTache:new" }
+    methods:  [GET, POST]
+
+typetache_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:TypeTache:edit" }
+    methods:  [GET, POST]
+
+typetache_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:TypeTache:delete" }
+    methods:  DELETE
+
+typetache_bytitle:
+    path:      /by-title/{title}
+    defaults:
+        _controller: BienBundle:TypeTache:getTypeTacheByTitle
+    requirements:
+        title: .+

@@ -1,0 +1,4 @@
+services:
+#    tiers.example:
+#        class: SBC\TiersBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="uk-text-upper">Fournisseurs</h1>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <table id="dt_tableExport" class="uk-table" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Datecreation</th>
+                    {#<th>Dateupdate</th>#}
+                    <th>Denomination</th>
+                    <th>Identifier</th>
+                    <th>Passenger</th>
+                    <th>Archived</th>
+                    <th>Fax</th>
+                    <th>Tel</th>
+                    {#<th>Website</th>#}
+                    {#<th>Moreinformations</th>#}
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for supplier in suppliers %}
+                    <tr>
+                        <td><a href="{{ path('supplier_show', { 'code': supplier.code }) }}">{{ supplier.code }}</a>
+                        </td>
+                        <td>{% if supplier.dateCreation %}{{ supplier.dateCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        {#<td>{% if supplier.dateUpdate %}{{ supplier.dateUpdate|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+                        <td>{{ supplier.denomination }}</td>
+                        <td>{{ supplier.identifier }}</td>
+                        <td>{% if supplier.passenger %}<span class="uk-badge uk-badge-warning">Oui</span>{% else %}<span class="uk-badge">Non</span>{% endif %}</td>
+                        <td>{% if supplier.archived %}<span class="uk-badge uk-badge-danger">Oui</span>{% else %}<span class="uk-badge">Non</span>{% endif %}</td>
+                        <td>{{ supplier.fax }}</td>
+                        <td>{{ supplier.tel }}</td>
+                        {#<td>{{ supplier.website }}</td>#}
+                        {#<td>{{ supplier.moreInformations }}</td>#}
+                        <td class="uk-text-center">
+                            <a href="{{ path('supplier_edit', { 'code': supplier.code }) }}"><i class="material-icons">&#xE22B;</i></a>
+                            <a href="javascript:void(0)" onclick="deleteTiers('{{ supplier.code }}', '{{ supplier.denomination }}')"><i class="material-icons">&#xE92B;</i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent md-fab-wave-light" href="{{ path('supplier_new') }}" id="invoice_add"
+           data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Nouveau fournisseur">
+            <i class="material-icons">&#xE7FE;</i>
+        </a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="{{ asset('template/bower_components/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+
+    <!-- datatables custom integration -->
+    <script src="{{ asset('template/assets/js/custom/datatables/datatables.uikit.min.js') }}"></script>
+
+    <!--  datatables functions -->
+    <script src="{{ asset('template/assets/js/pages/plugins_datatables.min.js') }}"></script>
+
+    {% for flashMessage in app.session.flashbag.get('success_add_supplier') %}
+
+        {{ flashMessage|raw }}
+
+    {% endfor %}
+
+    <script>
+        function deleteTiers(code, name) {
+            UIkit.modal.confirm(
+                    'Confirmez-vous la suppression du fournisseur "'+name+'" ?',
+                    function(){
+                        var url = "{{ path('supplier_delete', {'code': 'code_supplier'}) }}";
+                        url = url.replace('code_supplier', code);
+                        window.location.href = url;
+                    },
+                    {labels: {'Ok': 'Oui', 'Cancel': 'Annuler'}});
+        }
+    </script>
+
+{% endblock %}

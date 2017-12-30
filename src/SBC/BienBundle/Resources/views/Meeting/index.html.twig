@@ -1,0 +1,1445 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {% stylesheets output="css/compiled/mainForCalendar.css" filter="cssrewrite"
+    'bundles/immobilier/bower_components/fullcalendar/dist/fullcalendar.min.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {{ parent() }}
+    {% stylesheets output="css/compiled/mainKendouiCombo.css" filter="cssrewrite"
+    'bundles/immobilier/bower_components/kendo-ui/styles/kendo.common-material.min.css'
+    'bundles/immobilier/bower_components/kendo-ui/styles/kendo.material.min.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    <style>
+        /*.fc-scroller {*/
+            /*height: auto !important;*/
+        /*}*/
+    </style>
+{% endblock %}
+{% block title %}
+    Liste des Rendez-vous - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Rendez-vous</a></li>
+            <li><span>Afficher tous les rendez-vous</span></li>
+        </ul>
+        <h1>Liste des rendez-vous</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Liste de tous les rendez-vous</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="md-card" style="height: 1200px">
+            <div class="md-card-content">
+                <div id="calendar_selectable"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainIndexForCalendarMeeting.js"
+    'bundles/immobilier/f/fullcalendar.min.js'
+    'bundles/immobilier/f/scheduler.min.js'
+    'bundles/immobilier/bower_components/fullcalendar/dist/locale/fr.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js'
+    'bundles/immobilier/jquery-numberformatter/jshashtable-2.1.js'
+    'bundles/immobilier/jquery-numberformatter/jquery.numberformatter-1.2.4.js'
+    'bundles/immobilier/assets/js/kendoui_custom.js'
+    'bundles/immobilier/assets/js/pages/kendoui.js' %}
+    <script src="{{ asset_url }}"></script>
+    <script src="{{ asset('js/html2canvas.js') }}"></script>
+    <script src="{{ asset('js/dowload2.js') }}"></script>
+    {% endjavascripts %}
+    <script>
+        $( document ).ready(function() {
+
+        });
+        $(function () {
+            var timeChanged = '';
+            var calendar_selectable = $('#calendar_selectable'),
+                calendarColorsWrapper = $('<div id="calendar_colors_wrapper"></div>');
+            var calendarColorPicker = altair_helpers.color_picker(calendarColorsWrapper).prop('outerHTML');
+            calendar_selectable.fullCalendar({
+                viewDisplay: function (view) {
+                    var h;
+                    if (view.name == "day") {
+                        h = NaN;
+                    }
+                    else {
+                        h = 2500;  // high enough to avoid scrollbars
+                    }
+
+                    $('#calendar').fullCalendar('option', 'contentHeight', h);
+                },
+                header: {
+                    left: 'title today',
+                    center: 'month',
+                    right: 'agendaDay,agendaWeek,listWeek prev,next'
+                },
+                buttonIcons: {
+                    prev: 'md-left-single-arrow',
+                    next: 'md-right-single-arrow',
+                    prevYear: 'md-left-double-arrow',
+                    nextYear: 'md-right-double-arrow'
+                },
+                buttonText: {
+                    today: ' ',
+                    month: ' ',
+                    week: ' ',
+                    day: ' '
+                },
+                views: {
+                    month: {
+                        selectable: false,
+                        editable: false
+                    }
+                },
+                height: 1150,
+                locale: 'fr',
+                aspectRatio: 2.48,
+                defaultDate: moment(),
+                selectable: true,
+                selectHelper: true,
+                editable: true,
+                eventLimit: true,
+                timeFormat: '(HH)(:mm)',
+                defaultView: 'agendaDay',
+                minTime: '08:00',
+                maxTime: '20:00',
+                slotDuration: '00:15:00',
+                scrollTime: '08:00',
+                allDaySlot: false,
+                resources: '{{ path('personnel_all_or_one') }}',
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                eventSources: '{{ path('meeting_list') }}',
+                lazyFetching: false,
+                eventRender: function (event, element) {
+
+                    if (event.status === "Annulé")
+                        element.find('.fc-title').html("<del>Titre:&nbsp;&nbsp;\"" + event.title + "\"&nbsp;-&nbsp;Pour:&nbsp;&nbsp;" + event.remindFor +
+                            "&nbsp;-&nbsp;" + event.status + "</del>");
+                    else
+                        element.find('.fc-title').html("Titre:&nbsp;&nbsp;\"" + event.title + "\"&nbsp;-&nbsp;Pour:&nbsp;&nbsp;" + event.remindFor +
+                            "&nbsp;-&nbsp;" + event.status);
+                },
+                select: function (start, end, a, b, resources) {
+                    openAddEventModal(start, end, a, b, resources, calendarColorPicker, calendar_selectable);
+                    altair_md.init();
+                    $('.select').kendoComboBox({
+                        filter: "contains",
+                        suggest: true
+                    });
+
+                },
+                eventClick: function (calEvent) {
+
+                    eventClickModal(calEvent, calendar_selectable);
+                },
+                eventResize: function (calEvent) {
+                    calendar_selectable.fullCalendar('removeEvents', calEvent.id);
+                    editEvent(calEvent, calendar_selectable);
+                },
+                eventDragStop: function (event) {
+                    timeChanged = event.start;
+                },
+                eventDrop: function (calEvent, dayDelta, revertFunc) {
+                    if (calEvent.resourceEditable)
+                        editEvent(calEvent, calendar_selectable);
+                    else if (calEvent.start !== timeChanged) {
+                        calendar_selectable.fullCalendar('removeEvents', calEvent.id);
+                        editEvent(calEvent, calendar_selectable);
+                    }
+                    else
+                        revertFunc();
+                },
+                viewRender: function () {
+                    calendar_selectable.fullCalendar('removeEvents');
+                }
+            });
+
+            {#$('.fc-center').html(' <img src="{{ asset('icons/page tableau de bord.jpg') }}">')#}
+            $('.fc-agendaWeek-button').remove();
+            $('.fc-listWeek-button').remove();
+            $('.fc-right').first('div').append('<button onclick="print()" type="button" class=" fc-button fc-state-default fc-corner-left">' +
+                '<i class="material-icons">print</i>' +
+                '</button>');
+
+
+
+        });
+
+        function print() {
+            $('.fc-scroller').css('height','auto !important');
+
+            html2canvas(document.getElementById('calendar_selectable'), {
+                onrendered: function(canvas) {
+                    var dataURLstring = canvas.toDataURL();
+//                    var image = new Image();
+//                    dataURLstring.src = "data:image/jpg;base64," + dataURLstring.d;
+
+                    var d= new Date();
+                    download(dataURLstring, "planning"+d+".gif", "image/gif")
+//                    var w = window.open("");
+//                    w.document.write('<a download="custom-filename.jpg" href="'+dataURLstring+'" title="ImageName">' +
+//                        '<img src='+dataURLstring+'>' +
+//                        '</a>');
+
+
+                }
+            });
+//            var c = document.getElementById('calendar_selectable');
+//
+//            var t = c.getContext('2d');
+//            window.open('', document.getElementById('calendar_selectable').toDataURL());
+        }
+        function openUpdateModal(calEvent, calendar_selectable) {
+            UIkit.modal.confirm(
+                '<h3 class="heading_b uk-margin-medium-bottom">Modifier un rendez-vous</h3>' +
+                '<form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-1">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" style=" width: 150px;">' +
+                '<span class="uk-form-help-block">Titre</span>' +
+                '<input id="title" class="md-input" name="title" type="text" value="' + calEvent.title + '" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" ">' +
+                '<span class="uk-form-help-block">Date début</span>' +
+                '<input id="datestart" name="datestart"  value="' + calEvent.start.format('DD-MM-Y') +
+                '" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}" class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure début</span>' +
+                '<input id="timestart" name="timestart" value="' + calEvent.start.format('HH:mm') +
+                '" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" >' +
+                '<span class="uk-form-help-block">Date fin</span>' +
+                '<input id="dateend" name="dateend" value="' + calEvent.end.format('DD-MM-Y') +
+                '" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}", class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure fin</span>' +
+                '<input id="timeend"  name="timeend"  value="' + calEvent.end.format('HH:mm') +
+                '" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Type du rendez vous</span>' +
+                '<select id="typeMeeting"  class="kendoComboBox select" style="width: 100%"  >' +
+                '<option value=""></option>' +
+                '<option value="Sur place"' + ((calEvent.typeMeeting === "Sur place") ? 'selected=selected' : '' ) + ' >Sur place</option>' +
+                '<option value="Agence"' + ((calEvent.typeMeeting === "Agence") ? 'selected=selected' : '' ) + '>Agence</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
+                '<select id="status" class="kendoComboBox select" style="width: 100%" >' +
+                '<option value=""></option>' +
+                '<option value="Confirmé" ' + ((calEvent.status === "Confirmé") ? 'selected=selected' : '' ) + '>Confirmé</option>' +
+                '<option value="Non confirmé" ' + ((calEvent.status === "Non confirmé") ? 'selected=selected' : '' ) + '>Non confirmé</option>' +
+                '<option value="Annulé" ' + ((calEvent.status === "Annulé") ? 'selected=selected' : '' ) + '>Annulé</option>' +
+                '<option value="Effectué" ' + ((calEvent.status === "Effectué") ? 'selected=selected' : '' ) + '>Effectué</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div  class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Déscription</span>' +
+                '<textarea id="description" class="md-input selecize_init" cols="30" rows="4">' + calEvent.description + ' </textarea>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                ''
+                , function () {
+                    var title = $("#title");
+                    var description = $("#description");
+                    if (title.val() !== '') {
+
+                        var url = '{{ path('meeting_edit') }}';
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: 'title=' + title.val()
+                            + '&start=' + $('#datestart').val() + " " + $('#timestart').val()
+                            + '&end=' + $('#dateend').val() + " " + $('#timeend').val()
+                            + '&id=' + calEvent.id + '&status=' + $('#status').val() + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&description=' + description.val(),
+
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                                UIkit.modal.alert('Le rendez-vous a été modifié avec succès.', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }, {
+                    labels: {
+                        Ok: 'Modifier',
+                        Cancel: 'Fermer'
+                    }
+                });
+            $('.select').kendoComboBox({
+                filter: "contains",
+                suggest: true
+            });
+        }
+
+        function setFormatNumber() {
+            $('.numeric').blur(function () {
+                $(this).parseNumber({format: "######0.00", locale: "us"});
+                $(this).formatNumber({format: "######0.00", locale: "us"});
+            });
+            $('.money').blur(function () {
+                $(this).parseNumber({format: "#,##0.000", locale: "fr"});
+                $(this).formatNumber({format: '#,##0.000', locale: 'fr'});
+            });
+        }
+
+        function serealizeSelects(select) {
+            var array = [];
+            select.each(function () {
+                array.push($(this).val())
+            });
+            return array;
+        }
+
+        function editEvent(calEvent, calendar_selectable) {
+            var url = '{{ path('meeting_edit') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: 'id=' + calEvent.id + '&start=' + calEvent.start.format('Y-MM-DD HH:mm') +
+                '&end=' + calEvent.end.format('Y-MM-DD HH:mm') + '&remindFor=' + calEvent.resourceId
+                + '&remindFors=' + serealizeSelects($('#personnels'))
+                + '&resourceEditable=' + calEvent.resourceEditable
+                ,
+                success: function () {
+                    // setting new values on the event of calendar
+                    //                    calEvent.remindFor = data.remindFor;
+                    calendar_selectable.fullCalendar('refetchEvents'); // stick? = true
+                    timeChanged = '';
+                    UIkit.modal.alert('Succès', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function setInputValue(input, value) {
+            input.val(value);
+            input.closest('.md-input-wrapper').addClass('md-input-filled');
+        }
+
+        function getNumero(select) {
+            $('#numero').val($(select).next('div').find('.selectize-input').find('.item').attr('data-numero'));
+            $('#numero').closest('.md-input-wrapper').addClass('md-input-filled');
+        }
+
+        function getNouvelles(select) {
+            var nouvelles = select[0].selectize;
+            nouvelles.clearOptions();
+            var url = '{{ path('nouvelle_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            nouvelles.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function (exception) {
+                    console.log(exception.responseText);
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function getAcquisitions(select) {
+            var acquisitions = select[0].selectize;
+            acquisitions.clearOptions();
+            var url = '{{ path('acquisition_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            acquisitions.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function getRequetes(select) {
+            var requetes = select[0].selectize;
+            requetes.clearOptions();
+            var url = '{{ path('requete_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            requetes.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function getMandats(select) {
+            var mandats = select[0].selectize;
+            mandats.clearOptions();
+            var url = '{{ path('mandat_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            mandats.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function getClients(select) {
+            var clients = select[0].selectize;
+            clients.clearOptions();
+            var url = '{{ path('client_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            clients.addOption({
+                                text: element.text,
+                                value: element.value,
+                                numero: element.numero
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function getPersonnels(select) {
+            var personnels = select[0].selectize;
+            personnels.clearOptions();
+            var url = '{{ path('personnel_list') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    if (data !== null) {
+                        $.each(data, function (key, element) {
+                            personnels.addOption({
+                                text: element.title,
+                                value: element.id
+                            });
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Rien', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function eventClickModal(calEvent, calendar_selectable) {
+            UIkit.modal.confirm('' +
+                '<h3 class="heading_b uk-margin-medium-bottom">Informations sur le rendez-vous</h3>' +
+                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium"data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<ul class="md-list">' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.title +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Débute le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.start.format('Y-MM-DD HH:mm') +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Se términe le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.end.format('Y-MM-DD HH:mm') +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Rendez-vous pour</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.remindFor +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '</ul>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<ul class="md-list">' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Rendez-vous créé par</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.createdBy +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Etat</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.status +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Type</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.typeMeeting +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Client</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.client +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Tél Client</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.tel +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Autre clients</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.others +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Déscription</span>' +
+                '<span class="md-list-heading uk-text-large">' + calEvent.description +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '</ul>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '', function () {
+                    openUpdateModal(calEvent, calendar_selectable);
+                }
+                , {
+                    labels: {
+                        Cancel: 'Fermer',
+                        Ok: 'Modifier'
+                    }
+                });
+
+        }
+
+        function openAddEventModal(start, end, a, b, resources, calendarColorPicker, calendar_selectable) {
+            UIkit.modal.confirm('' +
+                '<h3 class="heading_b uk-margin-medium-bottom">Ajouter un rendez-vous</h3>' +
+                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                '<span class="uk-form-help-block">Couleur</span>' +
+                calendarColorPicker +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row pers">' +
+                '<div class="parsley-row">' +
+                '<label for="personnel">Personnel</label>' +
+                '<input id="personnel" class="md-input" name="personnel" type="text" readonly />' +
+                '<input id="personnelId" class="md-input" name="personnelId" type="hidden"  required />' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Client</span>' +
+                '<select id="clients" onchange="getNumero(this)"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Autres clients</label>' +
+                '<input id="autresClients" class="md-input" name="autres" type="text" />' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Numéro</label>' +
+                '<input id="numero" class="md-input" name="numero" type="text" readonly />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Autres personnels</span>' +
+                '<select id="personnels" multiple="multiple" ></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Type du rendez vous</span>' +
+                '<select id="typeMeeting" class="kendoComboBox select" style="width: 100%" >' +
+                '<option value=""></option>' +
+                '<option value="Sur place">Sur place</option>' +
+                '<option value="Agence">Agence</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
+                '<select id="status" class="kendoComboBox select" style="width: 100%">' +
+                '<option value=""></option>' +
+                '<option value="Confirmé">Confirmé</option>' +
+                '<option value="Non confirmé">Non confirmé</option>' +
+                '<option value="Annulé">Annulé</option>' +
+                '<option value="Effectué">Effectué</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div  class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Déscription</label>' +
+                '<textarea id="description" class="md-input selecize_init" cols="30" rows="4"></textarea>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '</div>' +
+                '</div>' +
+                '<span class="uk-form-help-block"></span>' + '<span class="uk-form-help-block"></span>' +
+                '<ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:\'#tabs_4\', animation:\'slide-horizontal\'}">' +
+                '<li class="uk-active"><a href="#">Rech.</a></li>' +
+                '<li><a href="#">Acquis.</a></li>' +
+                '<li><a href="#">Prise M.</a></li>' +
+                '<li><a href="#">requête</a></li>' +
+                '<li><a href="#">Offre</a></li>' +
+                '<li><a href="#">Accept.</a></li>' +
+                '<li><a href="#">Réunion</a></li>' +
+
+                '<li><a href="#">Visites</a></li>' +
+                '<li><a href="#">Autres</a></li>' +
+                '</ul>' +
+                '<ul id="tabs_4" class="uk-switcher uk-margin">' +
+                '<li>' +
+                '<form method="POST" name="form_recherche" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Zone</label>' +
+                '<input id="zone" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Rue</label>' +
+                '<input id="rue" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_recherche" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_nouvelle" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Nouvelle</span>' +
+                '<select id="nouvelles"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_nouvelle" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_acquisition" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Acquisition</span>' +
+                '<select id="acquisitions"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_acquisition" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_requete" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Requête</span>' +
+                '<select id="requetes"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_requete" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_offre" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Mandat</span>' +
+                '<select id="offres"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_offre" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Prix proposé</label>' +
+                '<input id="proposedPriceOffre" class="md-input money" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_accept" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Mandat</span>' +
+                '<select id="acceptations"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_accept" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Prix proposé</label>' +
+                '<input id="proposedPriceAccept" class="md-input money" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_reunion" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_reunion" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_visite" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Mandat</span>' +
+                '<select id="visites"></select>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-medium-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_visite" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '<li>' +
+                '<form method="POST" name="form_other" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-medium-5-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Titre</label>' +
+                '<input id="title_other" class="md-input" name="text" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</li>' +
+                '</ul>' +
+
+                ''
+                , function () {
+                    var titleRecherche = $("#title_recherche");
+                    if (titleRecherche.val() !== '') {
+                        var eventDataRech,
+                            eventColorRech = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataRech = {
+                            title: titleRecherche.val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorRech ? eventColorRech : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlRech = '{{ path('bienmeeting_add') }}';
+                        $.ajax({
+                            url: urlRech,
+                            type: 'POST',
+                            data: 'title=' + eventDataRech.title + '&start=' + eventDataRech.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataRech.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataRech.color
+                            + '&zone=' + $('#zone').val() + '&rue=' + $('#rue').val() + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&status=' + $('#status').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&description=' + $("#description").val()
+                            ,
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_nouvelle").val() !== '') {
+                        var eventData,
+                            eventColor = $('#calendar_colors_wrapper').find('input').val();
+                        eventData = {
+                            title: $("#title_nouvelle").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColor ? eventColor : '',
+                            createdBy: 'Vous'
+                        };
+                        var url = '{{ path('nouvellemeeting_add') }}';
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: 'title=' + eventData.title + '&start=' + eventData.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventData.end.format('Y-MM-DD HH:mm') + '&color=' + eventData.color
+                            + '&nouvelle=' + $('#nouvelles').val() + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&status=' + $('#status').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&description=' + $("#description").val()
+                            ,
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_acquisition").val() !== '') {
+                        var eventDataa,
+                            eventColore = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataa = {
+                            title: $("#title_acquisition").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColore ? eventColore : '',
+                            createdBy: 'Vous'
+                        };
+                        var urle = '{{ path('acquisitionmeeting_add') }}';
+                        $.ajax({
+                            url: urle,
+                            type: 'POST',
+                            data: 'title=' + eventDataa.title + '&start=' + eventDataa.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataa.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataa.color
+                            + '&acquisition=' + $('#acquisitions').val() + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&status=' + $('#status').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&description=' + $("#description").val(),
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_requete").val() !== '') {
+                        var eventDataRequete,
+                            eventColorRequete = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataRequete = {
+                            title: $("#title_requete").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorRequete ? eventColorRequete : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlRequete = '{{ path('requetemeeting_add') }}';
+                        var autresClients = $('#autresClients');
+                        $.ajax({
+                            url: urlRequete,
+                            type: 'POST',
+                            data: 'title=' + eventDataRequete.title + '&start=' + eventDataRequete.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataRequete.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataRequete.color
+                            + '&requete=' + $('#requetes').val() + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&status=' + $('#status').val()
+                            + '&other=' + autresClients.val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&other=' + autresClients.val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&description=' + $("#description").val(),
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_offre").val() !== '') {
+                        var eventDataOffre,
+                            eventColorOffre = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataOffre = {
+                            title: $("#title_offre").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorOffre ? eventColorOffre : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlMandat = '{{ path('mandatmeeting_add') }}';
+                        $.ajax({
+                            url: urlMandat,
+                            type: 'POST',
+                            data: 'title=' + eventDataOffre.title + '&start=' + eventDataOffre.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataOffre.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataOffre.color
+                            + '&mandat=' + $('#offres').val() + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&status=' + $('#status').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMandatMeeting= Offre'
+                            + '&proposedPrice=' + $('#proposedPriceOffre').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&description=' + $("#description").val(),
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_accept").val() !== '') {
+                        var eventDataAccept,
+                            eventColorAccept = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataAccept = {
+                            title: $("#title_accept").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorAccept ? eventColorAccept : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlAccept = '{{ path('mandatmeeting_add') }}';
+                        $.ajax({
+                            url: urlAccept,
+                            type: 'POST',
+                            data: 'title=' + eventDataAccept.title + '&start=' + eventDataAccept.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataAccept.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataAccept.color
+                            + '&mandat=' + $('#acceptations').val() + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&status=' + $('#status').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMandatMeeting= Acceptation'
+                            + '&proposedPrice=' + parseFloat($('#proposedPriceAccept').val())
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&description=' + $("#description").val(),
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_reunion").val() !== '') {
+                        var eventDataReunion,
+                            eventColorReunion = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataReunion = {
+                            title: $("#title_reunion").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorReunion ? eventColorReunion : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlReunion = '{{ path('reunionmeeting_add') }}';
+                        $.ajax({
+                            url: urlReunion,
+                            type: 'POST',
+                            data: 'title=' + eventDataReunion.title + '&start=' + eventDataReunion.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataReunion.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataReunion.color
+                            + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&status=' + $('#status').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&description=' + $("#description").val()
+                            ,
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_other").val() !== '') {
+                        var eventDataOther,
+                            eventColorOther = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataOther = {
+                            title: $("#title_other").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorOther ? eventColorOther : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlOther = '{{ path('othermeeting_add') }}';
+                        $.ajax({
+                            url: urlOther,
+                            type: 'POST',
+                            data: 'title=' + eventDataOther.title + '&start=' + eventDataOther.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataOther.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataOther.color
+                            + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&status=' + $('#status').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&description=' + $("#description").val()
+                            ,
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else if ($("#title_visite").val() !== '') {
+                        var eventDataVisite,
+                            eventColorVisite = $('#calendar_colors_wrapper').find('input').val();
+                        eventDataVisite = {
+                            title: $("#title_visite").val(),
+                            start: start,
+                            end: end,
+                            remindFor: $("#personnel").val(),
+                            color: eventColorVisite ? eventColorVisite : '',
+                            createdBy: 'Vous'
+                        };
+                        var urlVisite = '{{ path('visite_add') }}';
+                        $.ajax({
+                            url: urlVisite,
+                            type: 'POST',
+                            data: 'title=' + eventDataVisite.title + '&start=' + eventDataVisite.start.format('Y-MM-DD HH:mm')
+                            + '&end=' + eventDataVisite.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataVisite.color
+                            + '&mandat=' + $('#visites').val() + +'&remindFor=' + $('#personnelId').val()
+                            + '&remindFor=' + $('#personnelId').val()
+                            + '&client=' + $('#clients').val()
+                            + '&remindFors=' + serealizeSelects($('#personnels'))
+                            + '&status=' + $('#status').val()
+                            + '&other=' + $('#autresClients').val()
+                            + '&typeMeeting=' + $('#typeMeeting').val()
+                            + '&description=' + $("#description").val()
+                            ,
+                            success: function () {
+                                calendar_selectable.fullCalendar('refetchEvents');
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }, {
+                    labels: {
+                        Ok: 'Ajouter',
+                        Cancel: 'Fermer'
+                    }
+                });
+
+
+//                    altair_forms.init();
+//                    altair_forms.parsley_validation_config();
+            if (typeof(resources) !== 'undefined') {
+                $('#personnel').val(resources.title);
+                $('#personnelId').val(resources.id);
+            }
+            else {
+                for (var k in b.calendar.resourceManager.resourcesById) {
+                    if (b.calendar.resourceManager.resourcesById.hasOwnProperty(k)) {
+                        if (b.calendar.resourceManager.resourcesById[k].title === '{{ app.user.personnel.name }}') {
+                            $('#personnel').val(b.calendar.resourceManager.resourcesById[k].title);
+                            $('#personnelId').val(b.calendar.resourceManager.resourcesById[k].id);
+                        }
+                    }
+                }
+            }
+            var nouvelles = $('#nouvelles');
+            var acquisitions = $('#acquisitions');
+            var requetes = $('#requetes');
+            var offres = $('#offres');
+            var acceptations = $('#acceptations');
+            var visites = $('#visites');
+            var clients = $('#clients');
+            var personnels = $('#personnels');
+            nouvelles.selectize({
+                placeholder: 'Choisir une nouvelle....             ',
+                hideSelected: true
+            });
+            acquisitions.selectize({
+                placeholder: 'Choisir une acquisition....             ',
+                hideSelected: true
+            });
+            requetes.selectize({
+                placeholder: 'Choisir une requête....             ',
+                hideSelected: true
+            });
+            offres.selectize({
+                placeholder: 'Choisir un mandat....             ',
+                hideSelected: true
+            });
+            acceptations.selectize({
+                placeholder: 'Choisir un mandat....             ',
+                hideSelected: true
+            });
+            visites.selectize({
+                placeholder: 'Choisir un mandat....             ',
+                hideSelected: true
+            });
+            clients.selectize({
+                placeholder: 'Choisir un client....             ',
+                hideSelected: true,
+                render: {
+                    item: function (data) {
+                        return "<div  data-value='" + data.value + "' data-numero='" + data.numero + "'  class='item'>"
+                            + data.text + " </div>";
+                    }
+                }
+            });
+            personnels.selectize({
+                placeholder: 'Choisir les personnels....             ',
+                hideSelected: true
+            });
+            setFormatNumber();
+            getClients(clients);
+            getPersonnels(personnels);
+            getNouvelles(nouvelles);
+            getAcquisitions(acquisitions);
+            getRequetes(requetes);
+            getMandats(offres);
+            getMandats(acceptations);
+            getMandats(visites);
+        }
+    </script>
+{% endblock %}

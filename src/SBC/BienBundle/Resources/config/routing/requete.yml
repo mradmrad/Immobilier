@@ -1,0 +1,41 @@
+requete_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Requete:index" }
+    methods:  GET
+
+requete_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Requete:list" }
+    methods:  [GET, POST]
+
+requete_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Requete:show" }
+    methods:  GET
+
+requete_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Requete:new" }
+    methods:  [GET, POST]
+
+requete_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Requete:edit" }
+    methods:  [GET, POST]
+
+requete_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Requete:delete" }
+    methods:  DELETE
+
+requete_state:
+    path:     /{id}/{state}/state
+    defaults: { _controller: "BienBundle:Requete:state" }
+    methods:  [GET, POST]
+
+requete_byreference:
+    path:      /by-reference/{reference}
+    defaults:
+        _controller: BienBundle:Requete:getRequeteByReference
+    requirements:
+        reference: .+

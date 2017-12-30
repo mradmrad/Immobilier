@@ -1,0 +1,18 @@
+_alpha_device_fingerprint:
+    path: /device/fingerprint
+    defaults: { _controller: AlphaVisitorTrackingBundle:Device:fingerprint }
+    options:
+        expose: true
+
+tableau_de_bord:
+    path: /historique-des-pages-consultees
+    defaults: { _controller: AlphaVisitorTrackingBundle:Visitors:visits }
+
+
+alpha_number_of_visitors:
+    path: /data/number_of_visitors
+    defaults: { _controller: AlphaVisitorTrackingBundle:Visitors:numberOfVisitors }
+
+alpha_pays_most_visited:
+    path: /data/pays_most_visited
+    defaults: { _controller: AlphaVisitorTrackingBundle:Visitors:mostCountriesVisited }

@@ -1,0 +1,43 @@
+localite_index:
+    path:     /liste
+    defaults: { _controller: "GeoTunisieBundle:Localite:index" }
+    methods:  GET
+
+localite_show:
+    path:     /afficher/{id}
+    defaults: { _controller: "GeoTunisieBundle:Localite:show" }
+    methods:  GET
+
+localite_new:
+    path:     /nouveau
+    defaults: { _controller: "GeoTunisieBundle:Localite:new" }
+    methods:  [GET, POST]
+
+localite_edit:
+    path:     /modifier/{id}
+    defaults: { _controller: "GeoTunisieBundle:Localite:edit" }
+    methods:  [GET, POST]
+
+localite_delete:
+    path:     /supprimer/{id}
+    defaults: { _controller: "GeoTunisieBundle:Localite:delete" }
+    methods:  DELETE
+
+localites_byville:
+    path:     /localites-par-ville
+    defaults: { _controller: "GeoTunisieBundle:Localite:byVille" }
+    methods:  POST
+
+localite_byname:
+    path:     /localite-par-nom/{name}
+    defaults: { _controller: "GeoTunisieBundle:Localite:byName" }
+    methods:  [GET, POST]
+
+localite_list:
+    path:     /localite-liste
+    defaults: { _controller: "GeoTunisieBundle:Localite:listForAjax" }
+    methods:  [GET, POST]
+localite_add:
+    path:     /add
+    defaults: { _controller: "GeoTunisieBundle:Localite:newLocalite" }
+    methods:  [GET, POST]

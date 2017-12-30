@@ -1,0 +1,36 @@
+typebien_index:
+    path:     /
+    defaults: { _controller: "BienBundle:TypeBien:index" }
+    methods:  GET
+
+typebien_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:TypeBien:show" }
+    methods:  GET
+
+typebien_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:TypeBien:new" }
+    methods:  [GET, POST]
+
+typebien_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:TypeBien:edit" }
+    methods:  [GET, POST]
+
+typebien_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:TypeBien:delete" }
+    methods:  DELETE
+
+typebien_bynameandcategory:
+    path:      /by-name-and-category/{name}/{category}
+    defaults:
+        _controller: BienBundle:TypeBien:getTypeBienByNameAndCategory
+    requirements:
+        name: .+
+
+typebien_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:TypeBien:add" }
+    methods:  [GET, POST]

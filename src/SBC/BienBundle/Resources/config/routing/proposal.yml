@@ -1,0 +1,29 @@
+proposal_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Proposal:index" }
+    methods:  GET
+
+proposal_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Proposal:show" }
+    methods:  GET
+
+proposal_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Proposal:new" }
+    methods:  [GET, POST]
+
+proposal_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Proposal:add" }
+    methods:  [GET, POST]
+
+proposal_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Proposal:edit" }
+    methods:  [GET, POST]
+
+proposal_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Proposal:delete" }
+    methods:  DELETE

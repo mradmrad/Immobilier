@@ -1,0 +1,4 @@
+mandatmeeting_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:MandatMeeting:add" }
+    methods:  [GET, POST]

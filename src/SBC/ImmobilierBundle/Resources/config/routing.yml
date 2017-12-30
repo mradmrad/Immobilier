@@ -1,0 +1,7 @@
+immobilier_dashboard:
+    path:     /accueil
+    defaults: { _controller: ImmobilierBundle:DashBoard:accueil }
+
+immobilier_agencyreport:
+    path:     /rapport-agence
+    defaults: { _controller: ImmobilierBundle:DashBoard:agencyReport }

@@ -1,0 +1,1044 @@
+{% extends "::layout.html.twig" %}
+{% block title %}
+    Lecture d'une nouvelle - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <style>
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 3px;
+            margin-top: 10px;
+            text-overflow: ellipsis;
+            width: 300px;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBK8ckSg8MXqpU9fQoZG_yoMnLb1zPmWM&v=3.exp&libraries=places"></script>
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Nouvelles</a></li>
+            <li><span>Afficher une nouvelle</span></li>
+        </ul>
+        <h1>{{ nouvelle.title }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">{{ nouvelle.creationDate|date('d/m/Y') }}</span>
+    </div>
+    <div id="page_content_inner">
+        <script src="https://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
+        <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs', animation:'slide-horizontal'}">
+            <li class="uk-active"><a href="#">Propiétaire</a></li>
+            <li><a href="#">Détails</a></li>
+            <li><a href="#">Gallerie</a></li>
+            <li><a href="#">Déscription</a></li>
+            <li><a href="#">Historique</a></li>
+            <li><a href="#">Rendez-vous</a></li>
+        </ul>
+        <ul id="tabs" class="uk-switcher uk-margin">
+            <li>
+                <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#proprietaires'}">
+                    <li class="uk-active"><a href="#">Propiétaires</a></li>
+                    <li><a href="#">Procurations</a></li>
+                    <li><a href="#">En qualité de</a></li>
+                </ul>
+                <ul id="proprietaires" class="uk-switcher uk-margin">
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails des propriétaires
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                {% if  nouvelle.owners|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-badge uk-badge-danger">  Pas de propriétaires </span>
+                                    </div>
+                                {% endif %}
+                                {% for owner in nouvelle.owners %}
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            <a href="{{ path('client_show', { 'code': owner.client.code }) }}">
+                                                                {{ owner.client.denomination }}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone  </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ owner.client.tel }}</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ owner.client.code }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ owner.client.identifier }}</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails des procurations
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                {% if  nouvelle.procurations|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-badge uk-badge-danger">  pas de procurations </span>
+                                    </div>
+                                {% endif %}
+                                {% for procuration in nouvelle.procurations %}
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination p  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            <a href="{{ path('client_show', { 'code': procuration.client.code }) }}">
+                                                                {{ procuration.client.denomination }}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone P </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ procuration.client.tel }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.client.code }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.client.identifier }}</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  PP </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            <a href="{{ path('client_show', { 'code': procuration.representant.code }) }}">
+                                                                {{ procuration.representant.denomination }}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone PP </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ procuration.representant.tel }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code PP  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.representant.code }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant PP  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            {{ procuration.representant.identifier }}
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails en qualité de
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                {% if  nouvelle.representants|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-badge uk-badge-danger">  pas de en qualité de </span>
+                                    </div>
+                                {% endif %}
+                                {% for representant in nouvelle.representants %}
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination p  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            <a href="{{ path('client_show', { 'code': representant.client.code }) }}">
+                                                                {{ representant.client.denomination }}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone P </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ representant.client.tel }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.client.code }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.client.identifier }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  PP </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            <a href="{{ path('client_show', { 'code': representant.representant.code }) }}">
+                                                                {{ representant.representant.denomination }}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone PP </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ representant.representant.tel }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code PP  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.representant.code }}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant PP  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                            {{ representant.representant.identifier }}
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                    <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Meublé(e)
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                            {% if nouvelle.furnished %}
+                                                <span class="uk-badge uk-badge-success">Oui</span>
+                                            {% else %}
+                                                <span class="uk-badge uk-badge-danger">Non</span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Image principale
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <a href="{{ vich_uploader_asset(nouvelle, 'mainPictureFile') }}"
+                                   data-uk-lightbox="{group:'nouvelle-main-picture'}">
+                                    <img src="{{ vich_uploader_asset(nouvelle, 'mainPictureFile') }}"
+                                         alt="{{ nouvelle.mainPictureName }}"/>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Type de prix  </span>
+                                            <span class="md-list-heading uk-text-large">{{ nouvelle.priceType }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block"> Prix estimé  </span>
+                                            <span class="md-list-heading uk-text-large">{{ nouvelle.estimatedPrice|number_format(3, ',', ' ') }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">   Prix  </span>
+                                            <span class="md-list-heading uk-text-large">{{ nouvelle.price|number_format(3, ',', ' ') }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">    Prix à afficher  </span>
+                                            <span class="md-list-heading uk-text-large">{{ nouvelle.displayPrice|number_format(3, ',', ' ') }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>
+                                                    <span class="md-list-heading uk-text-large"> {{ nouvelle.title }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Superficie terrain  </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ nouvelle.totalArea }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">    Superficie couverte  </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ nouvelle.coveredArea }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">    Nature  </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ nouvelle.nature }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">    Chambre(s)  </span>
+                                                    <span class="md-list-heading uk-text-large">   {{ nouvelle.bedroom }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">     Salle(s) de bain  </span>
+                                                    <span class="md-list-heading uk-text-large">   {{ nouvelle.bathroom }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Type de la nouvelle  </span>
+                                                    <span class="md-list-heading uk-text-large"> {{ nouvelle.typeBien }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Agence  </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('agency_show', { 'id': nouvelle.agency.id }) }}">
+                                                            {{ nouvelle.agency }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Créé par  </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('personnel_show', { 'id': nouvelle.createdBy.id }) }}">
+                                                            {{ nouvelle.createdBy }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Adresse </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ nouvelle.address }}
+                                                        , {{ nouvelle.address.rue }}
+                                                        , {{ nouvelle.address.rue.localite }}
+                                                        , {{ nouvelle.address.rue.localite.ville }}
+                                                        , {{ nouvelle.address.rue.localite.ville.gouvernorat }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Type de nouvelle </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ nouvelle.type }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                            <div class="uk-width-large-1-2">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Equipements
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content">
+                                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                            {% if  nouvelle.equipements|length ==0 %}
+                                                <span class="uk-badge uk-badge-danger">  pas d'équipements </span>
+                                            {% endif %}
+
+                                            {% for equipement in  nouvelle.equipements %}
+                                                <div class="parsley-row">
+                                                    <span class="uk-badge uk-badge-success">{{ equipement }}</span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-width-large-1-2">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Commodités
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content">
+                                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                            {% if  nouvelle.commodites|length ==0 %}
+                                                <span class="uk-badge uk-badge-danger"> pas de commodités </span>
+                                            {% endif %}
+                                            {% for commodite in  nouvelle.commodites %}
+                                                <div class="parsley-row">
+                                                    <span class="uk-badge uk-badge-success">{{ commodite }}</span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Gallerie
+                        </h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        {% if  nouvelle.pictures|length ==0 %}
+                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                            <span class="uk-badge uk-badge-danger"> pas encore d'images </span>
+                        </div>
+                        {% endif %}
+                        <div class="uk-grid " data-uk-grid-margin>
+                            {% for nouvellePicture in nouvelle.pictures %}
+                                <div class="uk-width-medium-1-4">
+                                    <div class="parsley-row" style="height: 324px;display: grid;border: solid 1px #e7e7e7;text-align: center">
+                                        <span class="uk-form-help-block"> {{ nouvellePicture.description }}</span>
+                                        <a href="{{ vich_uploader_asset(nouvellePicture, 'file') }}"
+                                           data-uk-lightbox="{group:'nouvelle-pictures'}">
+                                            <img src="{{ vich_uploader_asset(nouvellePicture, 'file') }}"
+                                                 alt="{{ nouvellePicture.fileName }}"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Déscription
+                        </h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                            <div class="uk-width-large-2-2">
+                                <div class="uk-form-row">
+                                    <div class="parsley-row">
+                                        {% autoescape %}
+                                            {{ nouvelle.description|raw }} {# var won't be escaped #}
+                                        {% endautoescape %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Historique
+                        </h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        <div class="md-card-content">
+                            {% if nouvelle.taches|length ==0 %}
+                                <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                    <span class="uk-badge uk-badge-danger"> pas encore d'hystorique </span>
+                                </div>
+                            {% else %}
+                                <table id="tachestable" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Date de creation</th>
+                                        <th>Effectuée par</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for tache in nouvelle.taches %}
+                                        <tr>
+                                            <td>
+                                                <a title="{{ tache.typeTache.title }}" href=""
+                                                   data-uk-modal="{target:'#modal-afficherTache'}"
+                                                   onclick="UIkit.modal.alert( 'Déscription : {{ tache.description|e('js') }}', {
+                                                           labels: {
+                                                           Ok: 'Fermer'
+                                                           }
+                                                           }) "
+                                                   data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}">
+                                                    <i class="md-icon md-list-addon-icon material-icons uk-text-{{ tache.typeTache.class }}">
+                                                        {{ tache.typeTache.icon|raw }}</i>
+                                                    {{ tache.typeTache }}
+                                                </a>
+                                            </td>
+                                            <td>  {{ tache.creationDate|date('d/m/Y') }}</td>
+                                            <td>  {{ tache.personnel }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Rendez-vous
+                        </h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        {% if  nouvelle.meetings|length == 0 %}
+                            <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                <span class="uk-badge uk-badge-danger">
+                                    pas encore de rendez-vous
+                                </span>
+                            </div>
+                        {% else %}
+                            <div class="md-card-content">
+                                <table id="tableTaches" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Date début</th>
+                                        <th>Date fin</th>
+                                        <th>Rendez-vous pour</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for meeting in nouvelle.meetings %}
+                                        <tr>
+                                            <td>
+
+                                                <a data-uk-modal="{target:'#modal-afficherRemind'}"
+                                                   data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}"
+                                                   onclick="openMeetingModal('{{ meeting.title }}',
+                                                           '{{ meeting.beginDate|date('m/m/Y H:m') }}',
+                                                           '{{ meeting.finishDate|date('m/m/Y H:m') }}',
+                                                           '{{ meeting.remindFors|join(' - ') }}', '{{ meeting.createdBy }}')">
+                                                    {{ meeting.title }}
+                                                </a>
+                                            </td>
+                                            <td>  {{ meeting.beginDate|date('d/m/Y H:m') }}</td>
+                                            <td>  {{ meeting.finishDate|date('d/m/Y H:m') }}</td>
+                                            <td>
+                                                {% for remindFor in meeting.remindFors %}
+                                                    <a href="{{ path('personnel_show',
+                                                    { 'id': remindFor.id }) }}">
+                                                        {{ remindFor }} {% if not loop.last %} - {% endif %}
+                                                    </a>
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-xLarge-10-10  uk-width-large-10-10">
+                {% if nouvelle.ismapped %}
+                    <div class="uk-width-xLarge-10-10 uk-width-large-10-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Map
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding" id="displaymap">
+                                <div id="map-canvas" style="width: 100%; height: 375px;">
+                                </div>
+                                <script>
+                                    var init_lng = '{{ nouvelle.longitude }}';
+                                    var init_lat = '{{ nouvelle.latitude }}';
+                                    var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                                        zoom: 14,
+                                        scrollwheel: true,
+                                        navigationControl: true,
+                                        mapTypeControl: true,
+                                        scaleControl: false,
+                                        draggable: true,
+                                        center: new google.maps.LatLng(init_lat, init_lng),
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                                    });
+                                    var marker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(parseFloat(init_lat), parseFloat(init_lng)),
+                                        map: map,
+                                        icon: ''
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper md-fab-speed-dial">
+        <a class="md-fab md-fab-primary" href="javascript:void(0)" data-uk-tooltip="{pos:'right'}"
+           title="Actions">
+            <i class="material-icons">&#xE55D;</i></a>
+        <div class="md-fab-wrapper-small">
+            {% for typeTache in typesTaches %}
+                <a title="{{ typeTache.title }}" class="md-fab md-fab-small md-fab-{{ typeTache.class }}"
+                   data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}"
+                   data-uk-modal="{target:'#modal-ajouterTache'}"
+                   onclick="openTacheModal('{{ typeTache.title }}', '{{ typeTache.id }}', '{{ nouvelle.title }}', '{{ nouvelle.id }}' )">
+                    <i class="material-icons">{{ typeTache.icon|raw }}</i>
+                </a>
+            {% endfor %}
+            <a class="md-fab md-fab-small md-fab-danger" href="javascript:void(0)"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Supprimer"
+               onclick="confirmDelete({{ nouvelle.id }})">
+                <i class="material-icons">&#xE92B;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab-success" href="{{ path('nouvelle_edit', {'id': nouvelle.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Modifier">
+                <i class="material-icons">&#xE3C9;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab" href="{{ path('acquisition_transfert', {'id': nouvelle.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Transférer en acquisition">
+                <i class="material-icons">&#xE15A;</i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        function openTacheModal(typeTacheTitle, typeTacheId, bienTitle, nouvelleId) {
+            UIkit.modal.confirm(' <div class=uk-modal-header><h2>Ajouter une tâche</h2></div>' +
+                '<form method=POST name=form_tacheNouvelle action=# class=uk-form-stacked form_validation>' +
+                '<div class=uk-grid data-uk-grid-margin>' +
+                ' <div class=uk-width-medium-1-2>' +
+                ' <div class=parsley-row>' +
+                ' <div class=uk-input-group>' +
+                ' <span class=uk-form-help-block>Type de Tache</span>' +
+                ' <input id=typeTache class=md-input type=text value="' + typeTacheTitle + '" readonly/>' +
+                ' <input id=typeTacheValue name=typeTachee type=hidden value="' + typeTacheId + '" />' +
+                ' </div>' +
+                ' </div>' +
+                '  </div>' +
+                ' <div class=uk-width-medium-1-2>' +
+                '  <div class=parsley-row>' +
+                ' <div class=uk-input-group>' +
+                ' <span class=uk-form-help-block >Nouvelle</span>' +
+                ' <input id=nouvelle class=md-input type=text value="' + bienTitle + '" readonly />' +
+                ' <input id=nouvelleValue name=nouvellee type=hidden value="' + nouvelleId + '" />' +
+                ' </div>' +
+                ' </div>' +
+                ' </div>' +
+                ' </div>' +
+                '  <div class=uk-grid data-uk-grid-margin>' +
+                '  <div class=uk-width-medium-2-2>' +
+                '  <div class=parsley-row>' +
+                '  <div class=uk-input-group>' +
+                ' <span class=uk-form-help-block>Déscription</span>' +
+                '  <textarea id=descriptionn name=description></textarea>' +
+                ' </div>' +
+                ' </div>' +
+                '  </div>' +
+                ' </div>' +
+                '  <div class=uk-grid data-uk-grid-margin>' +
+                ' <div class=uk-width-medium-2-2>' +
+                '<div class="uk-margin-bottom uk-text-center uk-position-relative">' +
+                ' <a class="md-btn md-btn-primary" href="#"  title="Ajouter un rappel"  ' +
+                'data-uk-modal=" { target:\'#modal-ajouterT\' } " ' +
+                ' onclick=" openRemindModal()"><i class=\'material-icons\'>&#xE856;</i>Ajouter un rappel</a>' +
+                ' </div>' +
+                ' </div>' +
+                ' </div>' +
+                ' </form>', function () {
+                    ajouterTache(typeTacheId, nouvelleId);
+                }, {
+                    labels: {
+                        Ok: 'Ajouter',
+                        Cancel: 'Fermer'
+                    }
+                }
+            );
+            CKEDITOR.replace(descriptionn, {height: 150});
+        }
+        function openMeetingModal(title, start, end, remindFor, createdBy) {
+            UIkit.modal.alert('' +
+                '<h3 class="heading_b uk-margin-medium-bottom">' +
+                'Informations sur le rendez-vous</h3><div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                '</div>' +
+                '<ul class="md-list">' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>' +
+                '<span class="md-list-heading uk-text-large">' + title +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Débute le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + start +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Se términe le  </span>' +
+                '<span class="md-list-heading uk-text-large">' + end +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Rendez-vous pour</span>' +
+                '<span class="md-list-heading uk-text-large">' + remindFor +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '<li>' +
+                '<div class="md-list-content">' +
+                '<span class="uk-text-small uk-text-muted uk-display-block">Rendez-vous créé par</span>' +
+                '<span class="md-list-heading uk-text-large">' + createdBy +
+                '</span>' +
+                '</div>' +
+                '</li>' +
+                '</ul>' +
+                '', {
+                labels: {
+                    Ok: 'Fermer'
+                }
+            });
+        }
+        function openRemindModal() {
+            calendarColorsWrapper = $('<div id="calendar_colors_wrapper"></div>');
+            var calendarColorPicker = altair_helpers.color_picker(calendarColorsWrapper).prop('outerHTML');
+            UIkit.modal.confirm(
+                '<h3 class="heading_b uk-margin-medium-bottom">Ajouter un rappel</h3>' +
+                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
+                ' <span class="uk-form-help-block">Couleur</span>' + calendarColorPicker +
+                '</div>' +
+                '<form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-large-2-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Personnel</span>' +
+                '<input id="personnel" class="md-input" value="{{ app.user.personnel.name }}" name="personnel" type="text" readonly />' +
+                '<input id="personnelId" class="md-input" name="personnelId" value="{{ app.user.personnel.id }}" type="hidden"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Nouvelle</span>' +
+                '<input id="nouvelle" class="md-input uk-form-width-small" name="nouvelle" value="{{ nouvelle.title }}" type="text" readonly />' +
+                '<input id="nouvelleID" class="md-input" name="nouvelleID" value="{{ nouvelle.id }}" type="hidden"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" style=" width: 150px;">' +
+                '<span class="uk-form-help-block">Titre</span>' +
+                '<input id="title" class="md-input" name="title" type="text" value="" required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-large" data-uk-grid-margin>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" ">' +
+                '<span class="uk-form-help-block">Date début</span>' +
+                '<input id="datestart" name="datestart" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}" class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure début</span>' +
+                '<input id="timestart" name="timestart" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-grid uk-grid-divider uk-grid-large" data-uk-grid-margin>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row" >' +
+                '<span class="uk-form-help-block">Date fin</span>' +
+                '<input id="dateend" name="dateend"  data-uk-datepicker = "{format:\'DD-MM-YYYY\'}", class = "md-input uk-form-width-small"  required />' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="uk-width-large-1-2">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<span class="uk-form-help-block">Heure fin</span>' +
+                '<input id="timeend"  name="timeend"  required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                ''
+                , function () {
+                    var title = $("#title");
+                    if (title.val() !== '') {
+                        var eventColor = $('#calendar_colors_wrapper').find('input').val();
+                        var url = '{{ path('remindnouvelle_add') }}';
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: 'title=' + title.val() + '&start=' + $('#datestart').val() + " " + $('#timestart').val()
+                            + '&end=' + $('#dateend').val() + " " + $('#timeend').val() + '&color=' + eventColor
+                            + '&nouvelle=' + $('#nouvelleID').val() + '&remindFor=' + $('#personnelId').val(),
+                            success: function () {
+                                UIkit.modal.alert('Le rappel a été ajouté avec succès.', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                })
+                            },
+                            error: function () {
+                                UIkit.modal.alert('Erreur', {
+                                    labels: {
+                                        Ok: 'Fermer'
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }, {
+                    labels: {
+                        Ok: 'Ajouter',
+                        Cancel: 'Fermer'
+                    }
+                });
+        }
+        function ajouterTache(typeTache, nouvelle) {
+            var description = CKEDITOR.instances['descriptionn'].getData();
+            var url = '{{ path('tache_nouvelle_new') }}';
+            var data = {
+                'typetache': typeTache,
+                'nouvelle': nouvelle,
+                'description': description
+            };
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: url,
+                dataType: 'json',
+                data: data,
+                success: function (json) {
+                    if (json.success === false || json.message !== '') {
+                        UIkit.modal.alert('erreur');
+                    } else {
+                        UIkit.modal.alert('La tâche a été ajoutée avec succès.', {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            location.reload(true);
+                        });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('exception contacter SBC', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmDelete(id) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer ce bien ?',
+                function () {
+                    deleteIt(id);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                });
+        }
+        function deleteIt(id) {
+            var url = '{{ path('bien_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('La nouvelle a été supprimée avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            history.back();
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cette nouvelle pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cette nouvelle pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+    </script>
+{% endblock %}

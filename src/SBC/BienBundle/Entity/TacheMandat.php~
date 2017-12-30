@@ -1,0 +1,27 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TacheMandat
+ *
+ * @ORM\Table(name="tache_mandat")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\TacheMandatRepository")
+ */
+class TacheMandat extends Tache
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Mandat")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $mandat;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+

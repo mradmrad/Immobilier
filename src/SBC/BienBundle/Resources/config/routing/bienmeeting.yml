@@ -1,0 +1,4 @@
+bienmeeting_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:BienMeeting:add" }
+    methods:  [GET, POST]

@@ -1,0 +1,13 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: sbcdemo_immobilier_manager
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: sbcdemo
+    mailer_password: 'OFu115*x@'
+    secret: 7afb1774ee153a30ccadf94a9f81b25a78814709
+    routesexclues: /login

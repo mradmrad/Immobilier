@@ -1,0 +1,576 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+{% block jshead %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainheaderDiffTime.js"
+    'bundles/immobilier/timeLeft/diffTime.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Accueil</a></li>
+        </ul>
+        <h1>Accueil</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Accueil</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="md-card">
+            <div class="uk-grid">
+                <div class="uk-width-2-10">
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <h3 class="md-card-toolbar-heading-text">
+                                Rappels
+                            </h3>
+                        </div>
+                        <div class="scrum_column">
+                            <div id="scrum_column_todo">
+                                <div>
+                                    {% for reminder in reminders %}
+                                        <div class="scrum_task" id="reminder_{{ reminder.id }}">
+                                            <script>
+                                                var beginDate = '{{ reminder.beginDate|date('Y/m/d H:m') }}';
+                                                var id = '{{ reminder.id }}';
+//                                                alert(remindersDiff(new Date(beginDate)))
+                                                if (remindersDiff(new Date(beginDate)) == 1) {
+
+                                                    $('#reminder_' + id).addClass("blocker")
+                                                }
+                                                else if (remindersDiff(new Date(beginDate)) == 2) {
+                                                    $('#reminder_' + id).addClass("critical");
+                                                }
+                                                else {
+                                                    $('#reminder_' + id).addClass("minor")
+                                                }
+                                            </script>
+                                            <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">{{ reminder.title }}</a></h3>
+                                            <p class="scrum_task_info"><span class="uk-text-muted">{{ reminder.beginDate|date('d-m-Y') }}</span> </p>
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-8-10">
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <h3 class="md-card-toolbar-heading-text">
+                                Objectifs
+                            </h3>
+                        </div>
+                        {% if objectifs %}
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Recherches</h4>
+                                            <div id="recherches" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Nouvelles</h4>
+                                            <div id="nouvelles" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Acquisitions</h4>
+                                            <div id="acquisitions" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Requetes</h4>
+                                            <div id="requetes" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Mandats (vente)</h4>
+                                            <div id="mandats_vente" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Mandats (location)</h4>
+                                            <div id="mandats_location" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Transactions (vente)</h4>
+                                            <div id="transactions_vente" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-large-1-4">
+                                    <div class="md-card">
+                                        <div class="md-card-content">
+                                            <h4 class="heading_c uk-margin-bottom">Transactions (location)</h4>
+                                            <div id="transactions_location" class="c3chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="md-card-content">
+                            <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                <span class="uk-badge uk-badge-danger"> Pas d'objectifs pour cette période .. </span>
+                            </div>
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-4 ">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-toolbar">
+                                    <h3 class="md-card-toolbar-heading-text">
+                                        Requêtes
+                                    </h3>
+                                </div>
+                                <div class="md-card-content" style="height: 283px">
+                                    <table id="table1" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nom</th>
+                                            <th>Tél</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for requete in requetes %}
+                                            <tr>
+                                                <td id="tdtab1{{ requete.id }}">
+                                                    <script>
+                                                        var updatedAt = '{{ requete.updatedAt|date('Y/m/d H:m') }}';
+                                                        var id = '{{ requete.id }}';
+                                                        if (diffTime(new Date(updatedAt)) === "danger") {
+                                                            $('#tdtab1' + id).html('<span class="uk-badge uk-badge-danger">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else if (diffTime(new Date(updatedAt)) === "warning") {
+                                                            $('#tdtab1' + id).html('<span class="uk-badge uk-badge-warning"> &nbsp;&nbsp;</span>')
+                                                        }
+                                                        else {
+                                                            $('#tdtab1' + id).html('<span class="uk-badge uk-badge-success">&nbsp;&nbsp; </span>')
+                                                        }
+                                                    </script>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank" href="{{ path('client_show', { 'code': requete.client.code }) }}">
+                                                        {{ requete.client.denomination }}
+                                                    </a>
+                                                </td>
+                                                <td>  {{ requete.client.tel }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-4">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-toolbar">
+                                    <h3 class="md-card-toolbar-heading-text">
+                                        Nouvelles
+                                    </h3>
+                                </div>
+                                <div class="md-card-content" style="height: 283px">
+                                    <table id="table2" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Titre</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for nouvelle in nouvelles %}
+                                            <tr>
+                                                <td id="tdtab2{{ nouvelle.id }}">
+                                                    <script>
+                                                        var updatedAt = '{{ nouvelle.updatedAt|date('Y/m/d H:m') }}';
+                                                        var id = '{{ nouvelle.id }}';
+                                                        if (diffTime(new Date(updatedAt)) === "danger") {
+                                                            $('#tdtab2' + id).html('<span class="uk-badge uk-badge-danger">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else if (diffTime(new Date(updatedAt)) === "warning") {
+                                                            $('#tdtab2' + id).html('<span class="uk-badge uk-badge-warning">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else {
+                                                            $('#tdtab2' + id).html('<span class="uk-badge uk-badge-success">&nbsp;&nbsp; </span>')
+                                                        }
+                                                    </script>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank"  href="{{ path('nouvelle_show', { 'id': nouvelle.id }) }}">
+                                                        {{ nouvelle.title }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-4 ">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-toolbar">
+                                    <h3 class="md-card-toolbar-heading-text">
+                                        Acquisitions
+                                    </h3>
+                                </div>
+                                <div class="md-card-content" style="height: 283px">
+                                    <table id="table3" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Titre</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for acquisition in acquisitions %}
+                                            <tr>
+                                                <td id="tdtab3{{ acquisition.id }}">
+                                                    <script>
+                                                        var updatedAt = '{{ acquisition.updatedAt|date('Y/m/d H:m') }}';
+                                                        var id = '{{ acquisition.id }}';
+                                                        if (diffTime(new Date(updatedAt)) === "danger") {
+                                                            $('#tdtab3' + id).html('<span class="uk-badge uk-badge-danger">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else if (diffTime(new Date(updatedAt)) === "warning") {
+                                                            $('#tdtab3' + id).html('<span class="uk-badge uk-badge-warning">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else {
+                                                            $('#tdtab3' + id).html('<span class="uk-badge uk-badge-success">&nbsp;&nbsp; </span>')
+                                                        }
+                                                    </script>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank"  href="{{ path('acquisition_show', { 'id': acquisition.id }) }}">
+                                                        {{ acquisition.bien.title }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-4 ">
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-toolbar">
+                                    <h3 class="md-card-toolbar-heading-text">
+                                        Mandats
+                                    </h3>
+                                </div>
+                                <div class="md-card-content" style="height: 283px">
+                                    <table id="table4" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nom</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for mandat in mandats %}
+                                            <tr>
+                                                <td id="tdtab4{{ mandat.id }}">
+                                                    <script>
+                                                        var updatedAt = '{{ mandat.updatedAt|date('Y/m/d H:m') }}';
+                                                        var id = '{{ mandat.id }}';
+                                                        if (diffTime(new Date(updatedAt)) === "danger") {
+                                                            $('#tdtab4' + id).html('<span class="uk-badge uk-badge-danger">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else if (diffTime(new Date(updatedAt)) === "warning") {
+                                                            $('#tdtab4' + id).html('<span class="uk-badge uk-badge-warning">&nbsp;&nbsp; </span>')
+                                                        }
+                                                        else {
+                                                            $('#tdtab4' + id).html('<span class="uk-badge uk-badge-success">&nbsp;&nbsp; </span>')
+                                                        }
+                                                    </script>
+                                                </td>
+                                                <td>
+                                                    <a target="_blank"  href="{{ path('mandat_show', { 'id': mandat.id }) }}">
+                                                        {{ mandat.numero }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainIndexWithTreeAndNumberFormat.js"
+    'bundles/immobilier/bower_components/datatables/media/js/jquery.dataTables.min.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/dataTables.buttons.js'
+    'bundles/immobilier/assets/js/custom/datatables/buttons.uikit.js'
+    'bundles/immobilier/bower_components/jszip/dist/jszip.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/pdfmake.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/vfs_fonts.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.colVis.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.html5.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.print.js'
+    'bundles/immobilier/assets/js/custom/datatables/datatables.uikit.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_datatables.min.js'
+    'bundles/immobilier/bower_components/jquery-ui/jquery-ui.min.js'
+    'bundles/immobilier/bower_components/jquery.fancytree/dist/jquery.fancytree-all.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_tree.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js'
+    'bundles/immobilier/jquery-numberformatter/jshashtable-2.1.js'
+    'bundles/immobilier/jquery-numberformatter/jquery.numberformatter-1.2.4.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="{{ asset('bundles/immobilier/bower_components/d3/d3.min.js') }}"></script>
+    <!-- metrics graphics (charts) -->
+    <script src="{{ asset('bundles/immobilier/bower_components/metrics-graphics/dist/metricsgraphics.min.js') }}"></script>
+    <!-- c3.js (charts) -->
+    <script src="{{ asset('bundles/immobilier/bower_components/c3js-chart/c3.min.js') }}"></script>
+    <!-- chartist -->
+    <script src="{{ asset('bundles/immobilier/bower_components/chartist/dist/chartist.min.js') }}"></script>
+
+    <!--  charts functions -->
+    <script src="{{ asset('bundles/immobilier/assets/js/pages/plugins_charts.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#table1, #table2, #table3, #table4').dataTable({
+                paging: false,
+                info: true,
+                sDom: '<"H"lfr>t<"F"ip>',
+                language: {
+                    info: "<br/>"
+                },
+                scrollY: "190px",
+                scrollCollapse: true
+
+            });
+        });
+        $(document).ready(function () {
+            var recherche = '#recherches';
+            var recherche_u = c3.generate({
+                bindto: recherche,
+                data: {
+                    columns: [["data", {{ percentRecherches}}]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var nouvelle = '#nouvelles';
+            var nouvelle_u = c3.generate({
+                bindto: nouvelle,
+                data: {
+                    columns: [["data", 20]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var acquisition = '#acquisitions';
+            var acquisition_u = c3.generate({
+                bindto: acquisition,
+                data: {
+                    columns: [["data", 40]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var mandat = '#requetes';
+            var mandat_u = c3.generate({
+                bindto: mandat,
+                data: {
+                    columns: [["data", 80]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var mandat_vente = '#mandats_vente';
+            var mandat_vente_u = c3.generate({
+                bindto: mandat_vente,
+                data: {
+                    columns: [["data", {{ percentMandatsVente}}]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var mandat_location = '#mandats_location';
+            var mandat_location_u = c3.generate({
+                bindto: mandat_location,
+                data: {
+                    columns: [["data", {{ percentMandatsLocation }}]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var vente = '#transactions_vente';
+            var vente_u = c3.generate({
+                bindto: vente,
+                data: {
+                    columns: [["data", {{percentTransactionsVente }} ]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+            var location = '#transactions_location';
+            var location_u= c3.generate({
+                bindto: location,
+                data: {
+                    columns: [["data", {{ percentTransactionsLocation }}]], type: "gauge", onclick: function (e, t) {
+                        console.log("onclick", e, t)
+                    }, onmouseover: function (e, t) {
+                        console.log("onmouseover", e, t)
+                    }, onmouseout: function (e, t) {
+                        console.log("onmouseout", e, t)
+                    }
+                },
+                gauge: {
+                    label: {
+                        format: function (e, t) {
+                            return e
+                        }, show: !1
+                    }, min: 0, max: 100, width: 36
+                },
+                color: {pattern: ["#D32F2F", "#F57C00", "#388E3C"], threshold: {values: [25, 50, 100]}},
+                size: {height: 180}
+            });
+
+
+        })
+    </script>
+    {#<div style="margin-top: 50px; text-align: center">#}
+    {#Cette page est en cours de construction .#}
+    {#</div>#}
+{% endblock %}

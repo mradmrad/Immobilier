@@ -1,0 +1,25 @@
+nouvelle_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Nouvelle:index" }
+    methods:  [GET, POST]
+
+nouvelle_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Nouvelle:list" }
+    methods:  [GET, POST]
+
+nouvelle_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Nouvelle:show" }
+    methods:  GET
+
+nouvelle_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Nouvelle:new" }
+    methods:  [GET, POST]
+
+nouvelle_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Nouvelle:edit" }
+    methods:  [GET, POST]
+

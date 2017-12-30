@@ -1,0 +1,34 @@
+acquisition_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Acquisition:index" }
+    methods:  [GET, POST]
+
+acquisition_list:
+    path:     /list
+    defaults: { _controller: "BienBundle:Acquisition:list" }
+    methods:  [GET, POST]
+
+acquisition_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Acquisition:show" }
+    methods:  GET
+
+acquisition_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Acquisition:edit" }
+    methods:  [GET, POST]
+
+acquisition_transfert:
+    path:     /transfert/{id}
+    defaults: { _controller: "BienBundle:Acquisition:transfert" }
+    methods:  [GET, POST]
+
+acquisition_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Acquisition:delete" }
+    methods:  DELETE
+
+acquisition_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Acquisition:new" }
+    methods:  [GET, POST]

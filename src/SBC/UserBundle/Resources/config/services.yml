@@ -1,0 +1,40 @@
+services:
+#    user.example:
+#        class: SBC\UserBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    user.registration.form.type:
+        class: SBC\UserBundle\Form\Type\RegistrationFormType
+        arguments: ['%fos_user.model.user.class%']
+        tags:
+            - { name: form.type, alias: user_registration }
+
+    redirect_register_user.registration.completed:
+        class: SBC\UserBundle\EventListener\RegistrationCompletedListener
+        arguments: ["@router","@security.token_storage"]
+
+        tags:
+            - { name: kernel.event_subscriber }
+
+    user.edit.form.type:
+        class: SBC\UserBundle\Form\Type\ProfileFormType
+        arguments: ['%fos_user.model.user.class%']
+        decorates: fos_user.profile.form.type
+        tags:
+            - { name: form.type, alias: user_profile }
+
+    user.editUser.form.type:
+            class: SBC\UserBundle\Form\Type\ProfileEditFormType
+            arguments: ['%fos_user.model.user.class%']
+            decorates: fos_user.profile.form.type
+            tags:
+                - { name: form.type, alias: user_profile }
+
+    user.logoutlistener:
+        class: SBC\UserBundle\EventListener\LogoutListener
+        arguments: ["@doctrine.orm.entity_manager", '@service_container',"@security.token_storage"]
+
+    user.login:
+        class: SBC\UserBundle\EventListener\LoginListener
+        arguments: ["@doctrine.orm.entity_manager", '@service_container']
+        tags:
+            - { name: kernel.event_subscriber }

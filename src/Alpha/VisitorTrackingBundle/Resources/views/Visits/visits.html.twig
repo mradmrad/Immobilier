@@ -1,0 +1,188 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    {% stylesheets output="css/compiled/mainwithChartscss.css" filter="cssrewrite"
+    'bundles/immobilier/bower_components/metrics-graphics/dist/metricsgraphics.css'
+    'bundles/immobilier/bower_components/c3js-chart/c3.min.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+{% block title %}
+    Visites - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_content_inner">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-3">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Les pays qui visitent plus le site
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div id="c3_chart_donut" class="c3chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-2-3">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <div class="md-card-toolbar-actions">
+                            <i class="md-icon material-icons md-card-fullscreen-activate ">&#xE5D0;</i>
+                            <i class="md-icon material-icons refreshVisitors">&#xE5D5;</i>
+                        </div>
+                        <h3 class="md-card-toolbar-heading-text">
+                            Nombre de visiteurs
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div class="mGraph-wrapper">
+                            <div id="graphVisitors" class="mGraph"></div>
+                        </div>
+                        <div class="md-card-fullscreen-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-no-border uk-text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>Ip</th>
+                                        <th>Client</th>
+                                        <th>Pays</th>
+                                        <th>Date visite</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for visitor in visitors %}
+                                        <tr>
+                                            <td>{{ visitor.ip }}</td>
+                                            <td>{{ visitor.userAgent }}</td>
+                                            <td>{{ visitor.pays }}</td>
+                                            <td>{{ visitor.created|date('d/m/Y H:i') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-1">
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Les pages les plus visitées
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div id="pagesplusvisites" class="c3chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainChartsjs.js"
+    'bundles/immobilier/bower_components/d3/d3.min.js'
+    'bundles/immobilier/bower_components/metrics-graphics/dist/metricsgraphics.min.js'
+    'bundles/immobilier/bower_components/c3js-chart/c3.min.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(function () {
+            var mGraph_visitors = '#graphVisitors';
+            if ($(mGraph_visitors).length) {
+                var $mGraph_visitors_height = 0;
+
+                function buildGraph_visitors() {
+                    if ($mGraph_visitors_height === 0) {
+                        $mGraph_visitors_height = $(mGraph_visitors).height();
+                    }
+                    var $mGraph_visitors_width = $(mGraph_visitors).width();
+                    d3.json("data/number_of_visitors", function (data) {
+                        var max = 0;
+                        data = MG.convert.date(data, 'date');
+                        $.each(data, function (key, value) {
+                            var val = parseInt(value.value);
+                            if (val > max) {
+                                max = val;
+                            }
+                        });
+                        MG.data_graphic({
+                            data: data,
+                            width: $mGraph_visitors_width,
+                            height: $mGraph_visitors_height,
+                            target: mGraph_visitors,
+                            x_accessor: 'date',
+                            y_accessor: 'value',
+                            y_extended_ticks: true,
+                            x_extended_ticks: true,
+                            xax_count: 4,
+                            xax_format: d3.time.format('%b %d'),
+                            max_y: max
+                        });
+                    });
+                }
+                buildGraph_visitors();
+                $window.on('debouncedresize', function () {
+                    buildGraph_visitors();
+                });
+                $("#graphVisitors").on('display.uk.check', function () {
+                    buildGraph_visitors();
+                });
+            }
+            $('.refreshVisitors').on('click', function () {
+                buildGraph_visitors();
+            });
+            var c3chart_donut_id = '#c3_chart_donut';
+            if ($(c3chart_donut_id).length) {
+                var c3chart_donut = c3.generate({
+                    bindto: c3chart_donut_id,
+                    data: {
+                        columns: [
+                            {% for listeCountry in listeCountries %}
+                            ['{{ listeCountry['pays'] }}', {{ listeCountry['value'] }}]{% if not loop.last %} {{ ',' }} {% endif %}
+                            {% endfor %}
+                        ],
+                        type: 'donut'
+                    },
+                    donut: {
+                        title: "Les pays",
+                        width: 40
+                    }
+                    ,
+                    color: {
+                        pattern: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+                    }
+                });
+                $window.on('debouncedresize', function () {
+                    c3chart_donut.resize();
+                });
+            }
+            var pagesplusvisites = '#pagesplusvisites';
+            if ($(pagesplusvisites).length) {
+                var pagesplusvisite = c3.generate({
+                    bindto: pagesplusvisites,
+                    data: {
+                        columns: [
+                            {% for page in listePages %}
+                            ['{{ page['url'] }}', {{ page['value'] }}]{% if not loop.last %} {{ ',' }} {% endif %}
+                            {% endfor %}
+                        ],
+                        type: 'bar'
+                    },
+                    color: {
+                        pattern: ['#9467bd', '#bcbd22', '#8c564b', '#e377c2', '#1f77b4', '#ff7f0e', '#2ca02c', '#7f7f7f', '#d62728', '#17becf']
+                    }
+                });
+                $window.on('debouncedresize', function () {
+                    pagesplusvisite.resize();
+                });
+            }
+        })
+    </script>
+{% endblock %}

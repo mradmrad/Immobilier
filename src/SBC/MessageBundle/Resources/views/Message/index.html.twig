@@ -1,0 +1,184 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Messages - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div class="uk-width-medium-8-10 uk-container-center">
+        <div class="uk-grid uk-grid-collapse" data-uk-grid-margin>
+            <div class="uk-width-large-7-10">
+                <div class="md-card md-card-single">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text large">
+                            <span class="uk-text-muted">Messages avec</span> <a href="#" id="messageAvec"></a>
+                        </h3>
+                    </div>
+                    <div class="md-card-content padding-reset" style="height: 500px; overflow: auto">
+                        <div class="chat_box_wrapper">
+                            <div class="chat_box touchscroll chat_box_colors_a" id="chat">
+                                <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                    <span class="uk-form-help-block">    Veuillez selectionner un utilisateur </span>
+                                </div>
+                            </div>
+                            <div class="chat_submit_box" id="chat_submit_box">
+                                <div class="uk-input-group" id="chatSubmit">
+                                    <input type="text" class="md-input" name="submit_message"
+                                           id="submit_message" readonly="readonly"
+                                           placeholder="Ecrire un message">
+                                    <span class="uk-input-group-addon">
+                                        <a onclick="sendMessage($('#submit_message').val(), '{{ app.user.id }}' )"><i
+                                                    class="material-icons md-24">&#xE163;</i></a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-large-3-10 hidden-print uk-visible-large">
+                <div class="md-list-outside-wrapper">
+                    <ul class="md-list md-list-addon md-list-outside" id="chat_user_list">
+                        {% for user in users %}
+                            {% if user != app.user %}
+                                <li>
+                                    <a onclick="getMessages('{{ user.id }}', '{{ user.personnel.name }}' )"
+                                       class="md-list-content">
+                                        <div class="md-list-addon-element">
+                                            <img class="md-user-image md-list-addon-avatar"
+                                                 src="{{ vich_uploader_asset(user.personnel, 'pictureFile') }}" alt=""/>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <div class="md-list-action-placeholder"></div>
+                                            <span class="md-list-heading">{{ user.personnel.name }}</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">{{ user.roles.0 }}</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            pas d'utilisateurs
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        var rec = 0;
+        var nam = '';
+
+
+        function sendMessage(content) {
+            if (content !== '') {
+                var url = '{{ path('message_add') }}';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: 'content=' + content + '&receiver=' + rec
+                    ,
+                    success: function (json) {
+                        if (json.success) {
+                            getMessages(rec, nam)
+                        }
+                        else {
+                            UIkit.modal.alert('' + json.errmessage, {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        UIkit.modal.alert('Erreur Systeme', {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        function getMessages(userID, name) {
+            rec = userID;
+            nam = name;
+            inputText = $('#submit_message');
+            var url = '{{ path('message_list', { 'id': 'iD'}) }}';
+            url = url.replace('iD', userID);
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (messages) {
+                    inputText.val('');
+                    inputText.prop('readonly', false);
+                    $('#messageAvec').html(name);
+                    $('#chat').html('');
+                    if (messages.length === 0) {
+                        $('#chat').append('' +
+                            '<div class="uk-margin-bottom uk-text-center uk-position-relative">' +
+                            '<span class="uk-form-help-block">    Pas encore de messages échangés </span>' +
+                            '</div>' +
+                            ''
+                        );
+                    }
+                    $.each(messages, function (key, message) {
+                        if (message.sender.username === '{{ app.user.username }}') {
+
+
+                            $('#chat').append('  <div class="chat_message_wrapper chat_message_right">' +
+                                '<div class="chat_user_avatar">' +
+                                '<img class="md-user-image"' +
+                                ' src=""' +
+                                '   alt=""/>' +
+                                '     </div>' +
+                                ' <ul class="chat_message">' +
+                                '<li>' +
+                                '<p>' + message.content +
+                                ' <span class="chat_message_time">' + moment(message.creationdate.date).format('Y/MM/DD HH:mm') +
+                                '  </span>' +
+                                '</p>' +
+                                ' </li>' +
+                                '</ul>' +
+                                '</div>' +
+                                ''
+                            );
+                        }
+                        else {
+                            $('#chat').append('  <div class="chat_message_wrapper">' +
+                                '<div class="chat_user_avatar">' +
+                                '<img class="md-user-image"' +
+                                ' src=""' +
+                                '   alt=""/>' +
+                                '     </div>' +
+                                ' <ul class="chat_message">' +
+                                '<li>' +
+                                '<p>' + message.content +
+                                ' <span class="chat_message_time">' + moment(message.creationdate.date).format('Y/MM/DD HH:mm') +
+                                '  </span>' +
+                                '</p>' +
+                                ' </li>' +
+                                '</ul>' +
+                                '</div>' +
+                                ''
+                            );
+                        }
+                    });
+                    element = document.getElementById('chat');
+                    element.scrollTop = element.scrollHeight;
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur Systeme', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}

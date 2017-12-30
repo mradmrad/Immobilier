@@ -1,0 +1,36 @@
+agency_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Agency:index" }
+    methods:  GET
+
+agency_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Agency:show" }
+    methods:  GET
+
+agency_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Agency:new" }
+    methods:  [GET, POST]
+
+agency_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Agency:edit" }
+    methods:  [GET, POST]
+
+agency_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Agency:delete" }
+    methods:  DELETE
+
+agency_byname:
+    path:      /by-name/{name}
+    defaults:
+        _controller: BienBundle:Agency:getAgencyByName
+    requirements:
+        name: .+
+
+agency_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Agency:add" }
+    methods:  [GET, POST]

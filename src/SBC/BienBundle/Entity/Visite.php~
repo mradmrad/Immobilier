@@ -1,0 +1,29 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Visite
+ *
+ * @ORM\Table(name="visite")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\VisiteRepository")
+ */
+class Visite extends Meeting
+{
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Mandat", inversedBy="visites")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $mandat;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+}
+

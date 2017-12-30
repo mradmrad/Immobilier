@@ -1,0 +1,7 @@
+tiers_client:
+    resource: "@TiersBundle/Resources/config/routing/client.yml"
+    prefix:   /client
+
+tiers_supplier:
+    resource: "@TiersBundle/Resources/config/routing/supplier.yml"
+    prefix:   /supplier

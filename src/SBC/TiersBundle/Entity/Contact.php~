@@ -1,0 +1,170 @@
+<?php
+
+namespace SBC\TiersBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Contact
+ *
+ * @ORM\Table(name="contact")
+ * @ORM\Entity(repositoryClass="SBC\TiersBundle\Repository\ContactRepository")
+ */
+class Contact
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="denomination", type="string", length=255, nullable=true)
+     */
+    protected $denomination;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    protected $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mail", type="string", length=255, nullable=true)
+     */
+    protected $mail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tel", type="string", length=255, nullable=true)
+     */
+    protected $tel;
+
+    /**
+     * @var Client
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="contacts")
+     */
+    protected $client;
+
+    /**
+     * @var Supplier
+     * @ORM\ManyToOne(targetEntity="Supplier", inversedBy="contacts")
+     */
+    protected $supplier;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set denomination
+     *
+     * @param string $denomination
+     *
+     * @return Contact
+     */
+    public function setDenomination($denomination)
+    {
+        $this->denomination = $denomination;
+
+        return $this;
+    }
+
+    /**
+     * Get denomination
+     *
+     * @return string
+     */
+    public function getDenomination()
+    {
+        return $this->denomination;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Contact
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set mail
+     *
+     * @param string $mail
+     *
+     * @return Contact
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
+     * Get mail
+     *
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * Set tel
+     *
+     * @param string $tel
+     *
+     * @return Contact
+     */
+    public function setTel($tel)
+    {
+        $this->tel = $tel;
+
+        return $this;
+    }
+
+    /**
+     * Get tel
+     *
+     * @return string
+     */
+    public function getTel()
+    {
+        return $this->tel;
+    }
+}

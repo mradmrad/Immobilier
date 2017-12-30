@@ -1,0 +1,310 @@
+<?php
+
+namespace SBC\ReclamationBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use SBC\UserBundle\Entity\User;
+
+/**
+ * Reclamation
+ *
+ * @ORM\Table(name="reclamation")
+ * @ORM\Entity(repositoryClass="SBC\ReclamationBundle\Repository\ReclamationRepository")
+ */
+class Reclamation
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="code", type="string", length=100, nullable=false, unique=true)
+     */
+    private $code;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_creation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_update", type="datetime")
+     */
+    private $dateUpdate;
+
+    /**
+     * @var User
+     * 
+     * @ORM\ManyToOne(targetEntity="SBC\UserBundle\Entity\User")
+     */
+    private $user;
+
+    /**
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="reclamation", cascade={"persist", "remove"})
+     */
+    private $comments;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AttachmentReclamation", mappedBy="reclamation", cascade={"persist", "remove"})
+     */
+    private $attachments;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="open", type="boolean")
+     */
+    private $open;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Reclamation
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Reclamation
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return Reclamation
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set open
+     *
+     * @param boolean $open
+     *
+     * @return Reclamation
+     */
+    public function setOpen($open)
+    {
+        $this->open = $open;
+
+        return $this;
+    }
+
+    /**
+     * Get open
+     *
+     * @return bool
+     */
+    public function isOpen()
+    {
+        return $this->open;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->open = true;
+        $this->dateCreation = new \DateTime("now", new \DateTimeZone('Etc/GMT'));
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Reclamation
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set dateUpdate
+     *
+     * @param \DateTime $dateUpdate
+     *
+     * @return Reclamation
+     */
+    public function setDateUpdate($dateUpdate)
+    {
+        $this->dateUpdate = $dateUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get dateUpdate
+     *
+     * @return \DateTime
+     */
+    public function getDateUpdate()
+    {
+        return $this->dateUpdate;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \SBC\UserBundle\Entity\User $user
+     *
+     * @return Reclamation
+     */
+    public function setUser(\SBC\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SBC\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \SBC\ReclamationBundle\Entity\Comment $comment
+     *
+     * @return Reclamation
+     */
+    public function addComment(\SBC\ReclamationBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \SBC\ReclamationBundle\Entity\Comment $comment
+     */
+    public function removeComment(\SBC\ReclamationBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+}

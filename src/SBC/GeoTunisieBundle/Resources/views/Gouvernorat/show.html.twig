@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gouvernorat</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ gouvernorat.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ gouvernorat.name }}</td>
+            </tr>
+            <tr>
+                <th>Creationdate</th>
+                <td>{% if gouvernorat.creationdate %}{{ gouvernorat.creationdate|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gouvernorat_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('gouvernorat_edit', { 'id': gouvernorat.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

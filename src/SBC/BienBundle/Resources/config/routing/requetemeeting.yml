@@ -1,0 +1,4 @@
+requetemeeting_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:RequeteMeeting:add" }
+    methods:  [GET, POST]

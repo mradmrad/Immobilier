@@ -1,0 +1,4 @@
+reunionmeeting_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:ReunionMeeting:add" }
+    methods:  [GET, POST]

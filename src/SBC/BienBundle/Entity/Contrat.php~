@@ -1,0 +1,299 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+
+/**
+ * Contrat
+ *
+ * @ORM\Table(name="contrat")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\ContratRepository")
+ * @Vich\Uploadable
+ */
+class Contrat
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationDate", type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reference", type="string", length=255, unique=true)
+     */
+    private $reference;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="valide", type="boolean")
+     */
+    private $valide;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\TypeContrat")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $typeContrat;
+
+    /**
+     * @Vich\UploadableField(mapping="contrat_file", fileNameProperty="mainPictureName")
+     * @Assert\File(
+     *     maxSize = "6000k",
+     *     mimeTypes = {"application/pdf", "application/x-pdf" , "image/png", "image/jpeg", "image/jpg"},
+     *     mimeTypesMessage = "Please upload a valid IMAGE"
+     * )
+     *
+     * @var File
+     */
+    private $file;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $fileName;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Bien", inversedBy="contrats")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $bien;
+
+
+    public function __construct()
+    {
+        $this->creationDate = new \Datetime();
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Contrat
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     *
+     * @return Contrat
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get creationDate
+     *
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     *
+     * @return Contrat
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Contrat
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set valide
+     *
+     * @param boolean $valide
+     *
+     * @return Contrat
+     */
+    public function setValide($valide)
+    {
+        $this->valide = $valide;
+
+        return $this;
+    }
+
+    /**
+     * Get valide
+     *
+     * @return bool
+     */
+    public function getValide()
+    {
+        return $this->valide;
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     *
+     * @return Contrat
+     */
+    public function setFile(File $file = null)
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $fileName
+     *
+     * @return Contrat
+     */
+    public function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+
+    /**
+     * Set typeContrat
+     *
+     * @param \SBC\BienBundle\Entity\TypeContrat $typeContrat
+     *
+     * @return Contrat
+     */
+    public function setTypeContrat(TypeContrat $typeContrat)
+    {
+        $this->typeContrat = $typeContrat;
+
+        return $this;
+    }
+
+    /**
+     * Get typeContrat
+     *
+     * @return \SBC\BienBundle\Entity\TypeContrat
+     */
+    public function getTypeContrat()
+    {
+        return $this->typeContrat;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+}
+

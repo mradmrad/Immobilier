@@ -1,0 +1,9 @@
+tache_acquisition_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:TacheAcquisition:new" }
+    methods:  [GET, POST]
+
+tache_acquisition_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:TacheAcquisition:delete" }
+    methods:  DELETE

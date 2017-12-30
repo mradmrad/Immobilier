@@ -1,0 +1,27 @@
+supplier_index:
+    path:     /
+    defaults: { _controller: "TiersBundle:Supplier:index" }
+    methods:  GET
+
+supplier_show:
+    path:     /{code}/show
+    defaults: { _controller: "TiersBundle:Supplier:show" }
+    methods:  GET
+
+supplier_new:
+    path:     /new
+    defaults: { _controller: "TiersBundle:Supplier:new" }
+    methods:  [GET, POST]
+
+supplier_edit:
+    path:     /{code}/edit
+    defaults: { _controller: "TiersBundle:Supplier:edit" }
+    methods:  [GET, POST]
+
+supplier_delete:
+    path:     /{code}/delete
+    defaults: { _controller: "TiersBundle:Supplier:delete" }
+
+ajax_code_supplier_checker:
+    path:     /check-code/{code}
+    defaults: { _controller: "TiersBundle:Supplier:checkCode"}

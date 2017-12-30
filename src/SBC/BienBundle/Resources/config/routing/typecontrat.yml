@@ -1,0 +1,31 @@
+typecontrat_index:
+    path:     /
+    defaults: { _controller: "BienBundle:TypeContrat:index" }
+    methods:  GET
+
+typecontrat_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:TypeContrat:show" }
+    methods:  GET
+
+typecontrat_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:TypeContrat:new" }
+    methods:  [GET, POST]
+
+typecontrat_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:TypeContrat:edit" }
+    methods:  [GET, POST]
+
+typecontrat_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:TypeContrat:delete" }
+    methods:  DELETE
+
+typecontrat_byname:
+    path:      /by-name/{name}
+    defaults:
+        _controller: BienBundle:TypeContrat:getTypeContratByName
+    requirements:
+        name: .+

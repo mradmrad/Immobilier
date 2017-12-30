@@ -1,0 +1,36 @@
+commodite_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Commodite:index" }
+    methods:  GET
+
+commodite_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Commodite:show" }
+    methods:  GET
+
+commodite_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Commodite:new" }
+    methods:  [GET, POST]
+
+commodite_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Commodite:edit" }
+    methods:  [GET, POST]
+
+commodite_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Commodite:delete" }
+    methods:  DELETE
+
+commodite_byname:
+    path:      /by-name/{name}
+    defaults:
+        _controller: BienBundle:Commodite:getCommoditeByName
+    requirements:
+        name: .+
+
+commodite_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Commodite:add" }
+    methods:  [GET, POST]

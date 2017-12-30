@@ -1,0 +1,43 @@
+ville_index:
+    path:     /liste
+    defaults: { _controller: "GeoTunisieBundle:Ville:index" }
+    methods:  GET
+
+ville_show:
+    path:     /afficher{id}
+    defaults: { _controller: "GeoTunisieBundle:Ville:show" }
+    methods:  GET
+
+ville_new:
+    path:     /nouveau
+    defaults: { _controller: "GeoTunisieBundle:Ville:new" }
+    methods:  [GET, POST]
+
+ville_edit:
+    path:     /modifier/{id}
+    defaults: { _controller: "GeoTunisieBundle:Ville:edit" }
+    methods:  [GET, POST]
+
+ville_delete:
+    path:     /supprimer/{id}/
+    defaults: { _controller: "GeoTunisieBundle:Ville:delete" }
+    methods:  DELETE
+
+villes_bygouvernorat:
+    path:     /villes-par-gouvenrnorat
+    defaults: { _controller: "GeoTunisieBundle:Ville:byGouvernorat" }
+    methods:  POST
+
+ville_byname:
+    path:     /ville-par-nom/{name}
+    defaults: { _controller: "GeoTunisieBundle:Ville:byName" }
+    methods:  [GET, POST]
+
+ville_list:
+    path:     /ville-liste
+    defaults: { _controller: "GeoTunisieBundle:Ville:listForAjax" }
+    methods:  [GET, POST]
+ville_add:
+    path:     /add
+    defaults: { _controller: "GeoTunisieBundle:Ville:newVille" }
+    methods:  [GET, POST]

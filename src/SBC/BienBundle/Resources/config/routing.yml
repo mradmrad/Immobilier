@@ -1,0 +1,141 @@
+bien_equipement:
+    resource: "@BienBundle/Resources/config/routing/equipement.yml"
+    prefix:   /equipement
+
+bien_category:
+    resource: "@BienBundle/Resources/config/routing/category.yml"
+    prefix:   /category
+
+bien_typebien:
+    resource: "@BienBundle/Resources/config/routing/typebien.yml"
+    prefix:   /type-bien
+
+bien_agency:
+    resource: "@BienBundle/Resources/config/routing/agency.yml"
+    prefix:   /agency
+
+bien_bien:
+    resource: "@BienBundle/Resources/config/routing/bien.yml"
+    prefix:   /bien
+
+bien_nouvelle:
+    resource: "@BienBundle/Resources/config/routing/nouvelle.yml"
+    prefix:   /nouvelle
+
+bien_mandat:
+    resource: "@BienBundle/Resources/config/routing/mandat.yml"
+    prefix:   /mandat
+
+bien_acquisition:
+    resource: "@BienBundle/Resources/config/routing/acquisition.yml"
+    prefix:   /acquisition
+
+bien_typecontrat:
+    resource: "@BienBundle/Resources/config/routing/typecontrat.yml"
+    prefix:   /typecontrat
+
+bien_contrat:
+    resource: "@BienBundle/Resources/config/routing/contrat.yml"
+    prefix:   /contrat
+
+bien_requete:
+    resource: "@BienBundle/Resources/config/routing/requete.yml"
+    prefix:   /requete
+
+bien_origine:
+    resource: "@BienBundle/Resources/config/routing/origine.yml"
+    prefix:   /origine
+
+bien_commodite:
+    resource: "@BienBundle/Resources/config/routing/commodite.yml"
+    prefix:   /commodite
+
+bien_typetache:
+    resource: "@BienBundle/Resources/config/routing/typetache.yml"
+    prefix:   /typetache
+
+bien_tache_acquisition:
+    resource: "@BienBundle/Resources/config/routing/tacheacquisition.yml"
+    prefix:   /tache-acquisition
+
+bien_tache_nouvelle:
+    resource: "@BienBundle/Resources/config/routing/tachenouvelle.yml"
+    prefix:   /tache-nouvelle
+
+bien_tache_requete:
+    resource: "@BienBundle/Resources/config/routing/tacherequete.yml"
+    prefix:   /tache-requete
+
+bien_tache_mandat:
+    resource: "@BienBundle/Resources/config/routing/tachemandat.yml"
+    prefix:   /tache-mandat
+
+bien_remind:
+    resource: "@BienBundle/Resources/config/routing/remind.yml"
+    prefix:   /remind
+
+bien_meeting:
+    resource: "@BienBundle/Resources/config/routing/meeting.yml"
+    prefix:   /meeting
+
+bien_nouvellemeeting:
+    resource: "@BienBundle/Resources/config/routing/nouvellemeeting.yml"
+    prefix:   /nouvelle-meeting
+
+bien_acquisition_meeting:
+    resource: "@BienBundle/Resources/config/routing/acquisitionmeeting.yml"
+    prefix:   /acquisition-meeting
+
+bien_bienmeeting:
+    resource: "@BienBundle/Resources/config/routing/bienmeeting.yml"
+    prefix:   /bienmeeting
+
+bien_othermeeting:
+    resource: "@BienBundle/Resources/config/routing/othermeeting.yml"
+    prefix:   /othermeeting
+
+bien_reunionmeeting:
+    resource: "@BienBundle/Resources/config/routing/reunionmeeting.yml"
+    prefix:   /reunionmeeting
+
+bien_requete_meeting:
+    resource: "@BienBundle/Resources/config/routing/requetemeeting.yml"
+    prefix:   /requete-meeting
+
+bien_mandat_meeting:
+    resource: "@BienBundle/Resources/config/routing/mandatmeeting.yml"
+    prefix:   /mandat-meeting
+
+bien_remind_nouvelle:
+    resource: "@BienBundle/Resources/config/routing/remindnouvelle.yml"
+    prefix:   /remind-nouvelle
+
+bien_remind_acquisition:
+    resource: "@BienBundle/Resources/config/routing/remindacquisition.yml"
+    prefix:   /remind-acquisition
+
+bien_remind_mandat:
+    resource: "@BienBundle/Resources/config/routing/remindmandat.yml"
+    prefix:   /remind-mandat
+
+bien_remind_requete:
+    resource: "@BienBundle/Resources/config/routing/remindrequete.yml"
+    prefix:   /remind-requete
+
+bien_proposal:
+    resource: "@BienBundle/Resources/config/routing/proposal.yml"
+    prefix:   /proposal
+
+bien_goal:
+    resource: "@BienBundle/Resources/config/routing/goal.yml"
+    prefix:   /goal
+
+bien_offre:
+    resource: "@BienBundle/Resources/config/routing/offre.yml"
+    prefix:   /offre
+
+bien_visite:
+    resource: "@BienBundle/Resources/config/routing/visite.yml"
+    prefix:   /visite
+
+

@@ -1,0 +1,58 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Remind
+ *
+ * @ORM\Table(name="remind")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\RemindRepository")
+ */
+class Remind extends Event
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $remindFor;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_notified", type="boolean")
+     */
+    private $isNotified;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+
+
+    /**
+     * Set remindFor
+     *
+     * @param \SBC\PersonnelBundle\Entity\Personnel $remindFor
+     *
+     * @return Remind
+     */
+    public function setRemindFor(\SBC\PersonnelBundle\Entity\Personnel $remindFor)
+    {
+        $this->remindFor = $remindFor;
+
+        return $this;
+    }
+
+    /**
+     * Get remindFor
+     *
+     * @return \SBC\PersonnelBundle\Entity\Personnel
+     */
+    public function getRemindFor()
+    {
+        return $this->remindFor;
+    }
+}

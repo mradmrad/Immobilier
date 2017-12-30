@@ -1,0 +1,4 @@
+services:
+#    geo_tunisie.example:
+#        class: SBC\GeoTunisieBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

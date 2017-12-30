@@ -1,0 +1,50 @@
+message:
+    resource: "@MessageBundle/Resources/config/routing.yml"
+    prefix:   /messages
+
+utils:
+    resource: "@UtilsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+bien:
+    resource: "@BienBundle/Resources/config/routing.yml"
+    prefix:   /
+
+geo_tunisie:
+    resource: "@GeoTunisieBundle/Resources/config/routing.yml"
+    prefix:   /
+
+personnel:
+    resource: "@PersonnelBundle/Resources/config/routing.yml"
+    prefix:   /
+
+user:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+immobilier:
+    resource: "@ImmobilierBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tiers:
+    resource: "@TiersBundle/Resources/config/routing.yml"
+    prefix:   /
+
+reclamation:
+    resource: "@ReclamationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+attachment:
+    resource: "@AttachmentBundle/Resources/config/routing.yml"
+    prefix:   /
+
+alpha:
+    resource: "@AlphaVisitorTrackingBundle/Resources/config/routing.yml"
+    prefix: /
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+log_trucker:
+    resource: "@LogTrackerBundle/Resources/config/routing.yml"
+    prefix:   /logger

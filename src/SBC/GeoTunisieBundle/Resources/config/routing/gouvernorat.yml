@@ -1,0 +1,39 @@
+gouvernorat_index:
+    path:     /liste
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:index" }
+    methods:  GET
+
+gouvernorat_map:
+    path:     /map/{id}
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:map" }
+    methods:  [GET, POST]
+
+gouvernorat_show:
+    path:     /afficher/{id}
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:show" }
+    methods:  GET
+
+gouvernorat_new:
+    path:     /nouveau
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:new" }
+    methods:  [GET, POST]
+
+gouvernorat_edit:
+    path:     /modifier/{id}
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:edit" }
+    methods:  [GET, POST]
+
+gouvernorat_delete:
+    path:     /supprimer/{id}
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:delete" }
+    methods:  DELETE
+
+gouvernorat_byname:
+    path:     /gouvernorat-par-nom/{name}
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:byName" }
+    methods:  [GET, POST]
+
+gouvernorat_list:
+    path:     /gouvernorat-liste
+    defaults: { _controller: "GeoTunisieBundle:Gouvernorat:listForAjax" }
+    methods:  [GET, POST]

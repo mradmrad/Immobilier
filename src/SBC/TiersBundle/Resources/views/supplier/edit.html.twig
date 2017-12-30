@@ -1,0 +1,333 @@
+{% extends 'base.html.twig' %}
+
+{% block page_header %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <h1>{{ supplier.code }} - {{ supplier.denomination }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Tiers / <a href="{{ path('supplier_index') }}">Fournisseurs</a> / Modifier fournisseur</span>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ form_start(edit_form, {'attr':{ 'data-parsley-validate':'', 'style':'width:100%' }}) }}
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Etats
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <ul class="md-list">
+                        <li>
+                            <div class="parsley-row">
+                                {#<input type="checkbox" data-switchery id="d_form_mail" />#}
+                                {{ form_widget(edit_form.passenger) }}
+                                <label for="sbc_tiersbundle_supplier_passenger" class="inline-label">Passager</label>
+                            </div>
+                            <div class="parsley-row">
+                                {#<input type="checkbox" data-switchery id="d_form_mail" />#}
+                                {{ form_widget(edit_form.archived) }}
+                                <label for="sbc_tiersbundle_supplier_archived" class="inline-label">Archiver</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--==================================================-->
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Détails
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                        <div class="uk-width-large-1-2">
+                            <div class="uk-form-row parsley-row">
+                                <label for="product_edit_name_control">Code</label>
+                                {#<input type="text" class="md-input" id="product_edit_name_control" name="product_edit_name_control" value="Galaxy S6 edge"/>#}
+                                {{ form_widget(edit_form.code, {'attr':{ 'readonly':'readonly' }}) }}
+                            </div>
+                            <div class="uk-form-row parsley-row">
+                                <label for="product_edit_manufacturer_control">Dénomination</label>
+                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                {{ form_widget(edit_form.denomination) }}
+                            </div>
+                            <div class="uk-form-row parsley-row">
+                                <label for="product_edit_sn_control">Identifiant</label>
+                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                {{ form_widget(edit_form.identifier) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_sn_control">Activité</label>
+                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                {{ form_widget(edit_form.activity) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_sn_control">Téléphone</label>
+                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                {{ form_widget(edit_form.tel) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_sn_control">Fax</label>
+                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                {{ form_widget(edit_form.fax) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_sn_control">Site web</label>
+                                {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                {{ form_widget(edit_form.website) }}
+                            </div>
+                        </div>
+                        <div class="uk-width-large-1-2">
+                            <div><strong>Adresse principale</strong></div>
+                            <br>
+                            <div class="uk-form-row parsley-row">
+                                <label for="product_edit_manufacturer_control">Titre</label>
+                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                {{ form_widget(edit_form.mainAddress.title) }}
+                            </div>
+                            <div class="uk-form-row parsley-row">
+                                <label for="product_edit_manufacturer_control">Adresse</label>
+                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                {{ form_widget(edit_form.mainAddress.address) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_manufacturer_control">Cité</label>
+                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                {{ form_widget(edit_form.mainAddress.city) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_manufacturer_control">Governorat</label>
+                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                {{ form_widget(edit_form.mainAddress.governorate) }}
+                            </div>
+                            <div class="uk-form-row">
+                                <label for="product_edit_manufacturer_control">Code postal</label>
+                                {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+                                {{ form_widget(edit_form.mainAddress.zipCode) }}
+                            </div>
+                            {#<hr class="uk-grid-divider">#}
+                            <div class="uk-form-row">
+                                <label for="product_edit_description_control">Autre détails</label>
+                                {#<textarea class="md-input" name="product_edit_description_control" id="product_edit_description_control" cols="30" rows="4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquam necessitatibus suscipit velit voluptatibus! Ab accusamus ad adipisci alias aliquid at atque consectetur, dicta dignissimos, distinctio dolores esse fugiat iste laborum libero magni maiores maxime modi nemo neque, nesciunt nisi nulla optio placeat quas quia quibusdam quis saepe sit ullam!</textarea>#}
+                                {{ form_widget(edit_form.moreInformations) }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <ul class="uk-tab" data-uk-tab="{connect:'#tabs_anim1', animation:'scale'}">
+                        <li class="uk-active"><a href="#">Adresse secondaires</a></li>
+                        <li><a href="#">Contacts</a></li>
+                    </ul>
+
+                    <ul id="tabs_anim1" class="uk-switcher uk-margin">
+                        <li>
+                            <div class="uk-width-medium-1-5">
+                                <a id="addAddress" class="md-btn md-btn-success md-btn-block md-btn-wave-light" href="javascript:void(0)">Nouvelle address</a>
+                            </div>
+
+                            <div class="uk-grid uk-grid-small uk-margin address-block" data-uk-grid-margin data-uk-grid-match="{target:'.md-card'}"
+                                 data-prototype="{{ form_widget(edit_form.addresses.vars.prototype)|e('html_attr') }}">
+                                <!--===========addresses goes here=================-->
+                                {% if supplier.addresses|length == 0 %} {{ form_widget(edit_form.addresses) }} {% endif %}
+                                {% for adr in edit_form.addresses %}
+                                    <div class="uk-width-medium-1-3 block-form">
+                                        <div class="uk-form-row parsley-row">
+                                            <label for="product_editnufacturer_control">Titre</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][title]" required/>#}
+                                            {{ form_widget(adr.title) }}
+                                        </div>
+                                        <div class="uk-form-row parsley-row">
+                                            <label for="product_edit_manufacturer_control">Adresse</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][address]" required/>#}
+                                            {{ form_widget(adr.address) }}
+                                        </div>
+                                        <div class="uk-form-row">
+                                            <label for="product_edit_manufacturer_control">Cité</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][city]"/>#}
+                                            {{ form_widget(adr.city) }}
+                                        </div>
+                                        <div class="uk-form-row">
+                                            <label for="product_edit_manufacturer_control">Governorat</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][governorate]"/>#}
+                                            {{ form_widget(adr.governorate) }}
+                                        </div>
+                                        <div class="uk-form-row">
+                                            <label for="product_edit_manufacturer_control">Code postal</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][zipCode]"/>#}
+                                            {{ form_widget(adr.zipCode) }}
+                                        </div>
+                                        <br>
+                                        <div class="uk-width-medium-1-6">
+                                            <a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </li>
+                        <!--=======-->
+                        <li>
+                            <div class="uk-width-medium-1-5">
+                                <a id="addContact" class="md-btn md-btn-success md-btn-block md-btn-wave-light" href="javascript:void(0)">Nouveau contact</a>
+                            </div>
+
+                            <div class="uk-grid uk-grid-small uk-margin contact-block" data-uk-grid-margin data-uk-grid-match="{target:'.md-card'}"
+                                 data-prototype="{{ form_widget(edit_form.contacts.vars.prototype)|e('html_attr') }}">
+                                {% if supplier.contacts|length == 0 %} {{ form_widget(edit_form.contacts) }} {% endif %}
+                                <!--========contacts goes here=======-->
+                                {% for contact in edit_form.contacts %}
+                                    <div class="uk-width-medium-1-3 block-form">
+                                        <div class="uk-form-row parsley-row">
+                                            <label for="product_editnufacturer_control">Dénomination</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][denomination]" required/>#}
+                                            {{ form_widget(contact.denomination) }}
+                                        </div>
+                                        <div class="uk-form-row">
+                                            <label for="product_edit_manufacturer_control">Description</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][description]"/>#}
+                                            {{ form_widget(contact.description) }}
+                                        </div>
+                                        <div class="uk-form-row">
+                                            <label for="product_edit_manufacturer_control">Adresse mail</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][mail]"/>#}
+                                            {{ form_widget(contact.mail) }}
+                                        </div>
+                                        <div class="uk-form-row parsley-row">
+                                            <label for="product_edit_manufacturer_control">Téléphone</label>
+                                            {#<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][tel]" required/>#}
+                                            {{ form_widget(contact.tel) }}
+                                        </div>
+                                        <br>
+                                        <div class="uk-width-medium-1-6">
+                                            <a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <button class="md-fab md-fab-accent md-fab-wave-light" href="#" id="invoice_add"
+                data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Valider">
+            <i class="material-icons">&#xE161;</i>
+        </button>
+    </div>
+    {{ form_end(edit_form) }}
+{% endblock %}
+
+{% block javascripts %}
+
+    <!-- parsley (validation) -->
+    <script>
+        // load parsley config (altair_admin_common.js)
+        altair_forms.parsley_validation_config();
+    </script>
+    <script src="{{ asset('template/bower_components/parsleyjs/dist/parsley.min.js') }}"></script>
+
+    <!--  forms validation functions -->
+    <script src="{{ asset('template/assets/js/pages/forms_validation.min.js') }}"></script>
+
+    <script>
+        (function () {
+            /**add address and contact functions**/
+            var addressDOM = $('.address-block');
+            var contactDOM = $('.contact-block');
+            var _countAddress = addressDOM.children().length;
+            var _countContact = contactDOM.children().length;
+
+            $('#addAddress').on('click', function (e) {
+//                var addressForm = addressDOM.attr('data-prototype');
+                var addressForm = addressBlock();
+                addressForm = addressForm.replace(/__name__/g, _countAddress);
+                addressDOM.append(addressForm);
+                _countAddress++;
+                altair_md.init();
+                altair_forms.init();
+            });
+
+            $('#addContact').on('click', function (e) {
+//                var contactForm = contactDOM.attr('data-prototype');
+                var contactForm = contactBlock();
+                contactForm = contactForm.replace(/__name__/g, _countContact);
+                contactDOM.append(contactForm);
+                _countContact++;
+                altair_md.init();
+            });
+        })();
+
+        function addressBlock() {
+            block = '<div class="uk-width-medium-1-3 block-form">'+
+                    '<div class="uk-form-row parsley-row">'+
+                    '<label for="product_editnufacturer_control">Titre</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[addresses][__name__][title]" required/>'+
+                    '</div>'+
+                    '<div class="uk-form-row parsley-row">'+
+                    '<label for="product_edit_manufacturer_control">Adresse</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[addresses][__name__][address]" required/>'+
+                    '</div>'+
+                    '<div class="uk-form-row">'+
+                    '<label for="product_edit_manufacturer_control">Cité</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[addresses][__name__][city]"/>'+
+                    '</div>'+
+                    '<div class="uk-form-row">'+
+                    '<label for="product_edit_manufacturer_control">Governorat</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[addresses][__name__][governorate]"/>'+
+                    '</div>'+
+                    '<div class="uk-form-row">'+
+                    '<label for="product_edit_manufacturer_control">Code postal</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[addresses][__name__][zipCode]"/>'+
+                    '</div>'+
+                    '<br>'+
+                    '<div class="uk-width-medium-1-6">'+
+                    '<a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>'+
+                    '</div>'+
+                    '</div>';
+
+            return block;
+        }
+
+        function contactBlock() {
+            block = '<div class="uk-width-medium-1-3 block-form">'+
+                    '<div class="uk-form-row parsley-row">'+
+                    '<label for="product_editnufacturer_control">Dénomination</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[contacts][__name__][denomination]" required/>'+
+                    '</div>'+
+                    '<div class="uk-form-row">'+
+                    '<label for="product_edit_manufacturer_control">Description</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[contacts][__name__][description]"/>'+
+                    '</div>'+
+                    '<div class="uk-form-row">'+
+                    '<label for="product_edit_manufacturer_control">Adresse mail</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[contacts][__name__][mail]"/>'+
+                    '</div>'+
+                    '<div class="uk-form-row parsley-row">'+
+                    '<label for="product_edit_manufacturer_control">Téléphone</label>'+
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_supplier[contacts][__name__][tel]" required/>'+
+                    '</div>'+
+                    '<br>'+
+                    '<div class="uk-width-medium-1-6">'+
+                    '<a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>'+
+                    '</div>'+
+                    '</div>';
+
+            return block;
+        }
+
+        function deleteBlock(btn) {
+            $(btn).closest('.block-form').remove();
+        }
+
+    </script>
+{% endblock %}

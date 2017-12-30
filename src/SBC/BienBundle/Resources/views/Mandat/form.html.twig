@@ -1,0 +1,546 @@
+<div id="page_content_inner">
+    <script src="http://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
+    {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+    {{ form_errors(form) }}
+    <div class="md-card ">
+        <div class="md-card-content">
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    <ul class="uk-tab" data-uk-tab="{connect:'#tabs'}" id="tabs_1">
+                        <li class="uk-active"><a href="#">Acquisition</a></li>
+                        <li><a href="#">Déscription et statut du mandat</a></li>
+                        <li><a href="#">Prix & Conditions </a></li>
+                        <li><a href="#">Durée du mandat </a></li>
+                        <li><a href="#">Type du mandat </a></li>
+                        <li><a href="#">Visite du bien</a></li>
+                        <li><a href="#">Honoraires </a></li>
+                        <li><a href="#">Observation</a></li>
+                    </ul>
+                    <ul id="tabs" class="uk-switcher uk-margin">
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2" id="mandatParente">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.mandatParent, "Historique numéro mandat") }}</span>
+                                        {{ form_widget(form.mandatParent) }}
+                                        <span> {{ form_errors(form.mandatParent) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.acquisition, "Acquisition") }}</span>
+                                        {{ form_widget(form.acquisition) }}
+                                        <span> {{ form_errors(form.acquisition) }} </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.numero, "Numéro") }}
+                                        {{ form_widget(form.numero) }}
+                                        <span>     {{ form_errors(form.numero) }} </span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.provenance, "Provenance") }}
+                                        {{ form_widget(form.provenance) }}
+                                        <span>     {{ form_errors(form.provenance) }} </span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.usage, "Usage") }}
+                                        {{ form_widget(form.usage) }}
+                                        <span>     {{ form_errors(form.usage) }} </span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.titre, "Titre") }}
+                                        {{ form_widget(form.titre) }}
+                                        <span>     {{ form_errors(form.titre) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.isConforme, "Conformité" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.isConforme %}
+                                                <span class="icheck-inline">
+                                                        {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.isConforme) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="parsley-row uk-form-row" id="isNotConformeFor">
+                                        {{ form_label(form.isNotConformeFor, "Non conforme pour") }}
+                                        {{ form_widget(form.isNotConformeFor) }}
+                                        <span>     {{ form_errors(form.isNotConformeFor) }} </span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.typeMandat, "Type du mandat") }}</span>
+                                        {{ form_widget(form.typeMandat) }}
+                                        <span>     {{ form_errors(form.typeMandat) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.hypotheque, "Hypothèque" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.hypotheque %}
+                                                <span class="icheck-inline">
+                                                        {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.hypotheque) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="parsley-row uk-form-row" id="hypothequeFor">
+                                        {{ form_label(form.hypothequeFor, "Hypothèque de") }}
+                                        {{ form_widget(form.hypothequeFor) }}
+                                        <span>     {{ form_errors(form.hypothequeFor) }} </span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                             data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-3">
+                                                <div class="parsley-row uk-form-row">
+                                                    {{ form_label(form.fraisDeCorporite, "Frais de corporité") }}
+                                                    {{ form_widget(form.fraisDeCorporite) }}
+                                                    <span>     {{ form_errors(form.fraisDeCorporite) }} </span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-2-3">
+                                                <div class="parsley-row uk-form-row">
+                                                    <span class="uk-form-help-block">
+                                                        {{ form_label(form.periodeFraisDeCorporite, "Période" ) }}
+                                                    </span>
+                                                    <div class="dynamic_radio uk-margin-small-top">
+                                                        {% for child in form.periodeFraisDeCorporite %}
+                                                            <span class="icheck-inline">
+                                                                {{ form_widget(child) }}
+                                                                {{ form_label(child) }}
+                                                            </span>
+                                                        {% endfor %}
+                                                        <span>{{ form_errors(form.periodeFraisDeCorporite) }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.etatBien, "Etat du bien" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.etatBien %}
+                                                <span class="icheck-inline">
+                                                    {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.etatBien) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium"
+                                         data-uk-grid-margin id="loueA">
+                                        <div class="uk-width-medium-4-10">
+                                            <div class="parsley-row uk-form-row">
+
+                                                {{ form_label(form.loueA, "Loué à") }}
+                                                {{ form_widget(form.loueA) }}
+                                                <span>     {{ form_errors(form.loueA) }} </span>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-medium-3-10">
+                                            <div class="parsley-row uk-form-row">
+                                                {{ form_label(form.loyeMensuel, "Loyer mensuel") }}
+                                                {{ form_widget(form.loyeMensuel) }}
+                                                <span>     {{ form_errors(form.loyeMensuel) }} </span>
+                                            </div>
+                                        </div>
+                                        <div class="uk-width-medium-3-10">
+                                            <div class="parsley-row uk-form-row">
+                                                {{ form_label(form.dateFinLoyer, "Date fin loyer") }}
+                                                {{ form_widget(form.dateFinLoyer) }}
+                                                <span>     {{ form_errors(form.dateFinLoyer) }} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.prixDeVenteDemande, "Prix de vente demandé") }}
+                                        {{ form_widget(form.prixDeVenteDemande) }}
+                                        <span> {{ form_errors(form.prixDeVenteDemande) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.prixDeVenteDemandeTexte, "Prix de vente demandé en texte") }}
+                                        {{ form_widget(form.prixDeVenteDemandeTexte) }}
+                                        <span> {{ form_errors(form.prixDeVenteDemandeTexte) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.pourcentageRegelement, "Pourcentage réglement") }}
+                                        {{ form_widget(form.pourcentageRegelement) }}
+                                        <span> {{ form_errors(form.pourcentageRegelement) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.formeReglement, "Forme réglement" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.formeReglement %}
+                                                <span class="icheck-inline">
+                                                    {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.formeReglement) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.intervalMinSignatureActe, "Intervale min signature") }}
+                                        {{ form_widget(form.intervalMinSignatureActe) }}
+                                        <span>     {{ form_errors(form.intervalMinSignatureActe) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.intervalMaxSignatureActe, "Intervale max signature") }}
+                                        {{ form_widget(form.intervalMaxSignatureActe) }}
+                                        <span>     {{ form_errors(form.intervalMaxSignatureActe) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.consigne, "Consigne" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.consigne %}
+                                                <span class="icheck-inline">
+                                                    {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.consigne) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.dateDebutEffetMandat, "Date début effet mandat") }}
+                                        {{ form_widget(form.dateDebutEffetMandat) }}
+                                        <span> {{ form_errors(form.dateDebutEffetMandat) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.dateExpirationEffetMandat, "Date expiration effet mandat") }}
+                                        {{ form_widget(form.dateExpirationEffetMandat) }}
+                                        <span> {{ form_errors(form.dateExpirationEffetMandat) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.resoluOuRenouvele, "Résilié ou tacitement renouvelé" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.resoluOuRenouvele %}
+                                                <span class="icheck-inline">
+                                                    {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.resoluOuRenouvele) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.isExclusif, "Exclusif ou non" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.isExclusif %}
+                                                <span class="icheck-inline">
+                                                    {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.isExclusif) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.promotions, "Promotions" ) }}</span>
+                                        {{ form_widget(form.promotions) }}
+                                        <span>{{ form_errors(form.promotions) }}</span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        <label>{{ form_label(form.autresPromotion, "Autres" ) }}</label>
+                                        {{ form_widget(form.autresPromotion) }}
+                                        <span>{{ form_errors(form.autresPromotion) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.visite, "Moyens de visite" ) }}</span>
+                                        <div class="dynamic_radio uk-margin-small-top">
+                                            {% for child in form.visite %}
+                                                <span class="icheck-inline">
+                                                    {{ form_widget(child) }}
+                                                    {{ form_label(child) }}
+                                                </span>
+                                            {% endfor %}
+                                            <span>{{ form_errors(form.visite) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2" id="contactVisite">
+                                    <div class="parsley-row uk-form-row">
+                                        <label>{{ form_label(form.contactVisite, "Contacter" ) }}</label>
+                                        {{ form_widget(form.contactVisite) }}
+                                        <span>{{ form_errors(form.contactVisite) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <label>{{ form_label(form.montantHonoraireAgent, "Honoraire" ) }}</label>
+                                        {{ form_widget(form.montantHonoraireAgent) }}
+                                        <span>{{ form_errors(form.montantHonoraireAgent) }}</span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <label>{{ form_label(form.montantHonoraireAgentTexte, "Honoraire en texte" ) }}</label>
+                                        {{ form_widget(form.montantHonoraireAgentTexte) }}
+                                        <span>{{ form_errors(form.montantHonoraireAgentTexte) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="uk-grid uk-margin-top uk-grid-divider uk-grid-medium"
+                                 data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        <span class="uk-form-help-block">{{ form_label(form.note, "Note") }}</span>
+                                        {{ form_widget(form.note) }}
+                                        <span>{{ form_errors(form.note) }}</span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.faitA, "Fait à" ) }}
+                                        {{ form_widget(form.faitA) }}
+                                        <span>{{ form_errors(form.faitA) }}</span>
+                                    </div>
+                                    <div class="parsley-row uk-form-row">
+                                        {{ form_label(form.faitLe, "Fait le" ) }}
+                                        {{ form_widget(form.faitLe) }}
+                                        <span>{{ form_errors(form.faitLe) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <button class="md-fab md-fab-accent md-fab-wave-light" href="#" id="mandat_add"
+                data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Valider" name="save">
+            <i class="material-icons">&#xE161;</i>
+        </button>
+    </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+</div>
+<script>
+    $(function () {
+        $('.select').kendoComboBox({
+            filter: "contains",
+            suggest: true
+        });
+        $('.kendoMultiSelect').kendoMultiSelect({
+            filter: "contains",
+            suggest: true
+        });
+//        $('#mandatParente').hide();
+        //Conformité
+        var isConforme0 = $('#sbc_bienbundle_mandat_isConforme_0');
+        var isConforme1 = $('#sbc_bienbundle_mandat_isConforme_1');
+        var isNotConformeFor = $("#sbc_bienbundle_mandat_isNotConformeFor");
+        if (isConforme0.checked) {
+            $('#isNotConformeFor').hide();
+            isNotConformeFor.prop('required', false);
+        } else if (isConforme1.checked) {
+            $('#isNotConformeFor').show();
+            isNotConformeFor.prop('required', true);
+        } else {
+            $('#isNotConformeFor').hide();
+            isNotConformeFor.prop('required', false);
+        }
+        isConforme0.on('ifClicked', function () {
+            $('#isNotConformeFor').hide();
+            isNotConformeFor.prop('required', false);
+            isNotConformeFor.val("");
+        });
+        isConforme1.on('ifClicked', function () {
+            $('#isNotConformeFor').show();
+            isNotConformeFor.prop('required', true);
+        });
+        //Hypotheque
+        var hypotheque0 = $('#sbc_bienbundle_mandat_hypotheque_0');
+        var hypotheque1 = $('#sbc_bienbundle_mandat_hypotheque_1');
+        var hypotheque2 = $('#sbc_bienbundle_mandat_hypotheque_2');
+        var hypothequeFor = $("#sbc_bienbundle_mandat_hypothequeFor");
+        if (hypotheque0.checked) {
+            $('#hypothequeFor').hide();
+            hypothequeFor.prop('required', false);
+        } else if (hypotheque2.checked) {
+            $('#hypothequeFor').show();
+            hypothequeFor.prop('required', true);
+        } else {
+            $('#hypothequeFor').hide();
+            hypothequeFor.prop('required', false);
+        }
+        hypotheque0.on('ifClicked', function () {
+            $('#hypothequeFor').hide();
+            hypothequeFor.prop('required', false);
+            hypothequeFor.val("");
+        });
+        hypotheque1.on('ifClicked', function () {
+            $('#hypothequeFor').hide();
+            hypothequeFor.prop('required', false);
+            hypothequeFor.val("");
+        });
+        hypotheque2.on('ifClicked', function () {
+            $('#hypothequeFor').show();
+            hypothequeFor.prop('required', true);
+        });
+        //loué
+        var etatBien0 = $('#sbc_bienbundle_mandat_etatBien_0');
+        var etatBien2 = $('#sbc_bienbundle_mandat_etatBien_2');
+        var loueA = $("#sbc_bienbundle_mandat_loueA");
+        var loyeMensuel = $("#sbc_bienbundle_mandat_loyeMensuel");
+        var dateFinLoyer = $("#sbc_bienbundle_mandat_dateFinLoyer");
+        if (etatBien0.checked) {
+            $('#loueA').hide();
+            loyeMensuel.prop('required', false);
+            dateFinLoyer.prop('required', false);
+
+        } else if (etatBien2.checked) {
+            $('#loueA').show();
+            loyeMensuel.prop('required', true);
+            dateFinLoyer.prop('required', true);
+
+        } else {
+            $('#loueA').hide();
+            loyeMensuel.prop('required', false);
+            dateFinLoyer.prop('required', false);
+        }
+        etatBien0.on('ifClicked', function () {
+            $('#loueA').hide();
+            loueA.prop('required', false);
+            loyeMensuel.prop('required', false);
+            dateFinLoyer.prop('required', false);
+            loueA.val("");
+            loyeMensuel.val("");
+            dateFinLoyer.val("");
+        });
+        $('#sbc_bienbundle_mandat_etatBien_1').on('ifClicked', function () {
+            $('#loueA').hide();
+            loueA.prop('required', false);
+            loyeMensuel.prop('required', false);
+            dateFinLoyer.prop('required', false);
+            loueA.val("");
+            loyeMensuel.val("");
+            dateFinLoyer.val("");
+        });
+        etatBien2.on('ifClicked', function () {
+            $('#loueA').show();
+            loueA.prop('required', true);
+            loyeMensuel.prop('required', true);
+            dateFinLoyer.prop('required', true);
+        });
+        //contacter
+        var visite0 = $('#sbc_bienbundle_mandat_visite_0');
+        var visite1 = $('#sbc_bienbundle_mandat_visite_1');
+        var contactVisite = $("#sbc_bienbundle_mandat_contactVisite");
+        if (visite0.checked) {
+            $('#contactVisite').hide();
+            contactVisite.prop('required', false);
+
+        } else if (visite1.checked) {
+            $('#contactVisite').show();
+            contactVisite.prop('required', true);
+
+        } else {
+            $('#contactVisite').hide();
+            contactVisite.prop('required', false);
+        }
+        visite0.on('ifClicked', function () {
+            $('#contactVisite').hide();
+            contactVisite.prop('required', false);
+            contactVisite.val();
+        });
+        visite1.on('ifClicked', function () {
+            $('#contactVisite').show();
+            contactVisite.prop('required', true);
+            contactVisite.val();
+        });
+        $('#sbc_bienbundle_mandat_visite_2').on('ifClicked', function () {
+            $('#contactVisite').hide();
+            contactVisite.prop('required', false);
+            contactVisite.val();
+        });
+        setFormatNumber();
+        CKEDITOR.replace('sbc_bienbundle_mandat_note', {
+            height: 250
+        });
+    });
+    function setFormatNumber() {
+        $('.numeric').blur(function () {
+            $(this).parseNumber({format: "######0.00", locale: "us"});
+            $(this).formatNumber({format: "######0.00", locale: "us"});
+        });
+        $('.money').blur(function () {
+            $(this).parseNumber({format: "#,##0.000", locale: "fr"});
+            $(this).formatNumber({format: '#,##0.000', locale: 'fr'});
+        });
+    }
+</script>

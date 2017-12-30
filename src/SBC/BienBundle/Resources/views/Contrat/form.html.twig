@@ -1,0 +1,158 @@
+<div id="page_content_inner">
+    <script src="http://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
+    {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+    {{ form_errors(form) }}
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Pièce jointe
+                    </h3>
+                </div>
+                <div class="md-card-content">
+                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                        {{ form_widget(form.file, {'attr': {'class': ''}}) }}
+                        <span>     {{ form_errors(form.file) }} </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Details
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+                        <div class="uk-width-large-1-2">
+
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_label(form.name,   "Titre"  ) }}
+                                    {{ form_widget(form.name, {'attr': {'class': 'md-input'}}) }}
+                                    <span>     {{ form_errors(form.name) }} </span>
+                                </div>
+                            </div>
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_label(form.reference,   "Référence"  ) }}
+                                    {{ form_widget(form.reference, {'attr': {'class': 'md-input', 'data-parsley-reference':'3'}}) }}
+                                    <span>     {{ form_errors(form.reference) }} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-large-1-2">
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_widget(form.typeContrat,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span class="uk-form-help-block">Type de contrat</span>
+                                </div>
+                                <span>     {{ form_errors(form.typeContrat) }} </span>
+                            </div>
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_widget(form.bien,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span class="uk-form-help-block">Mandat</span>
+
+                                    <span>     {{ form_errors(form.bien) }} </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-xLarge-10-10  uk-width-large-10-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        {{ form_label(form.description, "Déscription") }}
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                        <div class="uk-width-large-2-2">
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_widget(form.description, {'attr': {'class': 'md-input', 'name':'description',
+                                        'cols':'10', 'rows':'8', 'data-parsley-trigger':'keyup', 'data-parsley-validation-threshold':'10',
+                                        'data-parsley-minlength-message':'Come on! You need to enter at least a 20 caracters long comment..'}}) }}
+                                    <span> {{ form_errors(form.description) }} </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md-fab-wrapper">
+            <button class="md-fab md-fab-accent md-fab-wave-light" href="#" id="contrat_add"
+                    data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Enregistrer" name="save">
+                <i class="material-icons">&#xE161;</i>
+            </button>
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+</div>
+<script>
+    $(function () {
+        CKEDITOR.replace('sbc_bienbundle_contrat_description', {
+            height: 250
+        });
+        var domReference = $('#sbc_bienbundle_contrat_reference');
+        var oldReference = domReference.val().toUpperCase();
+        domReference.on('change', function () {
+            var reference = domReference.val().toUpperCase();
+            var url = '{{ path('contrat_byreference', {'reference': 'referencE'}) }}';
+            url = url.replace('referencE', reference);
+            if (reference !== oldReference) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: url,
+                    success: function (json) {
+                        if (json.success) {
+                            window.Parsley.addValidator('reference', {
+                                validateString: function () {
+                                    return false;
+                                },
+                                messages: {
+                                    en: 'Cette référence existe déjà',
+                                    fr: "Cette référence existe déjà"
+                                }
+                            });
+                        } else {
+                            window.Parsley.addValidator('reference', {
+                                validateString: function () {
+                                    return true;
+                                }
+                            });
+                        }
+                        domReference.parsley().validate();
+                    }
+                });
+            }
+        });
+
+        picture = $('#sbc_bienbundle_contrat_file');
+        $('.dropify-clear').on('click', function () {
+            picture.prop('required', false);
+
+        });
+        picture.dropify({
+            defaultFile: '{{ vich_uploader_asset(contrat, 'file') }}',
+            messages: {
+                'default': 'Cliquez ou Glissez / déposez un fichier ici',
+                'replace': 'Cliquez ou Glissez / déposez un fichier ici pour remplacer',
+                'remove': 'Supprimer',
+                'error': 'Une erreur s\'est survenue'
+            }
+        });
+    });
+</script>

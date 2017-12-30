@@ -1,0 +1,462 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use SBC\PersonnelBundle\Entity\Personnel;
+use SBC\TiersBundle\Entity\Client;
+
+/**
+ * Offre
+ *
+ * @ORM\Table(name="offre")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\OffreRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"offre"="Offre" , "vente"="OffreVente", "location" = "OffreLocation"})
+ */
+class Offre implements \JsonSerializable
+{
+    const ACCEPTED = 'Acceptée';
+    const NOT_ACCEPTED = 'Refusée';
+    const EN_COURS = 'En cours';
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=255)
+     */
+    protected $status;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="proposedPrice", type="float")
+     */
+    protected $proposedPrice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="proposedPriceText", type="string", length=255)
+     */
+    protected $proposedPriceText;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255, unique=true)
+     */
+    protected $code;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="honoraires_ttc", type="string", length=255, nullable=true)
+     */
+    protected $honorairesTTC;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="honoraires_ht", type="integer", length=255, nullable=true)
+     */
+    protected $honorairesHT;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="acompte_ttc", type="string", length=255, nullable=true)
+     */
+    protected $acompteTTC;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="acompte_ht", type="integer", length=255, nullable=true)
+     */
+    protected $acompteHT;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationDate", type="datetime")
+     */
+    protected $creationDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\TiersBundle\Entity\Client")
+     * @ORM\JoinColumn(nullable=false, name="proposedby_code", referencedColumnName="code")
+     */
+    protected $proposedBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $createdBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Mandat", inversedBy="offres")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $mandat;
+
+    /**
+     * @ORM\OneToOne(targetEntity="SBC\BienBundle\Entity\Acceptation", cascade={"persist", "merge", "remove"})
+     */
+
+    protected $acceptation;
+
+
+    public function __construct()
+    {
+        $this->creationDate = new \Datetime();
+        $this->status = Offre::EN_COURS;
+    }
+
+    function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
+    public function __toString()
+    {
+        return $this->code;
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Offre
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set proposedPrice
+     *
+     * @param float $proposedPrice
+     *
+     * @return Offre
+     */
+    public function setProposedPrice($proposedPrice)
+    {
+        $this->proposedPrice = $proposedPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get proposedPrice
+     *
+     * @return float
+     */
+    public function getProposedPrice()
+    {
+        return $this->proposedPrice;
+    }
+
+    /**
+     * Set proposedPriceText
+     *
+     * @param string $proposedPriceText
+     *
+     * @return Offre
+     */
+    public function setProposedPriceText($proposedPriceText)
+    {
+        $this->proposedPriceText = $proposedPriceText;
+
+        return $this;
+    }
+
+    /**
+     * Get proposedPriceText
+     *
+     * @return string
+     */
+    public function getProposedPriceText()
+    {
+        return $this->proposedPriceText;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Offre
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     *
+     * @return Offre
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get creationDate
+     *
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+
+    /**
+     * Set createdbBy
+     *
+     * @param \SBC\PersonnelBundle\Entity\Personnel $createdBy
+     *
+     * @return Offre
+     */
+    public function setCreatedBy(Personnel $createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \SBC\PersonnelBundle\Entity\Personnel
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+
+    /**
+     * Set proposedBy
+     *
+     * @param \SBC\TiersBundle\Entity\Client $proposedBy
+     *
+     * @return Offre
+     */
+    public function setProposedBy(Client $proposedBy)
+    {
+        $this->proposedBy = $proposedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \SBC\TiersBundle\Entity\Client
+     */
+    public function getProposedBy()
+    {
+        return $this->proposedBy;
+    }
+
+    /**
+     * Set mandat
+     *
+     * @param \SBC\BienBundle\Entity\Mandat $mandat
+     *
+     * @return Offre
+     */
+    public function setMandat(\SBC\BienBundle\Entity\Mandat $mandat = null)
+    {
+        $this->mandat = $mandat;
+
+        return $this;
+    }
+
+    /**
+     * Get mandat
+     *
+     * @return \SBC\BienBundle\Entity\Mandat
+     */
+    public function getMandat()
+    {
+        return $this->mandat;
+    }
+
+
+    /**
+     * Set honorairesTTC
+     *
+     * @param string $honorairesTTC
+     *
+     * @return Offre
+     */
+    public function setHonorairesTTC($honorairesTTC)
+    {
+        $this->honorairesTTC = $honorairesTTC;
+
+        return $this;
+    }
+
+    /**
+     * Get honorairesTTC
+     *
+     * @return string
+     */
+    public function getHonorairesTTC()
+    {
+        return $this->honorairesTTC;
+    }
+
+    /**
+     * Set honorairesHT
+     *
+     * @param integer $honorairesHT
+     *
+     * @return Offre
+     */
+    public function setHonorairesHT($honorairesHT)
+    {
+        $this->honorairesHT = $honorairesHT;
+
+        return $this;
+    }
+
+    /**
+     * Get honorairesHT
+     *
+     * @return integer
+     */
+    public function getHonorairesHT()
+    {
+        return $this->honorairesHT;
+    }
+
+    /**
+     * Set acompteTTC
+     *
+     * @param string $acompteTTC
+     *
+     * @return Offre
+     */
+    public function setAcompteTTC($acompteTTC)
+    {
+        $this->acompteTTC = $acompteTTC;
+
+        return $this;
+    }
+
+    /**
+     * Get acompteTTC
+     *
+     * @return string
+     */
+    public function getAcompteTTC()
+    {
+        return $this->acompteTTC;
+    }
+
+    /**
+     * Set acompteHT
+     *
+     * @param integer $acompteHT
+     *
+     * @return Offre
+     */
+    public function setAcompteHT($acompteHT)
+    {
+        $this->acompteHT = $acompteHT;
+
+        return $this;
+    }
+
+    /**
+     * Get acompteHT
+     *
+     * @return integer
+     */
+    public function getAcompteHT()
+    {
+        return $this->acompteHT;
+    }
+
+    /**
+     * Set commision
+     *
+     * @param \SBC\BienBundle\Entity\Acceptation $commision
+     *
+     * @return Offre
+     */
+    public function setCommision(\SBC\BienBundle\Entity\Acceptation $commision = null)
+    {
+        $this->commision = $commision;
+
+        return $this;
+    }
+
+    /**
+     * Get commision
+     *
+     * @return \SBC\BienBundle\Entity\Acceptation
+     */
+    public function getCommision()
+    {
+        return $this->commision;
+    }
+}

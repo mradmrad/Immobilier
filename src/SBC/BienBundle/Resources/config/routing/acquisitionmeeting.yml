@@ -1,0 +1,4 @@
+acquisitionmeeting_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:AcquisitionMeeting:add" }
+    methods:  [GET, POST]

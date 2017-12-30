@@ -1,0 +1,683 @@
+{% extends "::layout.html.twig" %}
+{% block title %}
+    Lecture d'un bien - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <style>
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 3px;
+            margin-top: 10px;
+            text-overflow: ellipsis;
+            width: 300px;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBK8ckSg8MXqpU9fQoZG_yoMnLb1zPmWM&v=3.exp&libraries=places">
+    </script>
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Biens</a></li>
+            <li><span>Afficher un bien</span></li>
+        </ul>
+        <h1>{{ bien.title }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">{{ bien.creationDate|date('d/m/Y') }}</span>
+    </div>
+    <div id="page_content_inner">
+        <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs'}">
+            <li class="uk-active"><a href="#">Propiétaires</a></li>
+            <li><a href="#">Détails</a></li>
+            <li><a href="#">Gallerie</a></li>
+            <li><a href="#">Déscription</a></li>
+        </ul>
+        <ul id="tabs" class="uk-switcher uk-margin">
+            <li>
+                <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#proprietaires'}">
+                    <li class="uk-active"><a href="#">Propiétaires</a></li>
+                    <li><a href="#">Procurations</a></li>
+                    <li><a href="#">En qualité de</a></li>
+                </ul>
+                <ul id="proprietaires" class="uk-switcher uk-margin">
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails des propriétaires
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                {% if  bien.owners|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-form-help-block">  pas de propriétaires </span>
+                                    </div>
+                                {% endif %}
+                                {% for owner in bien.owners %}
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                <a href="{{ path('client_show', { 'code': owner.client.code }) }}">
+                                                {{ owner.client.denomination }}
+                                                </a>
+                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone  </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ owner.client.tel }}
+                                            </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ owner.client.code }}
+                                            </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ owner.client.identifier }}
+                                            </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails des procurations
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                {% if  bien.procurations|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-form-help-block">  pas de procurations </span>
+                                    </div>
+                                {% endif %}
+                                {% for procuration in bien.procurations %}
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination p  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                    <a href="{{ path('client_show', { 'code': procuration.client.code }) }}">
+                                                        {{ procuration.client.denomination }}
+                                                    </a>
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone P </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ procuration.client.tel }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.client.code }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.client.identifier }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  PP </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                    <a href="{{ path('client_show', { 'code': procuration.representant.code }) }}">
+                                                    {{ procuration.representant.denomination }}
+                                                    </a>
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone PP </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ procuration.representant.tel }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code PP  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.representant.code }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant PP  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ procuration.representant.identifier }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails en qualité de
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                {% if  bien.representants|length ==0 %}
+                                    <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                        <span class="uk-form-help-block">  pas de en qualité de </span>
+                                    </div>
+                                {% endif %}
+                                {% for representant in bien.representants %}
+                                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination p  </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                    <a href="{{ path('client_show', { 'code': representant.client.code }) }}">
+                                                        {{ representant.client.denomination }}
+                                                    </a>
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone P </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ representant.client.tel }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.client.code }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant P  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.client.identifier }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="uk-width-large-1-2">
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Dénomination  PP </span>
+                                                        <span class="md-list-heading uk-text-large">
+                                                    <a href="{{ path('client_show', { 'code': representant.representant.code }) }}">
+                                                    {{ representant.representant.denomination }}
+                                                    </a>
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Téléphone PP </span>
+                                                        <span class="md-list-heading uk-text-large"> {{ representant.representant.tel }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Code PP  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.representant.code }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="uk-text-small uk-text-muted uk-display-block">Identifiant PP  </span>
+                                                        <span class="md-list-heading uk-text-large">  {{ representant.representant.identifier }}
+                                                </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                    <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Meublé(e)
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                            {% if bien.furnished %}
+                                                <span class="uk-badge uk-badge-success">Oui</span>
+                                            {% else %}
+                                                <span class="uk-badge uk-badge-danger">Non</span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Image principale
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <a href="{{ vich_uploader_asset(bien, 'mainPictureFile') }}"
+                                   data-uk-lightbox="{group:'bien-main-picture'}">
+                                    <img src="{{ vich_uploader_asset(bien, 'mainPictureFile') }}"
+                                         alt="{{ bien.mainPictureName }}"/>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">Type de prix  </span>
+                                            <span class="md-list-heading uk-text-large"> {{ bien.priceType }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block"> Prix estimé  </span>
+                                            <span class="md-list-heading uk-text-large"> {{ bien.estimatedPrice|number_format(3, ',', ' ') }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">   Prix  </span>
+                                            <span class="md-list-heading uk-text-large">  {{ bien.price|number_format(3, ',', ' ') }}
+                                        </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="uk-text-small uk-text-muted uk-display-block">    Prix à afficher  </span>
+                                            <span class="md-list-heading uk-text-large">
+                                                {{ bien.displayPrice|number_format(3, ',', ' ') }}
+                                            </span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Titre  </span>
+                                                    <span class="md-list-heading uk-text-large"> {{ bien.title }} </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Superficie terrain  </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ bien.totalArea }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">    Superficie couverte  </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ bien.coveredArea }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">    Nature  </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ bien.nature }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">    Chambre(s)  </span>
+                                                    <span class="md-list-heading uk-text-large">   {{ bien.bedroom }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">     Salle(s) de bain  </span>
+                                                    <span class="md-list-heading uk-text-large">   {{ bien.bathroom }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="uk-width-large-1-2">
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Type de bien  </span>
+                                                    <span class="md-list-heading uk-text-large"> {{ bien.typeBien }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Agence  </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('agency_show', { 'id': bien.agency.id }) }}">
+                                                            {{ bien.agency }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Créé par  </span>
+                                                    <span class="md-list-heading uk-text-large">
+                                                        <a href="{{ path('personnel_show', { 'id': bien.createdBy.id }) }}">
+                                                            {{ bien.createdBy }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="uk-text-small uk-text-muted uk-display-block">Adresse </span>
+                                                    <span class="md-list-heading uk-text-large">  {{ bien.address }}
+                                                        , {{ bien.address.rue }}
+                                                        , {{ bien.address.rue.localite }}
+                                                        , {{ bien.address.rue.localite.ville }}
+                                                        , {{ bien.address.rue.localite.ville.gouvernorat }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                            <div class="uk-width-large-1-2">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Equipements
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content">
+                                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                            {% if  bien.equipements|length ==0 %}
+                                                <span class="uk-form-help-block">  pas d'équipements </span>
+                                            {% endif %}
+                                            {% for equipement in  bien.equipements %}
+                                                <div class="parsley-row">
+                                                    <span class="uk-badge uk-badge-success">{{ equipement }}</span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-width-large-1-2">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Commodités
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content">
+                                        <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                            {% if  bien.commodites|length ==0 %}
+                                                <span class="uk-form-help-block">  pas de commodités </span>
+                                            {% endif %}
+                                            {% for commodite in  bien.commodites %}
+                                                <div class="parsley-row">
+                                                    <span class="uk-badge uk-badge-success">{{ commodite }}</span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Gallerie
+                        </h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        {% if  bien.pictures|length ==0 %}
+                            <div class="uk-margin-bottom uk-text-center uk-position-relative">
+                                <span class="uk-form-help-block">  pas encore d'images </span>
+                            </div>
+                        {% endif %}
+                        <div class="uk-grid " data-uk-grid-margin>
+                            {% for bienPicture in bien.pictures %}
+                                <div class="uk-width-medium-1-4">
+                                    <div class="parsley-row" style="height: 324px;display: grid;border: solid 1px #e7e7e7;text-align: center">
+                                        <span class="uk-form-help-block"> {{ bienPicture.description }}</span>
+                                        <a href="{{ vich_uploader_asset(bienPicture, 'file') }}"
+                                           data-uk-lightbox="{group:'bien-pictures'}">
+                                            <img src="{{ vich_uploader_asset(bienPicture, 'file') }}"
+                                                 alt="{{ bienPicture.fileName }}"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Déscription
+                        </h3>
+                    </div>
+                    <div class="md-card-content large-padding">
+                        <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                            <div class="uk-width-large-2-2">
+                                <div class="uk-form-row">
+                                    <div class="parsley-row">
+                                        {% autoescape %}
+                                            {{ bien.description|raw }} {# var won't be escaped #}
+                                        {% endautoescape %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-xLarge-10-10  uk-width-large-10-10">
+                {% if bien.ismapped %}
+                    <div class="uk-width-xLarge-10-10 uk-width-large-10-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Map
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding" id="displaymap">
+
+                                <div id="map-canvas" style="width: 100%; height: 375px;">
+                                </div>
+                                <script>
+                                    var init_lng = '{{ bien.longitude }}';
+                                    var init_lat = '{{ bien.latitude }}';
+                                    var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                                        zoom: 13,
+                                        scrollwheel: true,
+                                        navigationControl: true,
+                                        mapTypeControl: true,
+                                        scaleControl: false,
+                                        draggable: true,
+                                        center: new google.maps.LatLng(init_lat, init_lng),
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                                    });
+                                    var marker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(parseFloat(init_lat), parseFloat(init_lng)),
+                                        map: map,
+                                        icon: ''
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper md-fab-speed-dial">
+        <a class="md-fab md-fab-primary" href="javascript:void(0)" data-uk-tooltip="{pos:'left'}"
+           title="Actions">
+            <i class="material-icons">&#xE55D;</i></a>
+        <div class="md-fab-wrapper-small">
+            <a class="md-fab md-fab-small md-fab-danger" href="javascript:void(0)"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Supprimer"
+               onclick="confirmDelete({{ bien.id }})">
+                <i class="material-icons">&#xE92B;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab-success" href="{{ path('bien_edit', {'id': bien.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Modifier">
+                <i class="material-icons">&#xE3C9;</i>
+            </a>
+            <a class="md-fab md-fab-small md-fab" href="{{ path('nouvelle_edit', {'id': bien.id}) }}"
+               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Transferer en nouvelle">
+                <i class="material-icons">&#xE15A;</i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        function confirmDelete(id) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer ce bien ?',
+                function () {
+                    deleteIt(id);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                });
+        }
+        function deleteIt(id) {
+            var url = '{{ path('bien_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('Le bien a été supprimé avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }
+                        ).on('hide.uk.modal', function () {
+                            history.back();
+                        });
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer ce bien pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer ce bien pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+    </script>
+{% endblock %}

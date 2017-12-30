@@ -1,0 +1,115 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tache
+ *
+ * @ORM\Table(name="tache")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\TacheRepository")
+ */
+class Tache
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationDate", type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\TypeTache")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $typeTache;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $presonnel;
+
+    public function __construct()
+    {
+        $this->creationDate = new \Datetime();
+    }
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Tache
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     *
+     * @return Tache
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get creationDate
+     *
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+}
+

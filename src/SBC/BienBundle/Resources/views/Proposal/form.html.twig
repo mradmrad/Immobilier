@@ -1,0 +1,105 @@
+<div id="page_content_inner">
+    {{ form_start(form, {'attr':{'class':'uk-form-stacked', 'id':'form_validation'}}) }}
+    {{ form_errors(form) }}
+    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+        <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+            <div class="md-card">
+                <div class="md-card-toolbar">
+                    <h3 class="md-card-toolbar-heading-text">
+                        Détails
+                    </h3>
+                </div>
+                <div class="md-card-content large-padding">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                        <div class="uk-width-large-1-2">
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_widget(form.acquisition,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span class="uk-form-help-block">Acquisition</span>
+                                </div>
+                                <span>     {{ form_errors(form.acquisition) }} </span>
+                            </div>
+                        </div>
+                        <div class="uk-width-large-1-2">
+                            <div class="uk-form-row">
+                                <div class="parsley-row">
+                                    {{ form_widget(form.proposedFor,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                    <span class="uk-form-help-block">Proposée pour</span>
+                                </div>
+                                <span>     {{ form_errors(form.proposedFor) }} </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <button class="md-fab md-fab-accent md-fab-wave-light" href="#" id="proposition_add"
+                data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Valider" name="save">
+            <i class="material-icons">&#xE161;</i>
+        </button>
+    </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+</div>
+<script>
+    //    $(document).ready(function () {
+    //
+    //        setFormatNumber();
+
+    {##}
+
+    {#$domReference = $('#sbc_bienbundle_requete_reference');#}
+    {#$oldReference = $domReference.val().toUpperCase();#}
+    {#$domReference.on('change', function () {#}
+    {#$reference = $domReference.val().toUpperCase();#}
+    {#var url = '{{ path('requete_byreference', {'reference': 'referencE'}) }}';#}
+    {#url = url.replace('referencE', $reference);#}
+
+    {#if ($reference != $oldReference) {#}
+    {#$.ajax({#}
+    {#async: true,#}
+    {#type: "POST",#}
+    {#url: url,#}
+    {#success: function (json) {#}
+    {#console.log(JSON.stringify(json));#}
+    {#if (json.success == true) {#}
+    {#// declancher une exeption#}
+    {#window.Parsley.addValidator('reference', {#}
+    {#validateString: function (value) {#}
+    {#return false;#}
+    {#},#}
+    {#messages: {#}
+    {#en: 'Cette référence existe déjà',#}
+    {#fr: "Cette référence existe déjà"#}
+    {#}#}
+    {#});#}
+    {#} else {#}
+    {#window.Parsley.addValidator('reference', {#}
+    {#validateString: function (value) {#}
+    {#return true;#}
+    {#}#}
+    {#});#}
+    {#}#}
+    {#$domReference.parsley().validate();#}
+    {#}#}
+    {#});#}
+    {#}#}
+    {#});#}
+    {#})#}
+
+    //
+    //    function setFormatNumber() {
+    //
+    //        $('.numeric').blur(function () {
+    //            $(this).parseNumber({format: "######0.00", locale: "us"});
+    //            $(this).formatNumber({format: "######0.00", locale: "us"});
+    //        });
+    //
+    //        $('.money').blur(function () {
+    //            $(this).parseNumber({format: "#,##0.000", locale: "fr"});
+    //            $(this).formatNumber({format: '#,##0.000', locale: 'fr'});
+    //        });
+    //    }
+</script>

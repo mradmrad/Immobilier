@@ -1,0 +1,171 @@
+<div id="page_content_inner">
+    <div class="md-card">
+        <div class="md-card-content large-padding">
+            {{ form_start(form, {'attr': {'class': 'uk-form-stacked', 'id':'form_validation'}}) }}
+            {{ form_errors(form) }}
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="material-icons">&#xE0DA;</i>
+                            </span>
+                            {{ form_label(form.code,   "Code"  ) }}
+                            {{ form_widget(form.code, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-code':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.code) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="uk-form-row">
+                        <div class="parsley-row">
+                            {{ form_widget(form.agency,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                            <span class="uk-form-help-block">Agence</span>
+                            <span>     {{ form_errors(form.agency) }} </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                 <i class="material-icons">&#xE7FD;</i>
+                            </span>
+                            {{ form_label(form.name,   "Nom et prénom" ) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'md-input', 'required':''}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.name) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                 <i class="material-icons">&#xE0D0;</i>
+                            </span>
+                            {{ form_label(form.cin, "CIN" ) }}
+                            {{ form_widget(form.cin, {'attr': {'class': 'md-input', 'data-parsley-cin':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.cin) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-3">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                 <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+                            </span>
+                            {{ form_label(form.phonenumber,   "Téléphone"  ) }}
+                            {{ form_widget(form.phonenumber, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-phonenumber':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.phonenumber) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-3">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                <i class="md-list-addon-icon material-icons">&#xE0CF;</i>
+                            </span>
+                            {{ form_label(form.agencyPhoneNumber,   "Téléphone Green Duck"  ) }}
+                            {{ form_widget(form.agencyPhoneNumber, {'attr': {'class': 'md-input',
+                                'required':'', 'data-parsley-phonenumbergreen':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.agencyPhoneNumber) }} </span>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-3">
+                    <div class="parsley-row">
+                        <div class="uk-input-group">
+                            <span class="uk-input-group-addon">
+                                 <i class="md-list-addon-icon material-icons">&#xE158;</i>
+                            </span>
+                            {{ form_label(form.email, "Email" ) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'md-input', 'data-parsley-email':'3'}}) }}
+                        </div>
+                        <span>     {{ form_errors(form.email) }} </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-2">
+                    <span class="uk-form-help-block">Photo</span>
+                    {{ form_widget(form.pictureFile, {'attr': {'class': ''  }}) }}
+                    <span> {{ form_errors(form.pictureFile) }} </span>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content large-padding">
+                            <span class="uk-form-help-block">Adresse</span>
+                            <div class="uk-grid" data-uk-grid-margin>
+                            </div>
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="material-icons">&#xE55E;</i>
+                                            </span>
+                                            {{ form_label(form.address.governorate, "Gouvernorat" ) }}
+                                            {{ form_widget(form.address.governorate, {'attr': {'class': 'md-input'}}) }}
+                                        </div>
+                                        <span>     {{ form_errors(form.address.governorate) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="material-icons">&#xE55F;</i>
+                                            </span>
+                                            {{ form_label(form.address.city, "Cité" ) }}
+                                            {{ form_widget(form.address.city, {'attr': {'class': 'md-input'}}) }}
+                                        </div>
+                                        <span>     {{ form_errors(form.address.city) }} </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="material-icons">&#xE0DA;</i>
+                                            </span>
+                                            {{ form_label(form.address.zipCode, "Code postal" ) }}
+                                            {{ form_widget(form.address.zipCode, {'attr': {'class': 'md-input'}}) }}
+                                        </div>
+                                        <span>     {{ form_errors(form.address.zipCode) }} </span>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="parsley-row">
+                                        <div class="uk-input-group">
+                                            <span class="uk-input-group-addon">
+                                                <i class="material-icons">&#xE566;</i>
+                                            </span>
+                                            {{ form_label(form.address.address, "Rue" ) }}
+                                            {{ form_widget(form.address.address, {'attr': {'class': 'md-input'}}) }}
+                                        </div>
+                                        <span>     {{ form_errors(form.address.address) }} </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    {{ form_widget(form.save, {'attr': {'class': 'md-btn md-btn-primary'}}) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Modifier une Proposition - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Propositions</a></li>
+            <li><span>Modifier une proposition</span></li>
+        </ul>
+        <h1>Formulaire de modification de la proposition</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">veuillez bien remplir les champs</span>
+    </div>
+    {{ include("BienBundle:Proposal:form.html.twig") }}
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        altair_forms.parsley_validation_config();
+    </script>
+    {% javascripts output="js/compiled/mainWithMaskAndWysiwyg.js"
+    'bundles/immobilier/assets/js/kendoui_custom.min.js'
+    'bundles/immobilier/bower_components/parsleyjs/dist/parsley.min.js'
+    'bundles/immobilier/assets/js/pages/forms_validation.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js'
+    'bundles/immobilier/jquery-numberformatter/jshashtable-2.1.js'
+    'bundles/immobilier/jquery-numberformatter/jquery.numberformatter-1.2.4.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+//        $(document).ready(function ($) {
+//            $('#sbc_bienbundle_proposal_budgetMin').mask('000, 000, 000, 000', {reverse: true});
+//            $('#sbc_bienbundle_proposal_budgetMax').mask('000, 000, 000, 000', {reverse: true});
+//
+//            $('#sbc_bienbundle_proposal_totalAreaMin').mask('000, 000, 000', {reverse: true});
+//            $('#sbc_bienbundle_proposal_totalAreaMax').mask('000, 000, 000', {reverse: true});
+//
+//            $('#sbc_bienbundle_proposal_coveredAreaMin').mask('000, 000, 000', {reverse: true});
+//            $('#sbc_bienbundle_proposal_coveredAreaMax').mask('000, 000, 000', {reverse: true});
+//
+//            $('#sbc_bienbundle_proposal_bedroom').mask('0, 000', {reverse: false});
+//            $('#sbc_bienbundle_proposal_bathroom').mask('0, 000', {reverse: false});
+//        })
+
+    </script>
+{% endblock %}

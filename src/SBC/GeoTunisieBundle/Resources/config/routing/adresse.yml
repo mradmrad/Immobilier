@@ -1,0 +1,49 @@
+adresse_index:
+    path:     /liste
+    defaults: { _controller: "GeoTunisieBundle:Adresse:index" }
+    methods:  GET
+
+adresse_show:
+    path:     /afficher/{id}
+    defaults: { _controller: "GeoTunisieBundle:Adresse:show" }
+    methods:  GET
+
+adresse_new:
+    path:     /new
+    defaults: { _controller: "GeoTunisieBundle:Adresse:new" }
+    methods:  [GET, POST]
+
+adresse_edit:
+    path:     /modifier/{id}
+    defaults: { _controller: "GeoTunisieBundle:Adresse:edit" }
+    methods:  [GET, POST]
+
+adresse_delete:
+    path:     /supprimer/{id}
+    defaults: { _controller: "GeoTunisieBundle:Adresse:delete" }
+    methods:  DELETE
+
+adresse_bynameandrue:
+    path:     /by-name-and-rue/{name}/{rue}
+    defaults: { _controller: "GeoTunisieBundle:Adresse:getAdresseByNameAndRue" }
+    methods:  GET
+
+adresse_add:
+    path:     /ajouter
+    defaults: { _controller: "GeoTunisieBundle:Adresse:add" }
+    methods:  [GET, POST]
+
+adresses_byrue_notjoined:
+    path:     /adresses-par-rue-notjoined
+    defaults: { _controller: "GeoTunisieBundle:Adresse:byRueNotJoined" }
+    methods:  POST
+
+adresse_byname:
+    path:     /adresse-par-nom/{name}
+    defaults: { _controller: "GeoTunisieBundle:Adresse:byName" }
+    methods:  [GET, POST]
+
+adresse_list:
+    path:     /adresse-liste
+    defaults: { _controller: "GeoTunisieBundle:Adresse:listForAjax" }
+    methods:  [GET, POST]

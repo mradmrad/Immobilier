@@ -1,0 +1,4 @@
+personnel_personnel:
+    resource: "@PersonnelBundle/Resources/config/routing/personnel.yml"
+    prefix:   /personnel
+

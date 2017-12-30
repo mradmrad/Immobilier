@@ -1,0 +1,36 @@
+origine_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Origine:index" }
+    methods:  GET
+
+origine_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Origine:show" }
+    methods:  GET
+
+origine_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Origine:new" }
+    methods:  [GET, POST]
+
+origine_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Origine:edit" }
+    methods:  [GET, POST]
+
+origine_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Origine:delete" }
+    methods:  DELETE
+
+origine_byname:
+    path:      /by-name/{name}
+    defaults:
+        _controller: BienBundle:Origine:getOrigineByName
+    requirements:
+        name: .+
+
+origine_add:
+    path:     /add
+    defaults: { _controller: "BienBundle:Origine:add" }
+    methods:  [GET, POST]

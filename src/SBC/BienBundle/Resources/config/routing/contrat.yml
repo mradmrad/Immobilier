@@ -1,0 +1,31 @@
+contrat_index:
+    path:     /
+    defaults: { _controller: "BienBundle:Contrat:index" }
+    methods:  GET
+
+contrat_show:
+    path:     /{id}/show
+    defaults: { _controller: "BienBundle:Contrat:show" }
+    methods:  GET
+
+contrat_new:
+    path:     /new
+    defaults: { _controller: "BienBundle:Contrat:new" }
+    methods:  [GET, POST]
+
+contrat_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BienBundle:Contrat:edit" }
+    methods:  [GET, POST]
+
+contrat_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BienBundle:Contrat:delete" }
+    methods:  DELETE
+
+contrat_byreference:
+    path:      /by-reference/{reference}
+    defaults:
+        _controller: BienBundle:Contrat:getContratByReference
+    requirements:
+        reference: .+

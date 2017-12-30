@@ -1,0 +1,27 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * NouvelleMeeting
+ *
+ * @ORM\Table(name="nouvelle_meeting")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\NouvelleMeetingRepository")
+ */
+class NouvelleMeeting extends Meeting
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Bien")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $nouvelle;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+

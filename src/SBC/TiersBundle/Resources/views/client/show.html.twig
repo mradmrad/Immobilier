@@ -1,0 +1,627 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}
+    Lecture d'un client - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Clients</a></li>
+            <li><span>Afficher un client</span></li>
+        </ul>
+        <h1>{{ client.denomination }}</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">{{ client.code }}</span>
+    </div>
+
+    <div id="page_content_inner">
+        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+            <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <ul class="md-list">
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Nom</span>
+                                    {{ client.denomination }}
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Prènom</span>
+                                    {{ client.denomination }}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Téléphones favoris
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <ul class="md-list">
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Protable 1</span>
+                                    {{ client.tel }}
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Portable 2</span>
+                                    {{ client.secondtel }}
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Téléphone bureau</span>
+                                    {{ client.telbureau }}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="md-card">
+
+                    <div class="md-card-content">
+                        <ul class="md-list">
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Email</span>
+                                    {{ client.website }}
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-content">
+                                    <span class="uk-text-small uk-text-muted uk-display-block">Fax</span>
+                                    {{ client.fax }}
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="md-card">
+                    <div class="md-card-toolbar">
+                        <h3 class="md-card-toolbar-heading-text">
+                            Préférences de contact
+                        </h3>
+                    </div>
+                    <div class="md-card-content">
+                        <div class="parsley-row">
+                            {% if client.preferences.lundi %}
+                                <span class="uk-badge uk-badge-success">lundi</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">lundi</span>
+                            {% endif %}
+
+                            {% if client.preferences.mardi %}
+                                <span class="uk-badge uk-badge-success">mardi</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">mardi</span>
+                            {% endif %}
+                            {% if client.preferences.mercredi %}
+                                <span class="uk-badge uk-badge-success">mercredi</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">mercredi</span>
+                            {% endif %}
+                            {% if client.preferences.jeudi %}
+                                <span class="uk-badge uk-badge-success">jeudi</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">jeudi</span>
+                            {% endif %}
+                            {% if client.preferences.vendredi %}
+                                <span class="uk-badge uk-badge-success">vendredi</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">vendredi</span>
+                            {% endif %}
+                            {% if client.preferences.samedi %}
+                                <span class="uk-badge uk-badge-success">samedi</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">samedi</span>
+                            {% endif %}
+                            {% if client.preferences.dimanche %}
+                                <span class="uk-badge uk-badge-success">dimanche</span>
+                            {% else %}
+                                <span class="uk-badge uk-badge-danger">dimanche</span>
+                            {% endif %}
+                        </div>
+                        <div class="parsley-row" style="margin-top: 10px">
+                            De : {{ client.preferences.heure|date('H:m') }}
+                            A : {{ client.preferences.heureFin|date('H:m') }}
+                        </div>
+                        <div class="md-list-content">
+                            <span class="uk-text-small uk-text-muted uk-display-block">Notes</span>
+                            {{ client.preferences.note }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--=======================DETAILS==============================-->
+            <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+                <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#tabs', animation:'slide-horizontal'}">
+                    <li><a href="#">Détails</a></li>
+                    <li><a href="#">Resume</a></li>
+                    <li><a href="#">Historique</a></li>
+                    {#<li><a href="#">Rendez-vous</a></li>#}
+                </ul>
+                <ul id="tabs" class="uk-switcher uk-margin">
+                    <li>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Détails
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium">
+                                    <div class="uk-width-large-2-2">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Prénom</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.prenom }}</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Nom</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.denomination }}</span>
+                                            </div>
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Sexe</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                <span class="uk-text-large uk-text-middle">{{ client.sexe }}</span>
+                                            </div>
+
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">CIN / Registre commerciale</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                {{ client.identifier }}
+                                            </div>
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Date de naissance</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.naissance|date('d-m-Y') }}</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Nationalité</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.birthplace }}</span>
+                                            </div>
+                                        </div>
+
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Situation familiale</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                <span class="uk-text-large uk-text-middle">{{ client.familySituation }}</span>
+                                            </div>
+
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Etudes</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.etude }}</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Travail</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.travail }}</span>
+                                            </div>
+
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Téléphone</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                {{ client.tel }}
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Portable 1</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                {{ client.secondtel }}
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Portable 2</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                {{ client.thirdtel }}
+                                            </div>
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Téléphone fixe</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                {{ client.telfixe }}
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Téléphone bureau</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                {{ client.telbureau }}
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Fax</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                {{ client.fax }}
+                                            </div>
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Email</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.website }}</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Email 2</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.secondmail }}</span>
+                                            </div>
+
+                                        </div>
+
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Email</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.website }}</span>
+                                            </div>
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Email 2</span>
+                                            </div>
+                                            <div class="uk-width-large-2-6">
+                                                <span class="uk-text-large uk-text-middle">{{ client.secondmail }}</span>
+                                            </div>
+
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-6">
+                                                <span class="uk-text-muted uk-text-small">Préférences de contact</span>
+                                            </div>
+                                            <div class="uk-width-large-5-6">
+                                                {% if client.preferences.lundi %}
+                                                    <span class="uk-badge uk-badge-success">lundi</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">lundi</span>
+                                                {% endif %}
+
+                                                {% if client.preferences.mardi %}
+                                                    <span class="uk-badge uk-badge-success">mardi</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">mardi</span>
+                                                {% endif %}
+                                                {% if client.preferences.mercredi %}
+                                                    <span class="uk-badge uk-badge-success">mercredi</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">mercredi</span>
+                                                {% endif %}
+                                                {% if client.preferences.jeudi %}
+                                                    <span class="uk-badge uk-badge-success">jeudi</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">jeudi</span>
+                                                {% endif %}
+                                                {% if client.preferences.vendredi %}
+                                                    <span class="uk-badge uk-badge-success">vendredi</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">vendredi</span>
+                                                {% endif %}
+                                                {% if client.preferences.samedi %}
+                                                    <span class="uk-badge uk-badge-success">samedi</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">samedi</span>
+                                                {% endif %}
+                                                {% if client.preferences.dimanche %}
+                                                    <span class="uk-badge uk-badge-success">dimanche</span>
+                                                {% else %}
+                                                    <span class="uk-badge uk-badge-danger">dimanche</span>
+                                                {% endif %}
+                                            </div>
+
+
+                                        </div>
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Origines</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                <span class="uk-text-large uk-text-middle">{{ client.origine }}</span>
+                                            </div>
+
+
+                                        </div>
+                                        <hr class="uk-grid-divider uk-hidden-large">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Autres informations
+                                </h3>
+                            </div>
+                            <div class="md-card-content large-padding">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium">
+                                    <div class="uk-width-large-2-2">
+                                        {{ client.moreInformations }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+
+                        <div class="uk-grid uk-grid-divider">
+                            <div class="uk-width-large-1-2" style="padding-bottom: 20px;">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Requetes
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        {% if client.requetes|length >0 %}
+                                            <table id="tachestable" class="uk-table uk-table-hover" cellspacing="0"
+                                                   width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Titre</th>
+                                                    <th>Date de création</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr>
+                                                    {% for requete in client.requetes %}
+                                                        <td>
+                                                            <a href="{{ path('requete_show' , {'id' : requete.id}) }}">
+                                                                {{ requete.reference }}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+
+                                                            {{ requete.creationDate|date('d-m-Y') }}
+                                                        </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                        {% else %}
+                                            <div style="text-align: center">
+                                            <span class="uk-badge uk-badge-danger">Aucune requete </span>
+                                            </div>
+                                                {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="uk-width-large-1-2" style="padding-bottom: 20px">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Propriétés
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        {% if client.requetes|length >0 %}
+                                            <table id="tachestable" class="uk-table uk-table-hover" cellspacing="0"
+                                                   width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Titre</th>
+                                                    <th>Date de création</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr>
+                                                    {% for bien in client.biens %}
+                                                        <td>
+                                                            <a href="{{ path('bien_show' , {'id' : bien.bien.id}) }}">
+                                                                {{ bien.bien.title }}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+
+                                                            {{ bien.bien.updatedAt|date('d-m-Y') }}
+                                                        </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                        {% else %}
+                                            <div style="text-align: center">
+                                                <span class="uk-badge uk-badge-danger">Aucune propriètè </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="uk-width-large-1-2">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Bien proposés
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        {% if client.requetes|length >0 %}
+                                            <table id="tachestable" class="uk-table uk-table-hover" cellspacing="0"
+                                                   width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Date création</th>
+                                                    <th>Requete</th>
+                                                    <th>Bien proposé</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr>
+
+                                                    {% for requete in client.requetes %}
+                                                        {% for proposition in requete.proposals %}
+                                                            <td>{{ proposition.creationdate|date('d-m-Y') }}</td>
+                                                        <td>
+                                                            <a href="{{ path('requete_show' , {'id' : requete.id}) }}">
+                                                                {{ requete.reference }}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+
+                                                            <a href="{{ path('bien_show' , {'id' : proposition.mandat.acquisition.bien.id}) }}">
+                                                                {{ proposition.mandat.acquisition.bien.title }}
+                                                            </a>
+                                                        </td>
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                        {% else %}
+                                            <div style="text-align: center">
+                                                <span class="uk-badge uk-badge-danger">Aucune proposition </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-width-large-1-2">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Activités marketing
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        <div style="text-align: center">
+                                            <span class="uk-badge uk-badge-danger">En cours de construction ..</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </li>
+                    <li>
+
+
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Requetes
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content large-padding">
+                                        <table id="tachestable" class="uk-table uk-table-hover" cellspacing="0"
+                                               width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Temps</th>
+                                                <th>Action</th>
+                                                <th></th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                                {% for history in histories %}
+                                                <tr>
+                                                    <td>{{ history.creationDate|date('d-m-Y') }}</td>
+                                                    <td>{{ history.creationDate|date('H:m') }}</td>
+                                                    <td>{{ history.description }} </td>
+                                                </tr>
+                                                {% endfor %}
+
+
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+        <div class="md-fab-wrapper">
+            <div class="md-fab md-fab-accent md-fab-sheet">
+                <i class="material-icons">&#xE913;</i>
+                <div class="md-fab-sheet-actions">
+                    <a href="{{ path('client_edit', { 'code': client.code }) }}" class="md-color-white"><i
+                                class="material-icons md-color-white">&#xE254;</i> Modifier</a>
+                    <a href="javascript:void(0)" class="md-color-white" onclick="deleteClient('{{ client.code }}')"><i
+                                class="material-icons md-color-white">&#xE872;</i> Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        function deleteClient(code) {
+            UIkit.modal.confirm(
+                'Confirmez-vous la suppression de ce client ?',
+                function () {
+                    var url = "{{ path('client_delete', {'code': 'code_client'}) }}";
+                    url = url.replace('code_client', code);
+                    window.location.href = url;
+                },
+                {labels: {'Ok': 'Oui', 'Cancel': 'Annuler'}}
+            );
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,333 @@
+<?php
+
+namespace SBC\BienBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Goal
+ *
+ * @ORM\Table(name="goal")
+ * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\GoalRepository")
+ */
+class Goal
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationDate", type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="beginDate", type="datetime")
+     */
+    private $beginDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="finishDate", type="datetime")
+     */
+    private $finishDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255, unique=true)
+     */
+    private $code;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="rechercheGoal", type="integer", nullable=true)
+     */
+    private $rechercheGoal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nouvelleGoal", type="integer", nullable=true)
+     */
+    private $nouvelleGoal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="acquisitionGoal", type="integer", nullable=true)
+     */
+    private $acquisitionGoal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="mandatGoal", type="integer", nullable=true)
+     */
+    private $mandatGoal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="requeteGoal", type="integer", nullable=true)
+     */
+    private $requeteGoal;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $createdBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Agency")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $agency;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $goalFor;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     *
+     * @return Goal
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get creationDate
+     *
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * Set beginDate
+     *
+     * @param \DateTime $beginDate
+     *
+     * @return Goal
+     */
+    public function setBeginDate($beginDate)
+    {
+        $this->beginDate = $beginDate;
+
+        return $this;
+    }
+
+    /**
+     * Get beginDate
+     *
+     * @return \DateTime
+     */
+    public function getBeginDate()
+    {
+        return $this->beginDate;
+    }
+
+    /**
+     * Set finishDate
+     *
+     * @param \DateTime $finishDate
+     *
+     * @return Goal
+     */
+    public function setFinishDate($finishDate)
+    {
+        $this->finishDate = $finishDate;
+
+        return $this;
+    }
+
+    /**
+     * Get finishDate
+     *
+     * @return \DateTime
+     */
+    public function getFinishDate()
+    {
+        return $this->finishDate;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Goal
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set rechercheGoal
+     *
+     * @param integer $rechercheGoal
+     *
+     * @return Goal
+     */
+    public function setRechercheGoal($rechercheGoal)
+    {
+        $this->rechercheGoal = $rechercheGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get rechercheGoal
+     *
+     * @return int
+     */
+    public function getRechercheGoal()
+    {
+        return $this->rechercheGoal;
+    }
+
+    /**
+     * Set nouvelleGoal
+     *
+     * @param integer $nouvelleGoal
+     *
+     * @return Goal
+     */
+    public function setNouvelleGoal($nouvelleGoal)
+    {
+        $this->nouvelleGoal = $nouvelleGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get nouvelleGoal
+     *
+     * @return int
+     */
+    public function getNouvelleGoal()
+    {
+        return $this->nouvelleGoal;
+    }
+
+    /**
+     * Set acquisitionGoal
+     *
+     * @param integer $acquisitionGoal
+     *
+     * @return Goal
+     */
+    public function setAcquisitionGoal($acquisitionGoal)
+    {
+        $this->acquisitionGoal = $acquisitionGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get acquisitionGoal
+     *
+     * @return int
+     */
+    public function getAcquisitionGoal()
+    {
+        return $this->acquisitionGoal;
+    }
+
+    /**
+     * Set mandatGoal
+     *
+     * @param integer $mandatGoal
+     *
+     * @return Goal
+     */
+    public function setMandatGoal($mandatGoal)
+    {
+        $this->mandatGoal = $mandatGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get mandatGoal
+     *
+     * @return int
+     */
+    public function getMandatGoal()
+    {
+        return $this->mandatGoal;
+    }
+
+    /**
+     * Set requeteGoal
+     *
+     * @param integer $requeteGoal
+     *
+     * @return Goal
+     */
+    public function setRequeteGoal($requeteGoal)
+    {
+        $this->requeteGoal = $requeteGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get requeteGoal
+     *
+     * @return int
+     */
+    public function getRequeteGoal()
+    {
+        return $this->requeteGoal;
+    }
+}
+

@@ -1,0 +1,347 @@
+{% extends "::layout.html.twig" %}
+{% block css %}
+    {% stylesheets output="css/compiled/mainWithTree.css" filter="cssrewrite"
+    'bundles/immobilier/assets/skins/jquery.fancytree/ui.fancytree.min.css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block title %}
+    Liste des nouvelles - {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+        <ul id="breadcrumbs" style="float: right;">
+            <li><a href="#">Nouvelles</a></li>
+            <li><span>Afficher tous les nouvelles</span></li>
+        </ul>
+        <h1>Liste des nouvelles</h1>
+        <span class="uk-text-muted uk-text-upper uk-text-small">Liste de tous les nouvelles</span>
+    </div>
+    <div id="page_content_inner">
+        <div class="uk-grid" data-uk-grid-margin>
+            <div class="uk-width-medium-1-5">
+                <div class="md-card">
+                    <select data-md-selectize data-md-bottom id="gouvernorats" onchange="getVilles()">
+                        <option value="">Cliquez ici ...</option>  <!-- Placeholder -->
+                        {% for gov in gouvernorats %}
+                            <option value="{{ gov.id }}">{{ gov.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="md-card-content" id="tree">
+                        Choisissez un gouvernorat ...
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-medium-4-5">
+                <div class="md-card uk-margin-medium-bottom">
+                    <div class="md-card-content">
+                        <div class="dt_colVis_buttons"></div>
+                        <table id="test" class="uk-table uk-table-hover" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>N° <br>du bien</th>
+                                <th>Titre du bien</th>
+                                <th>Vte/location</th>
+                                <th>Type de <br>bien</th>
+                                <th>Nom prènom <br>propriétaire</th>
+                                <th>Téléphone <br>propriétaire</th>
+                                <th>Date dernier <br>contact</th>
+                                <th>Date d'insertion</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            {% for bien in nouvelles %}
+                                <tr>
+                                    <td> {{ bien.id }}</td>
+                                    <td> {{ bien.titre }}</td>
+                                    <td> {{ bien.nature }}</td>
+                                    <td>  {{ bien.typeBien.name }}</td>
+                                    <td>
+                                        {% for owner in bien.owners %}
+
+                                            {{ owner.client.denomination }}
+                                            <br>
+                                        {% endfor %}
+
+                                    </td>
+                                    <td>
+                                        {% for owner in bien.owners %}
+
+                                            {{ owner.client.telfixe }}
+                                            <br>
+                                        {% endfor %}
+
+                                    </td>
+                                    <td>
+                                        {% if bien.taches|length>0 %}
+                                            {{ bien.taches.get(0).creationDate|date('d/m/y') }}
+                                        {% else %}
+                                            <span class="uk-form-help-block">
+                                     Aucun contact
+                                    </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>  {{ bien.creationDate|date('d/m/Y') }}</td>
+
+                                    <td>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            {#<a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}"#}
+                                            {#title="Afficher" href="{{ path('bien_show', {'id': bien.id}) }}">#}
+                                            {#<i class="md-icon material-icons">&#xE417;</i>#}
+                                            {#</a>#}
+                                            <a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}"
+                                               title="Modifier" href="{{ path('bien_edit', {'id': bien.id}) }}">
+                                                <i class="md-icon material-icons">&#xE150;</i>
+                                            </a>
+                                            {#<a data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}"#}
+                                            {#title="Transférer en nouvelle"#}
+                                            {#href="{{ path('nouvelle_edit', {'id': bien.id, 'transfert':1}) }}">#}
+                                            {#<i class="md-icon material-icons">&#xE15A;</i>#}
+                                            {#</a>#}
+                                            <a href="javascript:void(0)"
+                                               data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}" title="Supprimer"
+                                               onclick="confirmDelete({{ bien.id }})">
+                                                <i class="md-icon material-icons">&#xE872;</i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent md-fab-wave-light" href="{{ path('nouvelle_new') }}" id="nouvelle_add"
+           data-uk-tooltip="{cls:'uk-tooltip-small',pos:'left'}" title="Ajouter nouvelle">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+    </div>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    {% javascripts output="js/compiled/mainIndexWithTreeAndNumberFormat.js"
+    'bundles/immobilier/bower_components/datatables/media/js/jquery.dataTables.min.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/dataTables.buttons.js'
+    'bundles/immobilier/assets/js/custom/datatables/buttons.uikit.js'
+    'bundles/immobilier/bower_components/jszip/dist/jszip.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/pdfmake.min.js'
+    'bundles/immobilier/bower_components/pdfmake/build/vfs_fonts.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.colVis.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.html5.js'
+    'bundles/immobilier/bower_components/datatables-buttons/js/buttons.print.js'
+    'bundles/immobilier/assets/js/custom/datatables/datatables.uikit.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_datatables.min.js'
+    'bundles/immobilier/bower_components/jquery-ui/jquery-ui.min.js'
+    'bundles/immobilier/bower_components/jquery.fancytree/dist/jquery.fancytree-all.min.js'
+    'bundles/immobilier/assets/js/pages/plugins_tree.min.js'
+    'bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js'
+    'bundles/immobilier/jquery-numberformatter/jshashtable-2.1.js'
+    'bundles/immobilier/jquery-numberformatter/jquery.numberformatter-1.2.4.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        function confirmDelete(id, rueId) {
+            UIkit.modal.confirm('Voulez vous vraiment supprimer cette nouvelle ?',
+                function () {
+                    deleteIt(id, rueId);
+                },
+                {
+                    labels: {
+                        Ok: 'Oui',
+                        Cancel: 'Non'
+                    }
+                })
+        }
+        function deleteIt(id, rueID) {
+            var url = '{{ path('bien_delete', {'id': 'iD'}) }}';
+            url = url.replace('iD', id);
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (json) {
+                    if (json.success) {
+                        UIkit.modal.alert('La nouvelle a été supprimée avec succès.',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            }).on('hide.uk.modal', function () {
+                            location.reload(true);
+                        });
+                        fillDataTable(rueID);
+                    }
+                    else {
+                        UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cette nouvelle pour des raisons de sécurité',
+                            {
+                                labels: {
+                                    Ok: 'Fermer'
+                                }
+                            });
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Vous n\'avez pas le droit de supprimer cette nouvelle pour des raisons de sécurité',
+                        {
+                            labels: {
+                                Ok: 'Fermer'
+                            }
+                        });
+                }
+            });
+        }
+        function resetFormatNumber() {
+            $('.numeric').each(function () {
+                var resetNumber = $.parseNumber($(this).val(), {format: "######0.00", locale: "us"});
+                $(this).val(resetNumber);
+            });
+            $('.money').each(function () {
+                var resetNumber = $.parseNumber($(this).val(), {format: "#,##0.000", locale: "fr"});
+                $(this).val(resetNumber);
+            });
+        }
+        var datable, dt;
+        $(document).ready(function () {
+            resetFormatNumber();
+            dt = {
+                init: function () {
+                    datable = $('#test').DataTable({
+                        buttons: [
+                            {
+                                extend: 'copyHtml5',
+                                text: '<i class="uk-icon-files-o"></i> Copy',
+                                titleAttr: 'Copy'
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="uk-icon-print"></i> Print',
+                                titleAttr: 'Print'
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                text: '<i class="uk-icon-file-excel-o"></i> XLSX',
+                                titleAttr: ''
+                            },
+                            {
+                                extend: 'csvHtml5',
+                                text: '<i class="uk-icon-file-text-o"></i> CSV',
+                                titleAttr: 'CSV'
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                text: '<i class="uk-icon-file-pdf-o"></i> PDF',
+                                titleAttr: 'PDF'
+                            }
+                        ]
+                    });
+                    $('.dt_colVis_buttons').html(datable.buttons().container());
+                },
+                destroy: function () {
+                    datable.destroy();
+                }
+            };
+            dt.init();
+            {#var data = '{{ path('gouvernorat_map') }}';#}
+            {#$("#tree").fancytree({#}
+                {#source: {#}
+                    {#url: data#}
+                {#},#}
+                {#icon: false,#}
+                {#keyboard: true,#}
+                {#quicksearch: false,#}
+                {#tooltip: false,#}
+                {#strings: {#}
+                    {#loading: "Chargement ...",#}
+                    {#loadError: "Erreur de chargement"#}
+                {#},#}
+                {#click: function (event, data) {#}
+                    {#var tt = $.ui.fancytree.getEventTargetType(event.originalEvent);#}
+                    {#if (tt !== 'expander' && data.node.getLevel() === 4) {#}
+                        {#fillDataTable(data.node.key);#}
+                    {#}#}
+
+                {#}#}
+            {#});#}
+        });
+        function fillDataTable(rueID) {
+            var url = '{{ path('nouvelle_index') }}';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: 'rueID=' + rueID,
+                success: function (data) {
+                    if (data !== null) {
+                        dt.destroy();
+                        var rows = '';
+                        $.each(data, function (key, element) {
+                            var linkShoww = '{{ path('nouvelle_show', {'id':  'iD' }) }}';
+                            var linkEditt = '{{ path('nouvelle_edit', {'id': 'iD'}) }}';
+                            var linkTransfertAcquisitionn = '{{ path('acquisition_transfert', {'id': 'iD'}) }}';
+                            var linkShow = linkShoww.replace('iD', element.id);
+                            var linkEdit = linkEditt.replace('iD', element.id);
+                            var linkTransfertAcquisition = linkTransfertAcquisitionn.replace('iD', element.id);
+                            rows += '<tr>' +
+                                '<td> <a href="' + linkShow + '">' + element.title + '</a></td>' +
+                                '<td>' + moment(element.creationDate.date).format('DD/MM/YYYY') + '</td>' +
+                                '<td>' + element.typeBien.name + '</td>' +
+                                '<td>' + element.totalArea + '</td>' +
+                                '<td>' + element.coveredArea + '</td>' +
+                                '<td>' +
+                                '<div class="col-md-12 col-sm-12 col-xs-12">' +
+                                '<a data-uk-tooltip="{cls:\'uk-tooltip-small\',pos:\'top\'}" title="Afficher"' +
+                                ' href="' + linkShow + '" ><i class="md-icon material-icons">&#xE417;</i></a>' +
+                                '<a data-uk-tooltip="{cls:\'uk-tooltip-small\',pos:\'top\'}" title="Modifier" ' +
+                                'href="' + linkEdit + '"><i class="md-icon material-icons">&#xE150;</i></a>' +
+                                '<a data-uk-tooltip="{cls:\'uk-tooltip-small\',pos:\'top\'}" title="Transférer en acquisition"' +
+                                ' href="' + linkTransfertAcquisition +
+                                '"><i class="md-icon material-icons"> &#xE15A;</i></a>' +
+                                '<a data-uk-tooltip="{cls:\'uk-tooltip-small\',pos:\'left\'}" title="Supprimer" ' +
+                                'href="javascript:void(0)"' +
+                                ' onclick="confirmDelete(' + element.id + ',' + rueID + ')">' +
+                                '<i class="md-icon material-icons">&#xE872;</i>' +
+                                '</a>' +
+                                '</div>' +
+                                ' </td>' +
+                                '</tr>';
+                        });
+                        $('#tableBody').html(rows);
+                        dt.init();
+                    }
+                },
+                error: function () {
+                    UIkit.modal.alert('Erreur');
+                }
+            });
+        }
+        function getVilles() {
+            var gov = $('#gouvernorats').val();
+            var data = '{{ path('gouvernorat_map' , {'id' : '_ID'}) }}';
+            data = data.replace('_ID' , gov);
+            $("#tree").fancytree({
+                source: {
+                    url: data
+                },
+                icon: false,
+                keyboard: true,
+                quicksearch: false,
+                tooltip: false,
+                strings: {
+                    loading: "Chargement ...",
+                    loadError: "Erreur de chargement"
+                },
+                click: function (event, data) {
+                    var tt = $.ui.fancytree.getEventTargetType(event.originalEvent);
+                    if (tt !== 'expander' && data.node.getLevel() === 4) {
+                        fillDataTable(data.node.key);
+                    }
+                }
+            });
+
+        }
+    </script>
+{% endblock %}
