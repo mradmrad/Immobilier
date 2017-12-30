@@ -151,9 +151,9 @@
                                 A :
                             </div>
                             <div class="uk-width-1-2">
-                                <label id="de_label"></label>
+                                <label id="de_label">{% if client.preferences %}{{ client.preferences.heure|date('H:m') }}{% endif %}</label>
                                 <br>
-                                <label id="a_label"></label>
+                                <label id="a_label">{% if client.preferences %}{{ client.preferences.heureFin|date('H:m') }}{% endif %}</label>
                             </div>
                         </div>
 

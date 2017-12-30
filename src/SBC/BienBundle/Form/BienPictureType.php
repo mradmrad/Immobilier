@@ -17,10 +17,12 @@ class BienPictureType extends AbstractType
     {
         $builder
             ->add('description',TextType::class, array(
+                'required'=>false,
                 'attr' => array(
                     'data-name' => 'description',
                     'class' => 'md-input',
-                    'placeholder' => 'Description obligatoire'
+                    'placeholder' => 'Description obligatoire',
+
                 )
             ))
 
