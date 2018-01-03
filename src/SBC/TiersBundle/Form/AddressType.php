@@ -22,7 +22,7 @@ class AddressType extends AbstractType
 //                )
 //            ))
             ->add('address', TextType::class, array(
-                'required' => true,
+                'required' => false,
                 'attr' => array(
                     'class' => 'md-input',
                 )

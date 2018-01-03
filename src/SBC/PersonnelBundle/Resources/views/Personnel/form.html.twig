@@ -3,31 +3,9 @@
         <div class="md-card-content large-padding">
             {{ form_start(form, {'attr': {'class': 'uk-form-stacked', 'id':'form_validation'}}) }}
             {{ form_errors(form) }}
+
             <div class="uk-grid" data-uk-grid-margin>
-                <div class="uk-width-medium-1-2">
-                    <div class="parsley-row">
-                        <div class="uk-input-group">
-                            <span class="uk-input-group-addon">
-                                <i class="material-icons">&#xE0DA;</i>
-                            </span>
-                            {{ form_label(form.code,   "Code"  ) }}
-                            {{ form_widget(form.code, {'attr': {'class': 'md-input', 'required':'', 'data-parsley-code':'3'}}) }}
-                        </div>
-                        <span>     {{ form_errors(form.code) }} </span>
-                    </div>
-                </div>
-                <div class="uk-width-medium-1-2">
-                    <div class="uk-form-row">
-                        <div class="parsley-row">
-                            {{ form_widget(form.agency,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
-                            <span class="uk-form-help-block">Agence</span>
-                            <span>     {{ form_errors(form.agency) }} </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="uk-grid" data-uk-grid-margin>
-                <div class="uk-width-medium-1-2">
+                <div class="uk-width-medium-1-3">
                     <div class="parsley-row">
                         <div class="uk-input-group">
                             <span class="uk-input-group-addon">
@@ -39,7 +17,16 @@
                         <span>     {{ form_errors(form.name) }} </span>
                     </div>
                 </div>
-                <div class="uk-width-medium-1-2">
+                <div class="uk-width-medium-1-3">
+                    <div class="uk-form-row">
+                        <div class="parsley-row">
+                            {{ form_widget(form.agency,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                            <span class="uk-form-help-block">Agence</span>
+                            <span>     {{ form_errors(form.agency) }} </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-3">
                     <div class="parsley-row">
                         <div class="uk-input-group">
                             <span class="uk-input-group-addon">

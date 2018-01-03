@@ -23,7 +23,7 @@ class PersonnelType extends AbstractType
         $builder
             ->add('name')
             ->add('cin')
-            ->add('code')
+            
             ->add('phonenumber')
             ->add('agencyPhoneNumber')
             ->add('email')

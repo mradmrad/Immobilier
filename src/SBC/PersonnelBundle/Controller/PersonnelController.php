@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class PersonnelController
@@ -110,6 +111,10 @@ class PersonnelController extends Controller
     public function newAction(Request $request)
     {
         $personnel = new Personnel();
+        $date = new \DateTime('now');
+
+        $personnel->setCode('PERS'.$date->getTimestamp());
+//        die(var_dump($personnel->getCode()));
         $form = $this->createForm(PersonnelType::class, $personnel);
         $form->handleRequest($request);
 
