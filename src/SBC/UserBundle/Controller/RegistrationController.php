@@ -51,6 +51,8 @@ class RegistrationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($newUser->g)
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
@@ -77,6 +79,7 @@ class RegistrationController extends BaseController
 
         return $this->render('@FOSUser/Registration/register.html.twig', array(
             'form' => $form->createView(),
+            'user' => $newUser
         ));
 
     }

@@ -11,9 +11,8 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
     {% endstylesheets %}
     <style>
-        /*.fc-scroller {*/
-            /*height: auto !important;*/
-        /*}*/
+
+
     </style>
 {% endblock %}
 {% block title %}
@@ -29,7 +28,8 @@
         <span class="uk-text-muted uk-text-upper uk-text-small">Liste de tous les rendez-vous</span>
     </div>
     <div id="page_content_inner">
-        <div class="md-card" style="height: 700px">
+        <div class="md-card">
+
             <div class="md-card-content">
                 <div id="calendar_selectable"></div>
             </div>
@@ -52,10 +52,12 @@
     <script src="{{ asset('js/dowload2.js') }}"></script>
     {% endjavascripts %}
     <script>
+        var  event_color = "#f1b612";
         $( document ).ready(function() {
 
         });
         $(function () {
+
             var timeChanged = '';
             var calendar_selectable = $('#calendar_selectable'),
                 calendarColorsWrapper = $('<div id="calendar_colors_wrapper"></div>');
@@ -83,6 +85,7 @@
                     prevYear: 'md-left-double-arrow',
                     nextYear: 'md-right-double-arrow'
                 },
+                dayOfMonthFormat: 'ddd DD/MM',
                 buttonText: {
                     today: ' ',
                     month: ' ',
@@ -93,8 +96,17 @@
                     month: {
                         selectable: false,
                         editable: false
-                    }
+                    },
+                    day:{ titleFormat: "dddd DD MMMM YYYY" }
                 },
+//                titleFormat: {
+////                    month: 'MMMM yyyy',
+////                    week: "d[ yyyy]{ '&#8212;' d MMMM yyyy}",
+////                    day: 'MMMM D, YYYY'
+//                },
+//                titleFormat: {
+////                    week:  "d [MMM]{ '&#8211;' d MMM}",
+//                },
                 height: 650,
                 locale: 'fr',
                 aspectRatio: 2.48,
@@ -125,6 +137,118 @@
                 },
                 select: function (start, end, a, b, resources) {
                     openAddEventModal(start, end, a, b, resources, calendarColorPicker, calendar_selectable);
+                    _clientJoinedAddress = $('#title_rdv');
+                    _clientJoinedAddress.selectize({
+                        placeholder : 'Choisir un client',
+                        render: {
+                            option: function (data) {
+
+                                switch (data.value) {
+                                    case 'Recherche':
+                                        event_color = "#f1b612";
+                                        break;
+                                    case 'Acquisition':
+                                        event_color = "#f4511e";
+                                        break;
+                                    case 'Prise mandat':
+                                        event_color = "#43a047";
+                                        break;
+                                    case 'Visite':
+                                        event_color = "#689f38";
+                                        break;
+                                    case 'Prise offre':
+                                        event_color = "#3949ab";
+                                        break;
+                                    case 'Acceptation':
+                                        event_color = "#039be5";
+                                        break;
+                                    case 'Evaluation':
+                                        event_color = "#8e24aa";
+                                        break;
+                                    case 'Réunion':
+                                        event_color = "#e53935";
+                                        break;
+                                    default:
+                                        event_color = "";
+                                }
+
+
+                                return "<div>" +
+
+                                        "<span data-color="+event_color+" style=\"background:"+event_color+" ;width:22px ; height: 22px \">&nbsp &nbsp &nbsp</span> "+
+                                        data.text + "</div>"
+                            }
+                        },
+                        onChange: function(value) {
+                            $('#recherche_div').hide();
+                            $('#acquisition_div').hide();
+                            $('#prisemandat_div').hide();
+                            $('#visite_div').hide();
+                            $('#offre_div').hide();
+                            $('#acceptation_div').hide();
+                            $('#evaluation_div').hide();
+                            $('#reunion_div').hide();
+                            switch (value) {
+                                case 'Recherche':
+                                    $('#recherche_div').show();
+                                        $('#title_recherche').val('RDV pour une recherche');
+                                    $('#title_recherche').closest('div').addClass('md-input-filled');
+                                    event_color = "#f1b612";
+                                    break;
+                                case 'Acquisition':
+                                    event_color = "#f4511e";
+                                    $('#title_nouvelle').val('RDV pour une acquisition');
+                                    $('#title_nouvelle').closest('div').addClass('md-input-filled');
+                                    $('#acquisition_div').show();
+                                    break;
+                                case 'Prise mandat':
+                                    $('#title_acquisition').val('RDV pour une prise mandat');
+                                    $('#title_acquisition').closest('div').addClass('md-input-filled');
+                                    $('#prisemandat_div').show();
+                                    event_color = "#43a047";
+                                    break;
+                                case 'Visite':
+                                    $('#title_visite').val('RDV pour une visite');
+                                    $('#title_visite').closest('div').addClass('md-input-filled');
+                                    $('#visite_div').show();
+                                    event_color = "#689f38";
+                                    break;
+                                case 'Prise offre':
+                                    $('#title_offre').val('RDV pour une prise offre');
+                                    $('#title_offre').closest('div').addClass('md-input-filled');
+                                    $('#offre_div').show();
+                                    event_color = "#3949ab";
+                                    break;
+                                case 'Acceptation':
+                                    $('#title_accept').val('RDV pour une acceptation');
+                                    $('#title_accept').closest('div').addClass('md-input-filled');
+                                    $('#acceptation_div').show();
+                                    event_color = "#039be5";
+                                    break;
+                                case 'Evaluation':
+                                    $('#title_requete').val('RDV pour une évaluation');
+                                    $('#title_requete').closest('div').addClass('md-input-filled');
+                                    $('#evaluation_div').show();
+                                    event_color = "#8e24aa";
+                                        $('#requetes').hide();
+                                    break;
+                                case 'Réunion':
+                                    $('#title_reunion').val('RDV pour une réunion');
+                                    $('#title_reunion').closest('div').addClass('md-input-filled');
+                                    $('#reunion_div').show();
+                                    event_color = "#e53935";
+                                    break;
+                                case 'Autres':
+                                    $('#title_reunion').val('RDV pour une réunion');
+                                    $('#title_reunion').closest('div').addClass('md-input-filled');
+                                    $('#autres_div').show();
+                                    break;
+                                default:
+                                    event_color = "";
+                            }
+                        }
+                    });
+                    $('#title_recherche').val('RDV pour une recherche');
                     altair_md.init();
                     $('.select').kendoComboBox({
                         filter: "contains",
@@ -132,6 +256,7 @@
                     });
 
                 },
+
                 eventClick: function (calEvent) {
 
                     eventClickModal(calEvent, calendar_selectable);
@@ -158,9 +283,12 @@
                 }
             });
 
+            $('.fc-scroller').css('height','auto !important');
             {#$('.fc-center').html(' <img src="{{ asset('icons/page tableau de bord.jpg') }}">')#}
             $('.fc-agendaWeek-button').remove();
             $('.fc-listWeek-button').remove();
+            $('.fc-today-button').remove();
+
             $('.fc-right').first('div').append('<button onclick="print()" type="button" class=" fc-button fc-state-default fc-corner-left">' +
                 '<i class="material-icons">print</i>' +
                 '</button>');
@@ -460,39 +588,39 @@
             });
         }
 
-        function getRequetes(select) {
-            var requetes = select[0].selectize;
-            requetes.clearOptions();
-            var url = '{{ path('requete_list') }}';
-            $.ajax({
-                url: url,
-                type: 'POST',
-                success: function (data) {
-                    if (data !== null) {
-                        $.each(data, function (key, element) {
-                            requetes.addOption({
-                                text: element.title,
-                                value: element.id
-                            });
-                        });
-                    }
-                    else {
-                        UIkit.modal.alert('Rien', {
-                            labels: {
-                                Ok: 'Fermer'
-                            }
-                        });
-                    }
-                },
-                error: function () {
-                    UIkit.modal.alert('Erreur', {
-                        labels: {
-                            Ok: 'Fermer'
-                        }
-                    });
-                }
-            });
-        }
+        {#function getRequetes(select) {#}
+            {#var requetes = select[0].selectize;#}
+            {#requetes.clearOptions();#}
+            {#var url = '{{ path('requete_list') }}';#}
+            {#$.ajax({#}
+                {#url: url,#}
+                {#type: 'POST',#}
+                {#success: function (data) {#}
+                    {#if (data !== null) {#}
+                        {#$.each(data, function (key, element) {#}
+                            {#requetes.addOption({#}
+                                {#text: element.title,#}
+                                {#value: element.id#}
+                            {#});#}
+                        {#});#}
+                    {#}#}
+                    {#else {#}
+                        {#UIkit.modal.alert('Rien', {#}
+                            {#labels: {#}
+                                {#Ok: 'Fermer'#}
+                            {#}#}
+                        {#});#}
+                    {#}#}
+                {#},#}
+                {#error: function () {#}
+                    {#UIkit.modal.alert('Erreur', {#}
+                        {#labels: {#}
+                            {#Ok: 'Fermer'#}
+                        {#}#}
+                    {#});#}
+                {#}#}
+            {#});#}
+        {#}#}
 
         function getMandats(select) {
             var mandats = select[0].selectize;
@@ -707,11 +835,11 @@
         function openAddEventModal(start, end, a, b, resources, calendarColorPicker, calendar_selectable) {
             UIkit.modal.confirm('' +
                 '<h3 class="heading_b uk-margin-medium-bottom">Ajouter un rendez-vous</h3>' +
-                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
-                '<span class="uk-form-help-block">Couleur</span>' +
-                calendarColorPicker +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+//                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
+//                '<span class="uk-form-help-block">Couleur</span>' +
+//                calendarColorPicker +
+//                '</div>' +
+                '<div class="uk-grid  uk-grid-medium" data-uk-grid-margin>' +
                 '<div class="uk-width-medium-1-2">' +
                 '<div class="uk-form-row pers">' +
                 '<div class="parsley-row">' +
@@ -720,64 +848,305 @@
                 '<input id="personnelId" class="md-input" name="personnelId" type="hidden"  required />' +
                 '</div>' +
                 '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Client</span>' +
-                '<select id="clients" onchange="getNumero(this)"></select>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Autres personnels</span>' +
+                    '<select id="personnels" multiple="multiple" ></select>' +
+                    '</div>' +
+                    '</div>' +
+
+
                 '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Autres clients</label>' +
-                '<input id="autresClients" class="md-input" name="autres" type="text" />' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Numéro</label>' +
-                '<input id="numero" class="md-input" name="numero" type="text" readonly />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-1-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
+                    '<select id="status" class="kendoComboBox select" style="width: 100%">' +
+                    '<option value=""></option>' +
+                    '<option value="Confirmé">Confirmé</option>' +
+                    '<option value="Non confirmé">Non confirmé</option>' +
+                    '<option value="Annulé">Annulé</option>' +
+                    '<option value="Effectué">Effectué</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Lieu du rendez vous</span>' +
+                    '<select id="typeMeeting" class="kendoComboBox select" style="width: 100%" >' +
+                    '<option value=""></option>' +
+                    '<option value="Sur place">Sur place</option>' +
+                    '<option value="Agence">Agence</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-2-2">' +
+
+                    '<div class="uk-grid  uk-grid-medium" data-uk-grid-margin">' +
+                    '<div class="uk-width-1-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Client</span>' +
+                    '<select id="clients" onchange="getNumero(this)"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Autres clients</label>' +
+                    '<input id="autresClients" class="md-input" name="autres" type="text" />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-1-2">' +
+                    '<div class="uk-form-row" style="margin-top: 27px;">' +
+                    '<div class="parsley-row">' +
+                    '<label>Numéro</label>' +
+                    '<input id="numero" class="md-input" name="numero" type="text"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row" style="margin-top: 27px;">' +
+                    '<div class="parsley-row">' +
+                    '<label>Autre numéro</label>' +
+                    '<input id="numero" class="md-input" name="autreNumero" type="text"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
                 '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Autres personnels</span>' +
-                '<select id="personnels" multiple="multiple" ></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Type du rendez vous</span>' +
-                '<select id="typeMeeting" class="kendoComboBox select" style="width: 100%" >' +
-                '<option value=""></option>' +
-                '<option value="Sur place">Sur place</option>' +
-                '<option value="Agence">Agence</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
-                '<select id="status" class="kendoComboBox select" style="width: 100%">' +
-                '<option value=""></option>' +
-                '<option value="Confirmé">Confirmé</option>' +
-                '<option value="Non confirmé">Non confirmé</option>' +
-                '<option value="Annulé">Annulé</option>' +
-                '<option value="Effectué">Effectué</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Titre de RDV</span>' +
+                    '<select class="md-input" id="title_rdv"  data-md-selectize data-md-selectize-bottom >' +
+                    '<option  disabled >Choisir un titre ... </option>' +
+                    '<option value="Recherche">Recherche</option>' +
+                    '<option value="Acquisition">Acquisition</option>' +
+                    '<option value="Prise mandat">Prise mandat</option>' +
+                    '<option value="Visite">Visite</option>' +
+                    '<option value="Prise offre">Prise offre</option>' +
+                    '<option value="Acceptation">Acceptation</option>' +
+                    '<option value="Evaluation">Evaluation</option>' +
+                    '<option value="Réunion">Réunion</option>' +
+                    '<option value="Autres">Autres</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div id="recherche_div">' +
+                    '<form method="POST" name="form_recherche" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Zone</label>' +
+                    '<input id="zone" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Rue</label>' +
+                    '<input id="rue" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_recherche" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="acquisition_div" style="display : none">' +
+                    '<form method="POST" name="form_nouvelle" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Nouvelle</span>' +
+                    '<select id="nouvelles"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_nouvelle" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="prisemandat_div" style="display : none">' +
+                    '<form method="POST" name="form_acquisition" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Acquisition</span>' +
+                    '<select id="acquisitions"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_acquisition" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="visite_div" style="display : none">' +
+                    '<form method="POST" name="form_visite" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Mandat</span>' +
+                    '<select id="visites"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-2-2" style="display : none">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_visite" class="md-input" name="text" type="text" value=""  />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="offre_div" style="display : none">' +
+                    '<form method="POST" name="form_offre" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Mandat</span>' +
+                    '<select id="offres"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_offre" class="md-input" name="text" type="text" value=""  />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Prix proposé</label>' +
+                    '<input id="proposedPriceOffre" class="md-input money" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="acceptation_div" style="display: none">' +
+                    '<form method="POST" name="form_accept" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Mandat</span>' +
+                    '<select id="acceptations"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_accept" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Prix proposé</label>' +
+                    '<input id="proposedPriceAccept" class="md-input money" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="evaluation_div" style="display:none">' +
+                    '<form method="POST" name="form_requete" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Requête</span>' +
+                    '<select id="requetes" style="display:none"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_requete" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="reunion_div" style="display:none"> ' +
+                    '<form method="POST" name="form_reunion" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-5-2" style="display : none">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_reunion" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id ="autres_div" style="display : none">' +
+                    '<form method="POST" name="form_other" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_other" class="md-input" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+
+
                 '</div>' +
                 '</div>' +
                 '<div  class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
@@ -790,250 +1159,23 @@
                 '</div>' +
                 '</div>' +
                 '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '</div>' +
-                '</div>' +
-                '<span class="uk-form-help-block"></span>' + '<span class="uk-form-help-block"></span>' +
-                '<ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:\'#tabs_4\', animation:\'slide-horizontal\'}">' +
-                '<li class="uk-active"><a href="#">Rech.</a></li>' +
-                '<li><a href="#">Acquis.</a></li>' +
-                '<li><a href="#">Prise M.</a></li>' +
-                '<li><a href="#">requête</a></li>' +
-                '<li><a href="#">Offre</a></li>' +
-                '<li><a href="#">Accept.</a></li>' +
-                '<li><a href="#">Réunion</a></li>' +
 
-                '<li><a href="#">Visites</a></li>' +
-                '<li><a href="#">Autres</a></li>' +
-                '</ul>' +
-                '<ul id="tabs_4" class="uk-switcher uk-margin">' +
-                '<li>' +
-                '<form method="POST" name="form_recherche" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Zone</label>' +
-                '<input id="zone" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Rue</label>' +
-                '<input id="rue" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_recherche" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_nouvelle" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Nouvelle</span>' +
-                '<select id="nouvelles"></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_nouvelle" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_acquisition" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Acquisition</span>' +
-                '<select id="acquisitions"></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_acquisition" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_requete" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Requête</span>' +
-                '<select id="requetes"></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_requete" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_offre" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Mandat</span>' +
-                '<select id="offres"></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_offre" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Prix proposé</label>' +
-                '<input id="proposedPriceOffre" class="md-input money" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_accept" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Mandat</span>' +
-                '<select id="acceptations"></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_accept" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Prix proposé</label>' +
-                '<input id="proposedPriceAccept" class="md-input money" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_reunion" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_reunion" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_visite" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Mandat</span>' +
-                '<select id="visites"></select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_visite" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '<li>' +
-                '<form method="POST" name="form_other" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-5-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Titre</label>' +
-                '<input id="title_other" class="md-input" name="text" type="text" value="" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                '</li>' +
-                '</ul>' +
+                '<span class="uk-form-help-block"></span>' + '<span class="uk-form-help-block"></span>' +
+
+
 
                 ''
                 , function () {
                     var titleRecherche = $("#title_recherche");
                     if (titleRecherche.val() !== '') {
                         var eventDataRech,
-                            eventColorRech = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorRech = event_color;
                         eventDataRech = {
                             title: titleRecherche.val(),
                             start: start,
                             end: end,
                             remindFor: $("#personnel").val(),
-                            color: eventColorRech ? eventColorRech : '',
+                            color: eventColorRech,
                             createdBy: 'Vous'
                         };
                         var urlRech = '{{ path('bienmeeting_add') }}';
@@ -1041,7 +1183,7 @@
                             url: urlRech,
                             type: 'POST',
                             data: 'title=' + eventDataRech.title + '&start=' + eventDataRech.start.format('Y-MM-DD HH:mm')
-                            + '&end=' + eventDataRech.end.format('Y-MM-DD HH:mm') + '&color=' + eventDataRech.color
+                            + '&end=' + eventDataRech.end.format('Y-MM-DD HH:mm') + '&color=' + eventColorRech
                             + '&zone=' + $('#zone').val() + '&rue=' + $('#rue').val() + '&remindFor=' + $('#personnelId').val()
                             + '&client=' + $('#clients').val()
                             + '&remindFors=' + serealizeSelects($('#personnels'))
@@ -1064,7 +1206,7 @@
                     }
                     else if ($("#title_nouvelle").val() !== '') {
                         var eventData,
-                            eventColor = $('#calendar_colors_wrapper').find('input').val();
+                            eventColor =  event_color;
                         eventData = {
                             title: $("#title_nouvelle").val(),
                             start: start,
@@ -1101,7 +1243,7 @@
                     }
                     else if ($("#title_acquisition").val() !== '') {
                         var eventDataa,
-                            eventColore = $('#calendar_colors_wrapper').find('input').val();
+                            eventColore =  event_color;
                         eventDataa = {
                             title: $("#title_acquisition").val(),
                             start: start,
@@ -1137,7 +1279,7 @@
                     }
                     else if ($("#title_requete").val() !== '') {
                         var eventDataRequete,
-                            eventColorRequete = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorRequete =  event_color;
                         eventDataRequete = {
                             title: $("#title_requete").val(),
                             start: start,
@@ -1175,7 +1317,7 @@
                     }
                     else if ($("#title_offre").val() !== '') {
                         var eventDataOffre,
-                            eventColorOffre = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorOffre =  event_color;
                         eventDataOffre = {
                             title: $("#title_offre").val(),
                             start: start,
@@ -1213,7 +1355,7 @@
                     }
                     else if ($("#title_accept").val() !== '') {
                         var eventDataAccept,
-                            eventColorAccept = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorAccept =  event_color;
                         eventDataAccept = {
                             title: $("#title_accept").val(),
                             start: start,
@@ -1251,7 +1393,7 @@
                     }
                     else if ($("#title_reunion").val() !== '') {
                         var eventDataReunion,
-                            eventColorReunion = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorReunion =  event_color;
                         eventDataReunion = {
                             title: $("#title_reunion").val(),
                             start: start,
@@ -1288,7 +1430,7 @@
                     }
                     else if ($("#title_other").val() !== '') {
                         var eventDataOther,
-                            eventColorOther = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorOther = "#0277bd";
                         eventDataOther = {
                             title: $("#title_other").val(),
                             start: start,
@@ -1324,8 +1466,9 @@
                         });
                     }
                     else if ($("#title_visite").val() !== '') {
+alert(event_color);
                         var eventDataVisite,
-                            eventColorVisite = $('#calendar_colors_wrapper').find('input').val();
+                            eventColorVisite = event_color;
                         eventDataVisite = {
                             title: $("#title_visite").val(),
                             start: start,
@@ -1401,10 +1544,10 @@
                 placeholder: 'Choisir une acquisition....             ',
                 hideSelected: true
             });
-            requetes.selectize({
-                placeholder: 'Choisir une requête....             ',
-                hideSelected: true
-            });
+//            requetes.selectize({
+//                placeholder: 'Choisir une requête....             ',
+//                hideSelected: true
+//            });
             offres.selectize({
                 placeholder: 'Choisir un mandat....             ',
                 hideSelected: true
@@ -1436,7 +1579,7 @@
             getPersonnels(personnels);
             getNouvelles(nouvelles);
             getAcquisitions(acquisitions);
-            getRequetes(requetes);
+//            getRequetes(requetes);
             getMandats(offres);
             getMandats(acceptations);
             getMandats(visites);

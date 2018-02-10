@@ -66,6 +66,20 @@ class Requete
     /**
      * @var int
      *
+     * @ORM\Column(name="piece", type="integer", nullable=true)
+     */
+    private $piece;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sde", type="integer", nullable=true)
+     */
+    private $sde;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="bathroom", type="integer", nullable=true)
      */
     private $bathroom;
@@ -199,6 +213,7 @@ class Requete
 
     /**
      * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\TacheRequete", mappedBy="requete")
+     * @ORM\OrderBy({"id" = "DESC"})
      */
     private $taches;
 
@@ -229,7 +244,6 @@ class Requete
     private $etatRequete;
 
 
-
     public function __construct()
     {
         $this->creationDate = new \Datetime();
@@ -249,7 +263,7 @@ class Requete
         $this->totalAreaMin = 0;
         $this->totalAreaMax = 0;
         $this->coveredAreaMax = 0;
-        $this-> coveredAreaMin = 0;
+        $this->coveredAreaMin = 0;
     }
 
     public function __toString()
@@ -581,7 +595,6 @@ class Requete
     }
 
 
-
     public function addGouvernorat(Gouvernorat $gouvernorat)
     {
 
@@ -622,7 +635,6 @@ class Requete
     {
         return $this->villes;
     }
-
 
 
     /**
@@ -761,7 +773,6 @@ class Requete
     {
         return $this->taches;
     }
-
 
 
     /**

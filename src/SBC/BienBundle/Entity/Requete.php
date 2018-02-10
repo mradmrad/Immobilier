@@ -66,6 +66,20 @@ class Requete
     /**
      * @var int
      *
+     * @ORM\Column(name="piece", type="integer", nullable=true)
+     */
+    private $piece;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sde", type="integer", nullable=true)
+     */
+    private $sde;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="bathroom", type="integer", nullable=true)
      */
     private $bathroom;
@@ -230,7 +244,6 @@ class Requete
     private $etatRequete;
 
 
-
     public function __construct()
     {
         $this->creationDate = new \Datetime();
@@ -250,7 +263,7 @@ class Requete
         $this->totalAreaMin = 0;
         $this->totalAreaMax = 0;
         $this->coveredAreaMax = 0;
-        $this-> coveredAreaMin = 0;
+        $this->coveredAreaMin = 0;
     }
 
     public function __toString()
@@ -582,7 +595,6 @@ class Requete
     }
 
 
-
     public function addGouvernorat(Gouvernorat $gouvernorat)
     {
 
@@ -623,7 +635,6 @@ class Requete
     {
         return $this->villes;
     }
-
 
 
     /**
@@ -762,7 +773,6 @@ class Requete
     {
         return $this->taches;
     }
-
 
 
     /**
@@ -1021,5 +1031,53 @@ class Requete
     public function getNotfurnished()
     {
         return $this->notfurnished;
+    }
+
+    /**
+     * Set piece
+     *
+     * @param integer $piece
+     *
+     * @return Requete
+     */
+    public function setPiece($piece)
+    {
+        $this->piece = $piece;
+
+        return $this;
+    }
+
+    /**
+     * Get piece
+     *
+     * @return integer
+     */
+    public function getPiece()
+    {
+        return $this->piece;
+    }
+
+    /**
+     * Set sde
+     *
+     * @param integer $sde
+     *
+     * @return Requete
+     */
+    public function setSde($sde)
+    {
+        $this->sde = $sde;
+
+        return $this;
+    }
+
+    /**
+     * Get sde
+     *
+     * @return integer
+     */
+    public function getSde()
+    {
+        return $this->sde;
     }
 }

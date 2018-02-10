@@ -57,15 +57,17 @@
                     <ul class="md-list">
                         <li>
                             <div class="uk-form-row">
-                                <div class="parsley-row">
-                                    {{ form_label(form.budgetMin,   "Budget minimal"  ) }}
+                                <div class="uk-input-group">
+                                                   <span class="uk-form-help-block">
+                                    {{ form_label(form.budgetMin,   "Budget minimal"  ) }}</span>
                                     {{ form_widget(form.budgetMin, {'attr': {'class': 'md-input money'}}) }}
                                     <span>     {{ form_errors(form.budgetMin) }} </span>
                                 </div>
                             </div>
                             <div class="uk-form-row">
-                                <div class="parsley-row">
-                                    {{ form_label(form.budgetMax,   "Budget maximal"  ) }}
+                                <div class="uk-input-group">
+                                                   <span class="uk-form-help-block">
+                                    {{ form_label(form.budgetMax,   "Budget maximal"  ) }}</span>
                                     {{ form_widget(form.budgetMax, {'attr': {'class': 'md-input money'}}) }}
                                     <span>     {{ form_errors(form.budgetMax) }} </span>
                                 </div>
@@ -75,33 +77,6 @@
                 </div>
             </div>
 
-            {#<div class="md-card">#}
-            {#<div class="md-card-toolbar">#}
-            {#<h3 class="md-card-toolbar-heading-text">#}
-            {#Superficie couverte#}
-            {#</h3>#}
-            {#</div>#}
-            {#<div class="md-card-content">#}
-            {#<ul class="md-list">#}
-            {#<li>#}
-            {#<div class="uk-form-row">#}
-            {#<div class="parsley-row">#}
-            {#{{ form_label(form.coveredAreaMin,   "Superficie couverte minimale" ) }}#}
-            {#{{ form_widget(form.coveredAreaMin, {'attr': {'class': 'md-input numeric'}}) }}#}
-            {#<span>     {{ form_errors(form.coveredAreaMin) }} </span>#}
-            {#</div>#}
-            {#</div>#}
-            {#<div class="uk-form-row">#}
-            {#<div class="parsley-row">#}
-            {#{{ form_label(form.coveredAreaMax,   "Superficie couverte maximale"  ) }}#}
-            {#{{ form_widget(form.coveredAreaMax, {'attr': {'class': 'md-input numeric'}}) }}#}
-            {#<span>     {{ form_errors(form.coveredAreaMax) }} </span>#}
-            {#</div>#}
-            {#</div>#}
-            {#</li>#}
-            {#</ul>#}
-            {#</div>#}
-            {#</div>#}
             <div class="md-card">
                 <div class="md-card-toolbar">
                     <h3 class="md-card-toolbar-heading-text">
@@ -143,160 +118,195 @@
             </ul>
             <ul id="tabs" class="uk-switcher uk-margin">
                 <li>
-                    <div class="md-card">
-                        <div class="md-card-toolbar">
-                            <h3 class="md-card-toolbar-heading-text">
-                                Général
-                            </h3>
-                            <div class="md-card-toolbar-actions">
 
-
-                            </div>
-                        </div>
-                        <div class="md-card-content">
                             <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
                                 <div class="uk-width-1-2">
-                                    <div class="uk-grid">
-                                        <div class="uk-width-large-4-6" style="*text-align:center;margin-bottom: 5%">
+                                    <div class="md-card">
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                Détails
+                                            </h3>
+
+                                        </div>
+                                        <div class="md-card-content">
                                             <div class="uk-grid">
-                                                <div class="uk-width-1-2">
+                                                <div class="uk-width-1-3">
+                                                    Meublé :
+                                                </div>
+                                                <div class="uk-width-large-2-3" style="*text-align:center;margin-bottom: 5%">
+                                                    <div class="uk-grid">
+
                                           <span class="icheck-inline">
                                           {{ form_widget(form.furnished) }}
+                                              {{ form_errors(form.furnished) }}
                                               {#<input type="checkbox" name="checkbox_demo_inline_mercury" id="checkbox_demo_inline_1" data-md-icheck />#}
-                                              <label for="sbc_bienbundle_requete_furnished"
-                                                     class="inline-label">Meublé</label>
+
                                     </span>
+
+
+                                                    </div>
+
                                                 </div>
-                                                <div class="uk-width-1-2">
-   <span class="icheck-inline">
-                                          {{ form_widget(form.notfurnished) }}
-       {#<input type="checkbox" name="checkbox_demo_inline_mercury" id="checkbox_demo_inline_1" data-md-icheck />#}
-       <label for="sbc_bienbundle_requete_furnished" class="inline-label">Non meublé</label>
-                                    </span>
+
+
+                                                <div class="uk-width-1-3">
+                                                    Sup :
                                                 </div>
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="uk-width-1-2">
-                                            <div class="uk-input-group">
+                                                <div class="uk-width-2-3">
+                                                    <div class="uk-input-group">
                                                 <span class="uk-input-group-addon"><label>Superficie
                                                         terrain</label></span>
-                                                {{ form_widget(form.totalAreaMin, {'attr': {'class': 'md-input numeric'}}) }}
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-1-2">
-                                            <div class="uk-input-group">
+                                                        {{ form_widget(form.totalAreaMin, {'attr': {'class': 'md-input numeric'}}) }}
+                                                    </div>
+                                                    <div class="uk-input-group">
                                                 <span class="uk-input-group-addon"><label>Superficie
                                                         couverte</label></span>
-                                                {{ form_widget(form.coveredAreaMin, {'attr': {'class': 'md-input numeric'}}) }}
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-1-2">
-                                            <div class="uk-input-group">
-                                                <span class="uk-input-group-addon"><label>Nb chambre</label></span>
-                                                {{ form_widget(form.bedroom, {'attr': {'class': 'md-input',  'data-parsley-bedroom':'3'}}) }}
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-1-2">
-                                            <div class="uk-input-group">
-                                                <span class="uk-input-group-addon"><label>Nb SDB</label></span>
-                                                {{ form_widget(form.bathroom, {'attr': {'class': 'md-input'}}) }}
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-1-1">
-                                            <div class="parsley-row">
-                                                <span class="uk-form-help-block">Equipements</span>
-                                                {{ form_widget(form.equipements, {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}} ) }}
-                                                <span>     {{ form_errors(form.equipements) }} </span>
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-1-2">
-                                            <div class="parsley-row">
-                                                <span class="uk-form-help-block">Orientation</span>
-                                                {{ form_widget(form.orientation ) }}
-                                                <span>     {{ form_errors(form.orientation) }} </span>
-                                            </div>
-                                        </div>
+                                                        {{ form_widget(form.coveredAreaMin, {'attr': {'class': 'md-input numeric'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Nb chambre</label></span>
+                                                        {{ form_widget(form.bedroom, {'attr': {'class': 'md-input',  'data-parsley-bedroom':'3'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Nb de pièces</label></span>
+                                                        {{ form_widget(form.piece, {'attr': {'class': 'md-input'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Nb SDB</label></span>
+                                                        {{ form_widget(form.bathroom, {'attr': {'class': 'md-input',  'data-parsley-bedroom':'3'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Nb SDE</label></span>
+                                                        {{ form_widget(form.sde, {'attr': {'class': 'md-input'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="parsley-row">
+                                                        <span class="uk-form-help-block">Equipements</span>
+                                                        <ul class="equipements-list">
+                                                            {% for elem in form.equipements %}
+                                                                <li>
+                                                            <span>
+                                                            {{ form_widget(elem) }}
+                                                                {{ form_label(elem) }}
+                                                            </span>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
 
-                                        <div class="uk-width-1-2">
-                                            <div class="parsley-row">
-                                                <span class="uk-form-help-block">Vues</span>
-                                                {{ form_widget(form.view ) }}
-                                                <span>     {{ form_errors(form.view) }} </span>
+                                                        {#{{ form_widget(form.equipements ) }}#}
+                                                        <span>     {{ form_errors(form.equipements) }} </span>
+                                                    </div>
+                                                </div>
+
+
                                             </div>
                                         </div>
-
                                     </div>
+
 
                                 </div>
 
                                 <div class="uk-width-large-1-2">
+                                    <div class="md-card">
+                                        <div class="md-card-toolbar">
+                                            <h3 class="md-card-toolbar-heading-text">
+                                                Général
+                                            </h3>
+                                            <div class="md-card-toolbar-actions">
 
-                                    <div class="uk-grid">
-                                        <div class="uk-width-1-1">
-                                            <div class="parsley-row">
-                                                <span class="uk-form-help-block">Date d'entrée souhaitée</span>
-                                                {{ form_widget(form.entryDate ) }}
-                                                <span>     {{ form_errors(form.equipements) }} </span>
+
                                             </div>
                                         </div>
-                                        <div class="uk-width-1-1">
-                                            <div class="parsley-row">
-                                                <div class="uk-grid uk-grid-small" data-uk-grid-margin>
-                                                    <div class="uk-width-large-9-10">
-                                                        <span class="uk-form-help-block">Demandeur</span>
-                                                        {{ form_widget(form.client,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
-                                                        <span>     {{ form_errors(form.client) }} </span>
+                                        <div class="md-card-content">
+                                            <div class="uk-grid">
+                                                <div class="uk-width-1-2">
+                                                    <div class="parsley-row">
+                                                        <span class="uk-form-help-block">Date d'entrée souhaitée</span>
+                                                        {{ form_widget(form.entryDate ) }}
+                                                        <span>     {{ form_errors(form.equipements) }} </span>
                                                     </div>
-                                                    <div class="uk-width-large-1-10">
-                                                        <div class="uk-form-row" style="padding-top: 30px;">
-                                                            <a id="addDemandeur" onclick="dropify()"
-                                                               title="Ajouter un demandeur"
-                                                               data-uk-modal="{target:'#modal-addDemandeur'}">
-                                                                <i class="material-icons md-24">&#xE146;</i>
-                                                            </a>
+                                                </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="parsley-row">
+                                                        <div class="uk-grid uk-grid-small" data-uk-grid-margin>
+                                                            <div class="uk-width-large-9-10">
+                                                                <span class="uk-form-help-block">Demandeur</span>
+                                                                {{ form_widget(form.client,{'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                                                <span>     {{ form_errors(form.client) }} </span>
+                                                            </div>
+                                                            <div class="uk-width-large-1-10">
+                                                                <div class="uk-form-row" style="padding-top: 30px;">
+                                                                    <a id="addDemandeur" onclick="dropify()"
+                                                                       title="Ajouter un demandeur"
+                                                                       data-uk-modal="{target:'#modal-addDemandeur'}">
+                                                                        <i class="material-icons md-24">&#xE146;</i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                                <div class="uk-width-1-2">
+                                                    <div class="parsley-row">
+                                                        <span class="uk-form-help-block">Orientation</span>
+                                                        {{ form_widget(form.orientation ) }}
+                                                        <span>     {{ form_errors(form.orientation) }} </span>
+                                                    </div>
+                                                </div>
 
+                                                <div class="uk-width-1-2">
+                                                    <div class="parsley-row">
+                                                        <span class="uk-form-help-block">Vues</span>
+                                                        {{ form_widget(form.view ) }}
+                                                        <span>     {{ form_errors(form.view) }} </span>
+                                                    </div>
+                                                </div>
 
-                                        <div class="uk-width-1-2" style="margin-top: 25px">
-                                            <div class="parsley-row">
-                                                {{ form_label(form.commodites , 'Commodités') }}
-                                                <a id="addCommodite" title="Ajouter une commodité"
-                                                   data-uk-modal="{target:'#modal-addCommodite'}">
-                                                    <i class="material-icons md-24">&#xE146;</i>
-                                                </a>
-                                                {{ form_widget(form.commodites
-                                                , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
-                                                <span class="uk-form-help-block">Cliquez pour selectionner</span>
-                                                <span>     {{ form_errors(form.commodites) }} </span>
-                                            </div>
-                                        </div>
-                                        <div class="uk-width-1-2" style="margin-top: 25px">
-                                            <div class="parsley-row">
-                                                {{ form_label(form.origines , 'Origines') }}
-                                                <a id="addCommodite" title="Ajouter un origine"
-                                                   data-uk-modal="{target:'#modal-addOrigine'}">
-                                                    <i class="material-icons md-24">&#xE146;</i>
-                                                </a>
-                                                {{ form_widget(form.origines
-                                                , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
-                                                <span class="uk-form-help-block">Cliquez pour selectionner</span>
-                                                <span>     {{ form_errors(form.origines) }} </span>
+                                                <div class="uk-width-1-2" style="margin-top: 25px">
+                                                    <div class="parsley-row">
+                                                        {{ form_label(form.commodites , 'Commodités') }}
+                                                        <a id="addCommodite" title="Ajouter une commodité"
+                                                           data-uk-modal="{target:'#modal-addCommodite'}">
+                                                            <i class="material-icons md-24">&#xE146;</i>
+                                                        </a>
+                                                        {{ form_widget(form.commodites
+                                                        , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                                        <span class="uk-form-help-block">Cliquez pour selectionner</span>
+                                                        <span>     {{ form_errors(form.commodites) }} </span>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1" style="margin-top: 25px">
+                                                    <div class="parsley-row">
+                                                        {{ form_label(form.origines , 'Origines') }}
+                                                        <a id="addCommodite" title="Ajouter un origine"
+                                                           data-uk-modal="{target:'#modal-addOrigine'}">
+                                                            <i class="material-icons md-24">&#xE146;</i>
+                                                        </a>
+                                                        {{ form_widget(form.origines
+                                                        , {'attr': {'data-md-selectize':'', 'data-md-selectize-bottom':''}}) }}
+                                                        <span class="uk-form-help-block">Cliquez pour selectionner</span>
+                                                        <span>     {{ form_errors(form.origines) }} </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
 
+
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
+
                     <div class="md-card">
                         <div class="md-card-toolbar">
                             <h3 class="md-card-toolbar-heading-text">
@@ -960,7 +970,7 @@
                                 }
                             });
                         }
-                        domReference.parsley().validate();
+//                        domReference.parsley().validate();
                     }
                 });
             }

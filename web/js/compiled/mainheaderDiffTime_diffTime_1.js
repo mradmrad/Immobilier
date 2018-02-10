@@ -18,22 +18,3 @@ function diffTime(start){
     }
 
 }
-
-function remindersDiff(start){
-
-    var now = moment();
-    if (now.diff(start, 'days') == 0) {
-        return 1;
-    }
-
-    else if (now.diff(start, 'days') >= -7 && now.diff(start, 'days')<= -1 ) {
-
-        return 2;
-    }
-
-    else {
-        return 3 ;
-
-    }
-
-}

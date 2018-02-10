@@ -23,10 +23,13 @@ framework:
         engines: ['twig']
     default_locale:  "%locale%"
     trusted_hosts:   ~
+
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
         save_path:   '%kernel.root_dir%/../var/sessions/kernel.environment'
+        cookie_lifetime: 7200
+        gc_maxlifetime: 7200
     fragments:       ~
     http_method_override: true
     assets: ~

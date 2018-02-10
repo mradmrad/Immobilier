@@ -33,20 +33,28 @@ class RequeteType extends AbstractType
         $builder
 
             ->add('description')
-            ->add('furnished', CheckboxType::class, array(
-                'required'=>false,
+            ->add('furnished', ChoiceType::class, array(
+                'required'=>true,
+                    'empty_data'=>false,
                     'attr' => array(
                         'data-md-icheck'=>''
-                    )
+                    ),
+                    'choices'=>array(
+                        'Oui' => 'Oui',
+                        'Non' => 'Non',
+                        'Pas d\'importance'=>'Pas d\'importance'
+                    ),
+                    'expanded'=>true
+
                 )
             )
-            ->add('notfurnished', CheckboxType::class, array(
-                    'required'=>false,
-                    'attr' => array(
-                        'data-md-icheck'=>''
-                    )
-                )
-            )
+//            ->add('notfurnished', CheckboxType::class, array(
+//                    'required'=>false,
+//                    'attr' => array(
+//                        'data-md-icheck'=>''
+//                    )
+//                )
+//            )
             ->add($builder
                 ->create('budgetMin', TextType::class)
                 ->addModelTransformer(new MoneyTransformer()))
@@ -56,7 +64,9 @@ class RequeteType extends AbstractType
             ->add('bedroom',TextType::class,array(
                 'required'=>false,
             ))
-            ->add('bathroom')
+            ->add('bathroom',TextType::class)
+            ->add('piece',TextType::class)
+            ->add('sde',TextType::class)
             ->add('totalAreaMin')
             ->add('coveredAreaMin')
 
@@ -100,6 +110,8 @@ class RequeteType extends AbstractType
             ->add('orientation', ChoiceType::class, array(
                     'choices' => array(
                         'Sud' => 'Sud',
+                        'Est' => 'Est',
+                        'Ouest' => 'Ouest',
                         'Nord' => 'Nord',
                     ),
 
@@ -134,9 +146,12 @@ class RequeteType extends AbstractType
             ))
             ->add('equipements', EntityType::class, array(
                 'class' => Equipement::class,
-                'expanded' => false,
+                'expanded' => true,
                 'multiple' => true,
                 'required' => false,
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                }
             ))
             ->add('typeBiens', EntityType::class, array(
                 'class' => TypeBien::class,

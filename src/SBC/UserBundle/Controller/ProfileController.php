@@ -198,6 +198,7 @@ class ProfileController extends BaseController
             return $this->redirectToRoute('user_show', array('id' => $user->getId()));
         }
 
+        
         return $this->render('@User/Profile/editUser.html.twig', array(
             'user' => $user,
             'form' => $form->createView(),

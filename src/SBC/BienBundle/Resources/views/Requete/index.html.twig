@@ -33,9 +33,10 @@
                 <table id="dt_tableExport" class="uk-table uk-table-hover" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>Référence</th>
+                        {#<th>Référence</th>#}
                         <th>Date de création</th>
                         <th>Nature</th>
+                        <th>Type de bien</th>
                         <th>Client</th>
                         <th>Tél</th>
 
@@ -55,11 +56,17 @@
                                 {% endif %}
                         >
 
-                            <td>
-                                <a href="{{ path('requete_show', { 'id': requete.id }) }}"> {{ requete.reference }} </a>
-                            </td>
+                            {#<td>#}
+                                {#<a href="{{ path('requete_show', { 'id': requete.id }) }}"> {{ requete.reference }} </a>#}
+                            {#</td>#}
                             <td>  {{ requete.creationDate|date('d/m/Y H:i') }}</td>
                             <td>  {{ requete.natureRequete }}</td>
+                            <td>
+                                {% for type in requete.typeBiens %}
+                                    {{ type }}
+                                    <br>
+                                {% endfor %}
+                            </td>
                             <td>
                                 <a href="{{ path('client_show', { 'code': requete.client.code }) }}"> {{ requete.client.denomination }} </a>
                             </td>

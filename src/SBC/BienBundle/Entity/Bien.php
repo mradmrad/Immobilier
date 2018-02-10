@@ -111,6 +111,20 @@ class Bien implements \JsonSerializable
     /**
      * @var int
      *
+     * @ORM\Column(name="piece", type="integer", nullable=true)
+     */
+    private $piece;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sde", type="integer", nullable=true)
+     */
+    private $sde;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="bathroom", type="integer", nullable=true)
      */
     private $bathroom;
@@ -477,6 +491,13 @@ class Bien implements \JsonSerializable
      * @ORM\Column(name="paysage", type="string", length=255 , nullable=true)
      */
     private $paysage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="loisir", type="string", length=255 , nullable=true)
+     */
+    private $loisir;
 
     /**
      * @var string
@@ -2491,4 +2512,76 @@ class Bien implements \JsonSerializable
     }
 
 
+
+    /**
+     * Set piece
+     *
+     * @param integer $piece
+     *
+     * @return Bien
+     */
+    public function setPiece($piece)
+    {
+        $this->piece = $piece;
+
+        return $this;
+    }
+
+    /**
+     * Get piece
+     *
+     * @return integer
+     */
+    public function getPiece()
+    {
+        return $this->piece;
+    }
+
+    /**
+     * Set sde
+     *
+     * @param integer $sde
+     *
+     * @return Bien
+     */
+    public function setSde($sde)
+    {
+        $this->sde = $sde;
+
+        return $this;
+    }
+
+    /**
+     * Get sde
+     *
+     * @return integer
+     */
+    public function getSde()
+    {
+        return $this->sde;
+    }
+
+    /**
+     * Set loisir
+     *
+     * @param string $loisir
+     *
+     * @return Bien
+     */
+    public function setLoisir($loisir)
+    {
+        $this->loisir = $loisir;
+
+        return $this;
+    }
+
+    /**
+     * Get loisir
+     *
+     * @return string
+     */
+    public function getLoisir()
+    {
+        return $this->loisir;
+    }
 }

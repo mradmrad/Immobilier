@@ -9,6 +9,7 @@ use SBC\BienBundle\Entity\Agency;
 use SBC\PersonnelBundle\Entity\Personnel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,7 +28,7 @@ class PersonnelType extends AbstractType
             ->add('phonenumber')
             ->add('agencyPhoneNumber')
             ->add('email')
-            ->add('pictureFile', \Symfony\Component\Form\Extension\Core\Type\FileType::class, array(
+            ->add('pictureFile', FileType::class, array(
                     'required' => false,
                 )
             )
@@ -40,9 +41,9 @@ class PersonnelType extends AbstractType
                 'class' => Agency::class,
                 'placeholder' => 'Choisir l\'agence',
                 'empty_data' => null,
-            ))
+            ));
 
-            ->add('save', SubmitType::class);
+//            ->add('save', SubmitType::class);
     }
 
     /**

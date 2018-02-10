@@ -6,12 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use SBC\PersonnelBundle\Entity\Personnel;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="SBC\UserBundle\Repository\UserRepository")
+ * @Vich\Uploadable
  */
 class User extends BaseUser implements \JsonSerializable
 {
@@ -25,7 +28,7 @@ class User extends BaseUser implements \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel", inversedBy="user")
+     * @ORM\OneToOne(targetEntity="SBC\PersonnelBundle\Entity\Personnel", inversedBy="user" , cascade={"persist"})
      */
     private $personnel;
 
@@ -121,4 +124,3 @@ class User extends BaseUser implements \JsonSerializable
         return $this;
     }
 }
-

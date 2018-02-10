@@ -632,13 +632,40 @@
     {#<script src="{{ asset('template/assets/js/kendoui_custom.min.js') }}"></script>#}
     {#<script src="{{ asset('template/assets/js/kendoui_custom.min.js') }}"></script>#}
     <script src="{{ asset('bundles/immobilier/assets/js/pages/forms_file_input.min.js') }}"></script>
+    <script src="{{ asset('bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js') }}"></script>
+
     <script>
         var cin_recto= $('#sbc_tiersbundle_client_cinRecto_file');
         var cin_verso = $('#sbc_tiersbundle_client_cinVerso_file');
+        var favoris = $('#sbc_tiersbundle_client_tel');
+        var portable_1 = $('#sbc_tiersbundle_client_secondtel');
+        var portable_2 = $('#sbc_tiersbundle_client_thirdtel');
+        var portable_bureau = $('#sbc_tiersbundle_client_telbureau');
+        var portable_fax = $('#sbc_tiersbundle_client_fax');
         $('#sbc_tiersbundle_client_cinRecto_description').css('width' , '-webkit-fill-available');
         $('#sbc_tiersbundle_client_cinVerso_description').css('width' , '-webkit-fill-available');
         $(function ($) {
+//            $("#sbc_tiersbundle_client_naissance").datepicker({
+//
+//                yearRange: '1950:2013'
+//            });
 
+
+            $('#sbc_tiersbundle_client_naissance').on('click',function () {
+                $('.update-picker-year').html('');
+                console.log($('.update-picker-year'))
+                for (i=1930 ; i<2020 ; i++)
+                {
+//                alert('here')
+                    $('.update-picker-year').append('<option value="'+i+'">'+i+'</option>');
+                }
+            });
+
+            favoris.mask('00 000 000');
+            portable_1.mask('00 000 000');
+            portable_2.mask('00 000 000');
+            portable_bureau.mask('00 000 000');
+            portable_fax.mask('00 000 000');
             $('.dropify-clear').on('click', function () {
                 cin_recto.prop('required', false);
                 cin_verso.prop('required', false);

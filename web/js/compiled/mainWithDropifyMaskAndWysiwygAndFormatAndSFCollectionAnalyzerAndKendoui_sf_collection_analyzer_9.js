@@ -4,7 +4,7 @@
  *
  */
 var SFCollectionAnalyzer = (function () {
-    var inputs = ['input', 'select', 'checkbox', 'radio', 'textarea','div'];
+    var inputs = ['input', 'select', 'checkbox', 'radio', 'textarea'];
 
     /**
      * Decompose collection dom to children
@@ -14,10 +14,8 @@ var SFCollectionAnalyzer = (function () {
     function decompose(dom) {
         var data = [];
         for(var i in inputs){
-
             dom.find(inputs[i]).each(function(i) {
                 item = {
-
                     name: $(this).attr('data-name'),
                     dom: $(this)
                 };

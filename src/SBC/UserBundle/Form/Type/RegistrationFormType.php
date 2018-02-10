@@ -4,6 +4,7 @@ namespace SBC\UserBundle\Form\Type;
 
 use FOS\UserBundle\Event\FormEvent;
 use SBC\PersonnelBundle\Entity\Personnel;
+use SBC\PersonnelBundle\Form\PersonnelType;
 use SBC\PersonnelBundle\Repository\PersonnelRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -46,16 +47,7 @@ class RegistrationFormType extends BaseType
                     )
                 )
             )
-            ->add('personnel', EntityType::class, array(
-                'class' => Personnel::class,
-                'placeholder' => 'Choisir un personnel',
-                'empty_data' => null,
-                'query_builder' => function(PersonnelRepository $repository)
-                {
-                    return $repository->getAllNotUsersQuery();
-                }
-
-            ))
+            ->add('personnel',PersonnelType::class)
             ->add('save', SubmitType::class);
 
     }

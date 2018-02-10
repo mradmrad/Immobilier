@@ -104,7 +104,8 @@ class RequeteController extends Controller
     {
         $editForm = $this->createForm(RequeteType::class, $requete);
         $editForm->handleRequest($request);
-
+        $client = new Client();
+        $clientform = $this->createForm(ClientType::class,$client);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($requete);
@@ -116,6 +117,7 @@ class RequeteController extends Controller
         return $this->render('@Bien/Requete/edit.html.twig', array(
             'requete' => $requete,
             'form' => $editForm->createView(),
+            'clientform' => $clientform->createView()
         ));
     }
 

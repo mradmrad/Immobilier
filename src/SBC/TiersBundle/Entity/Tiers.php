@@ -394,7 +394,7 @@ class Tiers
 
     public function __toString()
     {
-        return $this->denomination;
+        return $this->prenom.' '.$this->denomination;
     }
 
     /**

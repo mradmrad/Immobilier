@@ -20,9 +20,12 @@ class CanalisationType extends AbstractType
                 'non' => 'non',
                 'autre'=> 'autre'
             ),
-            'attr' => array(
-                'class' => 'md-input'
-            ),
+//            'attr' => array(
+//                'class' => 'md-input'
+//            ),
+            'choice_attr' => function () {
+                return ['data-md-icheck' => ''];
+            },
             'expanded'=>true
         ))
             ->add('sonede',ChoiceType::class,array(
@@ -31,9 +34,12 @@ class CanalisationType extends AbstractType
                     'non' => 'non',
                     'autre'=> 'autre'
                 ),
-                'attr' => array(
-                    'class' => 'md-input'
-                ),
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                },
+//                'attr' => array(
+//                    'class' => 'md-input'
+//                ),
                 'expanded'=>true
             ))
             ->add('gaz',ChoiceType::class,array(
@@ -42,9 +48,12 @@ class CanalisationType extends AbstractType
                     'non' => 'non',
                     'autre'=> 'autre'
                 ),
-                'attr' => array(
-                    'class' => 'md-input'
-                ),
+//                'attr' => array(
+//                    'class' => 'md-input'
+//                ),
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                },
                 'expanded'=>true
             ))
             ->add('onas',ChoiceType::class,array(
@@ -53,9 +62,12 @@ class CanalisationType extends AbstractType
                     'non' => 'non',
                     'autre'=> 'autre'
                 ),
-                'attr' => array(
-                    'class' => 'md-input'
-                ),
+//                'attr' => array(
+//                    'class' => 'md-input'
+//                ),
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                },
                 'expanded'=>true
             ))
             ->add('eclairage',ChoiceType::class,array(
@@ -64,9 +76,12 @@ class CanalisationType extends AbstractType
                     'non' => 'non',
                     'autre'=> 'autre'
                 ),
-                'attr' => array(
-                    'class' => 'md-input'
-                ),
+//                'attr' => array(
+//                    'class' => 'md-input'
+//                ),
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                },
                 'expanded'=>true
             ))
             ->add('telephone',ChoiceType::class,array(
@@ -75,9 +90,12 @@ class CanalisationType extends AbstractType
                     'non' => 'non',
                     'autre'=> 'autre'
                 ),
-                'attr' => array(
-                    'class' => 'md-input'
-                ),
+//                'attr' => array(
+//                    'class' => 'md-input'
+//                ),
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                },
                 'expanded'=>true
             ))
             ->add('route',ChoiceType::class,array(
@@ -86,9 +104,12 @@ class CanalisationType extends AbstractType
                     'non' => 'non',
                     'autre'=> 'autre'
                 ),
-                'attr' => array(
-                    'class' => 'md-input'
-                ),
+//                'attr' => array(
+//                    'class' => 'md-input'
+//                ),
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                },
                 'expanded'=>true
             ))
             ->add('trottoir',ChoiceType::class,array(
@@ -97,9 +118,12 @@ class CanalisationType extends AbstractType
                         'non' => 'non',
                         'autre'=> 'autre'
                     ),
-                    'attr' => array(
-                        'class' => 'md-input'
-                    ),
+//                    'attr' => array(
+//                        'class' => 'md-input'
+//                    ),
+                    'choice_attr' => function () {
+                        return ['data-md-icheck' => ''];
+                    },
                     'expanded'=>true
                 )
 

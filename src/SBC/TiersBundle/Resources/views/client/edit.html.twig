@@ -654,13 +654,22 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script src="{{ asset('js/compiled/mainWithDropify_dropify.min_1.js') }}"></script>
+    <script src="{{ asset('bundles/immobilier/jQuery-Mask-Plugin/js/jquery.mask.min.js') }}"></script>
     <script>
         var cin_recto= $('#sbc_tiersbundle_client_cinRecto_file');
         var cin_verso = $('#sbc_tiersbundle_client_cinVerso_file');
         $('#sbc_tiersbundle_client_cinRecto_description').css('width' , '-webkit-fill-available');
         $('#sbc_tiersbundle_client_cinVerso_description').css('width' , '-webkit-fill-available');
         $(function ($) {
-
+            $('#sbc_tiersbundle_client_naissance').on('click',function () {
+                $('.update-picker-year').html('');
+                console.log($('.update-picker-year'))
+                for (i=1930 ; i<2020 ; i++)
+                {
+//                alert('here')
+                    $('.update-picker-year').append('<option value="'+i+'">'+i+'</option>');
+                }
+            });
             $('.dropify-clear').on('click', function () {
                 cin_recto.prop('required', false);
                 cin_verso.prop('required', false);

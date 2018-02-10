@@ -44,7 +44,7 @@ class BienType extends AbstractType
         $builder
             ->add('title')
             ->add('description', TextareaType::class, array(
-                'required' => true,
+                'required' => false,
             ))
             ->add('residence', TextType::class,array(
                 'required' => false,
@@ -70,12 +70,12 @@ class BienType extends AbstractType
                     'class' => 'md-input'
                 )
             ))
-            ->add('espaceCommun', TextType::class,array(
-                'required' => false,
-                'attr'=>array(
-                    'class' => 'md-input'
-                )
-            ))
+//            ->add('espaceCommun', TextType::class,array(
+//                'required' => false,
+//                'attr'=>array(
+//                    'class' => 'md-input'
+//                )
+//            ))
             ->add('zone', TextType::class,array(
                 'required' => false,
                 'attr'=>array(
@@ -100,11 +100,8 @@ class BienType extends AbstractType
                     'class' => 'md-input'
                 )
             ))
-            ->add('vitrine', TextType::class,array(
-                'required'=>false,
-                'attr'=>array(
-                    'class' => 'md-input'
-                )
+            ->add('vitrine', TextareaType::class, array(
+                'required' => false,
             ))
             ->add('largeurFacade', TextType::class,array(
                 'required' => false,
@@ -212,6 +209,21 @@ class BienType extends AbstractType
                     'placeholder' => false
                 )
             )
+            ->add('loisir', ChoiceType::class, array(
+                    'choices' => array(
+                        'Présence équipements de loisirs' => 'Présence équipements de loisirs',
+                        'Absence équipements de loisirs' => 'Absence équipements de loisirs',
+
+                    ),
+                    'choice_attr' => function () {
+                        return ['data-md-icheck' => ''];
+                    },
+                    'expanded' => true,
+                    'attr' => array('data-md-icheck' => ''),
+                    'required' => false,
+                    'placeholder' => false
+                )
+            )
             ->add('margeNegociation', TextType::class,array(
                 'attr'=>array(
                     'class' => 'md-input'
@@ -224,18 +236,26 @@ class BienType extends AbstractType
                 ),
                 'required' => false
             ))
+//            ->add('equipements', EntityType::class, array(
+//                'class' => Equipement::class,
+//                'expanded' => true,
+//                'multiple' => true,
+//                'required' => false,
+//                'choice_attr' => function () {
+//                    return ['data-md-icheck' => ''];
+//                }
+//            ))
             ->add('proximite', ChoiceType::class, array(
                     'choices' => array(
                         'Police' => 'Police',
                         'Poste'=>'Poste'
                     ),
-//                    'expanded'=> true,
-                    'placeholder' => '',
-
-                    'attr' => array(
-
-                        'data-md-selectize'=> 'data-md-selectize'
-                    )
+                    'expanded' => true,
+                    'multiple' => true,
+                    'required' => false,
+                    'choice_attr' => function () {
+                        return ['data-md-icheck' => ''];
+                    }
                 )
             )
             ->add('distanceCV', TextType::class,array(
@@ -249,12 +269,12 @@ class BienType extends AbstractType
                         'Bruit' => 'Bruit',
                     ),
 //                    'expanded'=> true,
-                    'placeholder' => '',
-
-                    'attr' => array(
-
-                        'data-md-selectize'=> 'data-md-selectize'
-                    )
+                    'expanded' => true,
+                    'multiple' => true,
+                    'required' => false,
+                    'choice_attr' => function () {
+                        return ['data-md-icheck' => ''];
+                    }
                 )
             )
             ->add('statutConstruction', ChoiceType::class, array(
@@ -440,6 +460,8 @@ class BienType extends AbstractType
             ->add('totalArea')
             ->add('coveredArea')
             ->add('bedroom')
+            ->add('piece')
+            ->add('sde')
             ->add('bathroom')
 //            ->add('reference',null,array(
 //                'required' => false
@@ -452,9 +474,9 @@ class BienType extends AbstractType
 //                    'data-switchery' => ''
 //                )
 //            ))
-            ->add('ismapped', CheckboxType::class, array(
-                'required' => false,
-            ))
+//            ->add('ismapped', CheckboxType::class, array(
+//                'required' => false,
+//            ))
             ->add('mainPictureFile', \Symfony\Component\Form\Extension\Core\Type\FileType::class, array(
                     'required' => false
                 )
@@ -486,11 +508,20 @@ class BienType extends AbstractType
 //                )
 
             ))
+//            ->add('equipements', EntityType::class, array(
+//                'class' => Equipement::class,
+//                'expanded' => false,
+//                'multiple' => true,
+//                'required' => false,
+//            ))
             ->add('equipements', EntityType::class, array(
                 'class' => Equipement::class,
-                'expanded' => false,
+                'expanded' => true,
                 'multiple' => true,
                 'required' => false,
+                'choice_attr' => function () {
+                    return ['data-md-icheck' => ''];
+                }
             ))
             ->add('owners', CollectionType::class, array(
                 'entry_type' => ProprietaireSelfType::class,

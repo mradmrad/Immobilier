@@ -29,9 +29,16 @@ class Equipement
     private $name;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", unique=true)
+     */
+    private $position;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="creationDate", type="datetime")
+     * @ORM\Column(name="creationDate", type="datetime",nullable = true)
      */
     private $creationDate;
 
@@ -102,5 +109,28 @@ class Equipement
     {
         return $this->name;
     }
-}
 
+    /**
+     * Set position
+     *
+     * @param integer $position
+     *
+     * @return Equipement
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return integer
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+}

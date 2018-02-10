@@ -54,10 +54,10 @@ class MeetingController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN'))
+//        if ($this->isGranted('ROLE_SUPER_ADMIN'))
             $meetings = $em->getRepository('BienBundle:Meeting')->findAll();
-        else
-            $meetings = $em->getRepository('PersonnelBundle:Personnel')->find($this->getUser()->getPersonnel()->getId())->getMeetings();
+//        else
+//            $meetings = $em->getRepository('PersonnelBundle:Personnel')->find($this->getUser()->getPersonnel()->getId())->getMeetings();
 
         $events = array();
         foreach ($meetings as $meeting) {

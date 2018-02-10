@@ -83,21 +83,21 @@ class Bien implements \JsonSerializable
     /**
      * @var float
      *
-     * @ORM\Column(name="displayPrice", type="float", nullable=true)
+     * @ORM\Column(name="display_price", type="float", nullable=true)
      */
     private $displayPrice;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="totalArea", type="float", nullable=true)
+     * @ORM\Column(name="total_area", type="float", nullable=true)
      */
     private $totalArea;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="coveredArea", type="float", nullable=true)
+     * @ORM\Column(name="covered_area", type="float", nullable=true)
      */
     private $coveredArea;
 
@@ -107,6 +107,20 @@ class Bien implements \JsonSerializable
      * @ORM\Column(name="bedroom", type="integer", nullable=true)
      */
     private $bedroom;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="piece", type="integer", nullable=true)
+     */
+    private $piece;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sde", type="integer", nullable=true)
+     */
+    private $sde;
 
     /**
      * @var int
@@ -153,14 +167,14 @@ class Bien implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="nomProp", type="string", length=255, nullable=true)
+     * @ORM\Column(name="nom_prop", type="string", length=255, nullable=true)
      */
     private $nomProp;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="usage", type="string", length=255, nullable=true)
+     * @ORM\Column(name="usage_b", type="string", length=255, nullable=true)
      */
     private $usage;
 
@@ -171,12 +185,7 @@ class Bien implements \JsonSerializable
      */
     private $exterieur;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hypotheque", type="string", length=255, nullable=true)
-     */
-    private $hypotheque;
+
 
 
     /**
@@ -196,7 +205,7 @@ class Bien implements \JsonSerializable
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="creationDate", type="datetime", nullable=true)
+     * @ORM\Column(name="creation_date", type="datetime", nullable=true)
      */
     private $creationDate;
 
@@ -482,6 +491,13 @@ class Bien implements \JsonSerializable
      * @ORM\Column(name="paysage", type="string", length=255 , nullable=true)
      */
     private $paysage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="loisir", type="string", length=255 , nullable=true)
+     */
+    private $loisir;
 
     /**
      * @var string
@@ -2493,5 +2509,55 @@ class Bien implements \JsonSerializable
     public function getExterieur()
     {
         return $this->exterieur;
+    }
+
+
+
+    /**
+     * Set piece
+     *
+     * @param integer $piece
+     *
+     * @return Bien
+     */
+    public function setPiece($piece)
+    {
+        $this->piece = $piece;
+
+        return $this;
+    }
+
+    /**
+     * Get piece
+     *
+     * @return integer
+     */
+    public function getPiece()
+    {
+        return $this->piece;
+    }
+
+    /**
+     * Set sde
+     *
+     * @param integer $sde
+     *
+     * @return Bien
+     */
+    public function setSde($sde)
+    {
+        $this->sde = $sde;
+
+        return $this;
+    }
+
+    /**
+     * Get sde
+     *
+     * @return integer
+     */
+    public function getSde()
+    {
+        return $this->sde;
     }
 }

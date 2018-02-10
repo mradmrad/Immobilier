@@ -11,9 +11,10 @@ use SBC\BienBundle\Entity\Goal;
 use SBC\BienBundle\Entity\Meeting;
 use SBC\BienBundle\Entity\Tache;
 use SBC\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
+
 
 /**
  * Personnel
@@ -128,7 +129,7 @@ class Personnel implements \JsonSerializable
 
     /**
      * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\Agency", inversedBy="personnels")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $agency;
 
@@ -164,10 +165,14 @@ class Personnel implements \JsonSerializable
 
     public function __construct()
     {
+        $date = new \DateTime('now');
+
+        $this->code = 'PERS'.$date->getTimestamp();
         $this->creationdate = new \Datetime();
         $this->taches = new ArrayCollection();
         $this->meetings = new ArrayCollection();
         $this->goals = new ArrayCollection();
+
     }
 
     public function __toString()
@@ -312,11 +317,11 @@ class Personnel implements \JsonSerializable
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $picture
+     *
      *
      * @return Personnel
      */
-    public function setPictureFile(File $picture = null)
+    public function setPictureFile($picture = null)
     {
         $this->pictureFile = $picture;
         if ($picture) {
