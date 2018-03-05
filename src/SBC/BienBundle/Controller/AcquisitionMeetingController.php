@@ -21,22 +21,44 @@ class AcquisitionMeetingController extends Controller
      */
     public function addAction(Request $request)
     {
-        $acquisitionMeeting = new AcquisitionMeeting();
         $em = $this->getDoctrine()->getManager();
+        if ($request->request->get('id') != '')
+        {
+            $oldEntity = $em->getRepository('BienBundle:Meeting')->find($request->request->get('id'));
+            $acquisitionMeeting = $this->cast($oldEntity,AcquisitionMeeting::class);
+            $em->remove($oldEntity);
+            $em->flush();
+            $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
+            $acquisitionMeeting->addRemindFor($remindFor);
+//            foreach ($bienMeeting->getRemindFors() as $remindFor)
+//            {
+//                $bienMeeting->removeRemindFor($remindFor);
+//            }
+        }
+        else {
+            $acquisitionMeeting = new AcquisitionMeeting();
+        }
+
 
         $acquisitionMeeting->setCreatedBy($this->getUser()->getPersonnel());
-        $acquisitionMeeting->setBeginDate(new \DateTime($request->request->get('start')));
+        ($request->request->get('start') != 'null') ? $acquisitionMeeting->setBeginDate(new \DateTime($request->request->get('start'))) : '';
+//        $acquisitionMeeting->setBeginDate(new \DateTime($request->request->get('start')));
         $acquisitionMeeting->setColor($request->request->get('color'));
-        $acquisitionMeeting->setFinishDate(new \DateTime($request->request->get('end')));
+        ($request->request->get('end') != 'null') ? $acquisitionMeeting->setFinishDate(new \DateTime($request->request->get('end'))) : '';
+//        $acquisitionMeeting->setFinishDate(new \DateTime($request->request->get('end')));
         $acquisitionMeeting->setTitle($request->request->get('title'));
         $acquisitionMeeting->setOtherclients($request->request->get('other'));
 
         $acquisition = $em->getRepository('BienBundle:Acquisition')->find($request->request->get('acquisition'));
         $acquisitionMeeting->setAcquisition($acquisition);
 
-        $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
-        $acquisitionMeeting->addRemindFor($remindFor);
-
+        if ($request->request->get('id') == '')
+        {
+            if ($request->request->get('remindFor') != '') {
+                $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
+                $acquisitionMeeting->addRemindFor($remindFor);
+            }
+        }
 
         $client = $em->getRepository('TiersBundle:Client')->find($request->request->get('client'));
         $acquisitionMeeting->setClient($client);
@@ -48,7 +70,7 @@ class AcquisitionMeetingController extends Controller
             }
 
         }
-
+        $acquisitionMeeting->setOtherNumbers($request->request->get('otherNumbers'));
         $acquisitionMeeting->setStatus($request->request->get('status'));
         $acquisitionMeeting->setTypeMeeting($request->request->get('typeMeeting'));
         $acquisitionMeeting->setDescription($request->request->get('description'));
@@ -57,7 +79,7 @@ class AcquisitionMeetingController extends Controller
         $message = '';
 
         try {
-            $acquisitionMeeting->getAcquisition()->setUpdatedAt();
+//            $acquisitionMeeting->getAcquisition()->setUpdatedAt();
             $em->persist($acquisitionMeeting);
             $em->flush();
         } catch (\Exception $e) {
@@ -65,5 +87,25 @@ class AcquisitionMeetingController extends Controller
             $message = $e->getMessage();
         }
         return new JsonResponse(array('success' => $success, 'message' => $message));
+    }
+    function cast($object, $class) {
+
+        /**
+         * This is a beautifully ugly hack.
+         *
+         * First, we serialize our object, which turns it into a string, allowing
+         * us to muck about with it using standard string manipulation methods.
+         *
+         * Then, we use preg_replace to change it's defined type to the class
+         * we're casting it to, and then serialize the string back into an
+         * object.
+         */
+        return unserialize(
+            preg_replace(
+                '/^O:\d+:"[^"]++"/',
+                'O:'.strlen($class).':"'.$class.'"',
+                serialize($object)
+            )
+        );
     }
 }

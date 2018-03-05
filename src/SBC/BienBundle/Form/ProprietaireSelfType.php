@@ -22,7 +22,7 @@ class ProprietaireSelfType extends AbstractType
                 'class' => Client::class,
                 'attr' => array(
                     'data-name' => 'client',
-                    'class' => 'kendoComboBox select',
+                    'class' => 'dynamic',
                     'style' => 'width:100%'
                 )
             ));

@@ -223,8 +223,10 @@
 <aside id="sidebar_main">
     <div class="sidebar_main_header">
         <div style="padding-top: 15px;">
-            <a href="{{ path('immobilier_dashboard') }}" class="sSidebar_hide sidebar_logo_large">
-                <img class="logo_regular" src="{{ asset('logo-2.png') }}" alt="logo_green_duck" height="50"
+            <a href="{{ path('immobilier_dashboard') }}" class="sSidebar_hide sidebar_logo_large" style="    text-align: center;
+    position: absolute;">
+                <img class="logo_regular" src="{{ asset('logo-2.png') }}" alt="logo_green_duck" height="50" style="    margin-top: 7px;
+    width: 80%;"
                      width="250"/>
             </a>
         </div>
@@ -263,7 +265,7 @@
             <li title="Requêtes" {% if current_route_name == 'requete_index' or current_route_name == 'requete_new' or current_route_name == 'requete_show' or current_route_name == 'requete_edit' %} class="act_section current_section" {% endif %}>
                 <a href="{{ path('requete_index') }}">
                     <span class="menu_icon">
-                         <img src="{{ asset('icons/requêtes.jpg') }}">
+                         <img src="{{ asset('icons/requetes.jpg') }}">
                         {#<i class="material-icons">&#xE91F;</i>#}
                     </span>
                     <span class="menu_title">Requêtes</span>
@@ -273,7 +275,7 @@
                 <a href="{{ path('bien_index_alltypes') }}">
                     <span class="menu_icon">
                         {#<i class="material-icons">&#xE638;</i>#}
-                         <img src="{{ asset('icons/base de donné.jpg') }}">
+                         <img src="{{ asset('icons/base.jpg') }}">
                     </span>
                     <span class="menu_title">Base de données</span>
                 </a>

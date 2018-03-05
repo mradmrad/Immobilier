@@ -63,6 +63,13 @@ class Meeting extends Event
     /**
      * @var string
      *
+     * @ORM\Column(name="othernumbers", type="string", length=255)
+     */
+    private $otherNumbers;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text")
      */
     private $description;
@@ -71,6 +78,7 @@ class Meeting extends Event
     {
         parent::__construct();
         $this->remindFors = new ArrayCollection();
+        $this->setCreationDate(new \DateTime('now'));
     }
 
 

@@ -128,12 +128,26 @@
                 lazyFetching: false,
                 eventRender: function (event, element) {
 
-                    if (event.status === "Annulé")
-                        element.find('.fc-title').html("<del>Titre:&nbsp;&nbsp;\"" + event.title + "\"&nbsp;-&nbsp;Pour:&nbsp;&nbsp;" + event.remindFor +
-                            "&nbsp;-&nbsp;" + event.status + "</del>");
+                    element.find('.fc-time').css('display','none');
+                    if (event.client != "-")
+                    {
+                        if (event.status === "Annulé")
+                            element.find('.fc-title').html("<del>" + event.clientName + "&nbsp;-&nbsp;" + event.tel + "</del>");
+                        else
+                            element.find('.fc-title').html(event.clientName + "&nbsp;-&nbsp" + event.tel );
+
+                    }
                     else
-                        element.find('.fc-title').html("Titre:&nbsp;&nbsp;\"" + event.title + "\"&nbsp;-&nbsp;Pour:&nbsp;&nbsp;" + event.remindFor +
-                            "&nbsp;-&nbsp;" + event.status);
+                    {
+                        if (event.status === "Annulé")
+                            element.find('.fc-title').html("<del>" + event.others + "&nbsp;-&nbsp;" + event.otherNumbers + "</del>");
+                        else
+                            element.find('.fc-title').html( event.others + "&nbsp;-&nbsp;" + event.otherNumbers );
+
+                    }
+
+
+
                 },
                 select: function (start, end, a, b, resources) {
                     openAddEventModal(start, end, a, b, resources, calendarColorPicker, calendar_selectable);
@@ -180,6 +194,7 @@
                             }
                         },
                         onChange: function(value) {
+                            $('.title').val('');
                             $('#recherche_div').hide();
                             $('#acquisition_div').hide();
                             $('#prisemandat_div').hide();
@@ -239,7 +254,7 @@
                                     event_color = "#e53935";
                                     break;
                                 case 'Autres':
-                                    $('#title_reunion').val('RDV pour une réunion');
+                                    $('#title_reunion').val('Autre');
                                     $('#title_reunion').closest('div').addClass('md-input-filled');
                                     $('#autres_div').show();
                                     break;
@@ -257,9 +272,135 @@
 
                 },
 
-                eventClick: function (calEvent) {
+                eventClick: function (calEvent,a,b) {
 
-                    eventClickModal(calEvent, calendar_selectable);
+                    openUpdateModal(calEvent, calendar_selectable,a,b);
+                    _clientJoinedAddress = $('#title_rdv');
+                    _clientJoinedAddress.selectize({
+                        placeholder : 'Choisir un client',
+                        render: {
+                            option: function (data) {
+
+                                switch (data.value) {
+                                    case 'Recherche':
+                                        event_color = "#f1b612";
+                                        break;
+                                    case 'Acquisition':
+                                        event_color = "#f4511e";
+                                        break;
+                                    case 'Prise mandat':
+                                        event_color = "#43a047";
+                                        break;
+                                    case 'Visite':
+                                        event_color = "#689f38";
+                                        break;
+                                    case 'Prise offre':
+                                        event_color = "#3949ab";
+                                        break;
+                                    case 'Acceptation':
+                                        event_color = "#039be5";
+                                        break;
+                                    case 'Evaluation':
+                                        event_color = "#8e24aa";
+                                        break;
+                                    case 'Réunion':
+                                        event_color = "#e53935";
+                                        break;
+                                    default:
+                                        event_color = "";
+                                }
+
+
+                                return "<div>" +
+
+                                        "<span data-color="+event_color+" style=\"background:"+event_color+" ;width:22px ; height: 22px \">&nbsp &nbsp &nbsp</span> "+
+                                        data.text + "</div>"
+                            }
+                        },
+                        onChange: function(value) {
+                            $('#recherche_div').hide();
+                            $('#acquisition_div').hide();
+                            $('#prisemandat_div').hide();
+                            $('#visite_div').hide();
+                            $('#offre_div').hide();
+                            $('#acceptation_div').hide();
+                            $('#evaluation_div').hide();
+                            $('#reunion_div').hide();
+                            switch (value) {
+                                case 'Recherche':
+                                        cleanTitles();
+                                    $('#recherche_div').show();
+                                    $('#title_recherche').val('RDV pour une recherche');
+                                    $('#title_recherche').closest('div').addClass('md-input-filled');
+                                    event_color = "#f1b612";
+                                    break;
+                                case 'Acquisition':
+                                    cleanTitles();
+                                    event_color = "#f4511e";
+                                    $('#title_nouvelle').val('RDV pour une acquisition');
+                                    $('#title_nouvelle').closest('div').addClass('md-input-filled');
+                                    $('#acquisition_div').show();
+                                    break;
+                                case 'Prise mandat':
+                                    cleanTitles();
+                                    $('#title_acquisition').val('RDV pour une prise mandat');
+                                    $('#title_acquisition').closest('div').addClass('md-input-filled');
+                                    $('#prisemandat_div').show();
+                                    event_color = "#43a047";
+                                    break;
+                                case 'Visite':
+                                    cleanTitles();
+                                    $('#title_visite').val('RDV pour une visite');
+                                    $('#title_visite').closest('div').addClass('md-input-filled');
+                                    $('#visite_div').show();
+                                    event_color = "#689f38";
+                                    break;
+                                case 'Prise offre':
+                                    cleanTitles();
+                                    $('#title_offre').val('RDV pour une prise offre');
+                                    $('#title_offre').closest('div').addClass('md-input-filled');
+                                    $('#offre_div').show();
+                                    event_color = "#3949ab";
+                                    break;
+                                case 'Acceptation':
+                                    cleanTitles();
+                                    $('#title_accept').val('RDV pour une acceptation');
+                                    $('#title_accept').closest('div').addClass('md-input-filled');
+                                    $('#acceptation_div').show();
+                                    event_color = "#039be5";
+                                    break;
+                                case 'Evaluation':
+                                    cleanTitles();
+                                    $('#title_requete').val('RDV pour une évaluation');
+                                    $('#title_requete').closest('div').addClass('md-input-filled');
+                                    $('#evaluation_div').show();
+                                    event_color = "#8e24aa";
+                                    $('#requetes').hide();
+                                    break;
+                                case 'Réunion':
+                                    cleanTitles();
+                                    $('#title_reunion').val('RDV pour une réunion');
+                                    $('#title_reunion').closest('div').addClass('md-input-filled');
+                                    $('#reunion_div').show();
+                                    event_color = "#e53935";
+                                    break;
+                                case 'Autres':
+                                    cleanTitles();
+                                    $('#title_reunion').val('Autre');
+                                    $('#title_reunion').closest('div').addClass('md-input-filled');
+                                    $('#autres_div').show();
+                                    break;
+                                default:
+                                    event_color = "";
+                            }
+                        }
+                    });
+//                    $('#title_recherche').val('RDV pour une recherche');
+//                    altair_md.init();
+                    $('.select').kendoComboBox({
+                        filter: "contains",
+                        suggest: true
+                    });
                 },
                 eventResize: function (calEvent) {
                     calendar_selectable.fullCalendar('removeEvents', calEvent.id);
@@ -321,142 +462,796 @@
 //            var t = c.getContext('2d');
 //            window.open('', document.getElementById('calendar_selectable').toDataURL());
         }
-        function openUpdateModal(calEvent, calendar_selectable) {
-            UIkit.modal.confirm(
-                '<h3 class="heading_b uk-margin-medium-bottom">Modifier un rendez-vous</h3>' +
-                '<form method="POST" name="form_adresse" action="#" class="uk-form-stacked" id="form_validation">' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-1-1">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row" style=" width: 150px;">' +
-                '<span class="uk-form-help-block">Titre</span>' +
-                '<input id="title" class="md-input" name="title" type="text" value="' + calEvent.title + '" required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row" ">' +
-                '<span class="uk-form-help-block">Date début</span>' +
-                '<input id="datestart" name="datestart"  value="' + calEvent.start.format('DD-MM-Y') +
-                '" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}" class = "md-input uk-form-width-small"  required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Heure début</span>' +
-                '<input id="timestart" name="timestart" value="' + calEvent.start.format('HH:mm') +
-                '" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row" >' +
-                '<span class="uk-form-help-block">Date fin</span>' +
-                '<input id="dateend" name="dateend" value="' + calEvent.end.format('DD-MM-Y') +
-                '" data-uk-datepicker = "{format:\'DD-MM-YYYY\'}", class = "md-input uk-form-width-small"  required />' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Heure fin</span>' +
-                '<input id="timeend"  name="timeend"  value="' + calEvent.end.format('HH:mm') +
-                '" required data-uk-timepicker="{start:8, end:19}" class="md-input uk-form-width-small"/>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Type du rendez vous</span>' +
-                '<select id="typeMeeting"  class="kendoComboBox select" style="width: 100%"  >' +
-                '<option value=""></option>' +
-                '<option value="Sur place"' + ((calEvent.typeMeeting === "Sur place") ? 'selected=selected' : '' ) + ' >Sur place</option>' +
-                '<option value="Agence"' + ((calEvent.typeMeeting === "Agence") ? 'selected=selected' : '' ) + '>Agence</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-width-medium-1-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
-                '<select id="status" class="kendoComboBox select" style="width: 100%" >' +
-                '<option value=""></option>' +
-                '<option value="Confirmé" ' + ((calEvent.status === "Confirmé") ? 'selected=selected' : '' ) + '>Confirmé</option>' +
-                '<option value="Non confirmé" ' + ((calEvent.status === "Non confirmé") ? 'selected=selected' : '' ) + '>Non confirmé</option>' +
-                '<option value="Annulé" ' + ((calEvent.status === "Annulé") ? 'selected=selected' : '' ) + '>Annulé</option>' +
-                '<option value="Effectué" ' + ((calEvent.status === "Effectué") ? 'selected=selected' : '' ) + '>Effectué</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div  class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
-                '<div class="uk-width-medium-2-2">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<span class="uk-form-help-block">Déscription</span>' +
-                '<textarea id="description" class="md-input selecize_init" cols="30" rows="4">' + calEvent.description + ' </textarea>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</form>' +
-                ''
+        function openUpdateModal(calEvent, calendar_selectable,a,b) {
+            console.log(calEvent);
+            UIkit.modal.confirm('<div class="md-card-toolbar-actions hidden-print" style="float:right">'+
+//                    '<span class="uk-form-help-block">Supprimer</span>' +
+                  '  <i class="md-icon material-icons js-modal-confirm-cancel" id="meeting_delete" style="color : red" >delete</i>' +
+
+                    '</div>' +
+                    '<h3 class="heading_b uk-margin-medium-bottom">Modifier un rendez-vous</h3>' +
+//                '<div class="uk-margin-medium-bottom" id="calendar_colors">' +
+//                '<span class="uk-form-help-block">Couleur</span>' +
+//                calendarColorPicker +
+//                '</div>' +
+                    '<div class="uk-grid  uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-1-2">' +
+                    '<div class="uk-form-row pers">' +
+                    '<div class="parsley-row">' +
+                    '<label for="personnel">Personnel</label>' +
+                    '<input id="personnel" class="md-input" name="personnel" type="text" value="'+calEvent.remindFor+'" readonly />' +
+                    '<input id="personnelId" class="md-input" name="personnelId" type="hidden" value="'+ calEvent.resourceId +'"   required />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Autres personnels</span>' +
+                    '<select id="personnels" multiple="multiple" ></select>' +
+                    '</div>' +
+                    '</div>' +
+
+
+                    '</div>' +
+                    '<div class="uk-width-medium-1-2">' +
+                    '<div class="uk-form-row"  style="margin-top: -23px;">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
+                    '<select id="status" class="kendoComboBox select" style="width: 100%">' +
+                    '<option value=""></option>' +
+                    '<option value="Confirmé" ' + ((calEvent.status === "Confirmé") ? 'selected=selected' : '' ) + '>Confirmé</option>' +
+                    '<option value="Non confirmé" ' + ((calEvent.status === "Non confirmé") ? 'selected=selected' : '' ) + '>Non confirmé</option>' +
+                    '<option value="Annulé" ' + ((calEvent.status === "Annulé") ? 'selected=selected' : '' ) + '>Annulé</option>' +
+                    '<option value="Effectué" ' + ((calEvent.status === "Effectué") ? 'selected=selected' : '' ) + '>Effectué</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Lieu du rendez vous</span>' +
+                    '<select id="typeMeeting" class="kendoComboBox select" style="width: 100%" >' +
+                    '<option value=""></option>' +
+                    '<option value="Sur place" ' + ((calEvent.typeMeeting === "Sur place") ? 'selected=selected' : '' ) + '>Sur place</option>' +
+                    '<option value="Agence" ' + ((calEvent.typeMeeting === "Agence") ? 'selected=selected' : '' ) + '>Agence</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-2-2">' +
+
+                    '<div class="uk-grid  uk-grid-medium" data-uk-grid-margin">' +
+                    '<div class="uk-width-1-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Client</span>' +
+                    '<select id="clients" onchange="getNumero(this)"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Autres clients</label></span>' +
+                    '<input id="autresClients" class="md-input" name="autres" type="text" value="'+calEvent.others+'"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-1-2">' +
+                    '<div class="uk-form-row" style="margin-top: 18px;">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Numéro</label></span>' +
+                    '<input id="numero" class="md-input" name="numero" type="text" value="'+calEvent.tel+'"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row" style="margin-top: -3px;">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Autre numéro</label></span>' +
+                    '<input id="otherNumbers" class="md-input" name="otherNumbers" type="text" value="'+calEvent.otherNumbers+'"    />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Titre de RDV</span>' +
+                    '<select class="md-input" id="title_rdv"  data-md-selectize data-md-selectize-bottom >' +
+                    '<option  disabled >Choisir un titre ... </option>' +
+                    '<option value="Recherche" ' + ((calEvent.title == "RDV pour une recherche") ? 'selected=selected' : '' ) + '>Recherche</option>' +
+                    '<option value="Acquisition" ' + ((calEvent.title == "RDV pour une acquisition") ? 'selected=selected' : '' ) + '>Acquisition</option>' +
+                    '<option value="Prise mandat" ' + ((calEvent.title == "RDV pour une prise mandat") ? 'selected=selected' : '' ) + '>Prise mandat</option>' +
+                    '<option value="Visite" ' + ((calEvent.title == "RDV pour une visite") ? 'selected=selected' : '' ) + '>Visite</option>' +
+                    '<option value="Prise offre" ' + ((calEvent.title == "RDV pour une prise offre") ? 'selected=selected' : '' ) + '>Prise offre</option>' +
+                    '<option value="Acceptation" ' + ((calEvent.title == "RDV pour une acceptation") ? 'selected=selected' : '' ) + '>Acceptation</option>' +
+                    '<option value="Evaluation" ' + ((calEvent.title == "RDV pour une évaluation") ? 'selected=selected' : '' ) + '>Evaluation</option>' +
+                    '<option value="Réunion" ' + ((calEvent.title == "RDV pour une réunion") ? 'selected=selected' : '' ) + '>Réunion</option>' +
+                    '<option value="Autres" ' + ((calEvent.title == "Autre") ? 'selected=selected' : '' ) + '>Autres</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div id="recherche_div"' + ((calEvent.title == "RDV pour une recherche") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_recherche" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Zone</label></span>' +
+                    '<input id="zone" class="md-input" name="text" type="text" required ' + ((calEvent.title == "RDV pour une recherche") ? 'value="' : '' ) +calEvent.hiddenDatas[0]['zone']+ '"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Rue</label></span>' +
+                    '<input id="rue" class="md-input" name="text" type="text" required ' + ((calEvent.title == "RDV pour une recherche") ? 'value="' : '' ) +calEvent.hiddenDatas[0]['rue']+ '" />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_recherche" class="md-input title" name="text" type="text"  required ' + ((calEvent.title == "RDV pour une recherche") ? 'value="' : '' ) +calEvent.title+ '"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="acquisition_div"' + ((calEvent.title == "RDV pour une acquisition") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_nouvelle" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Nouvelle</span>' +
+                    '<select id="nouvelles"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_nouvelle" class="md-input title" name="text" type="text" ' + ((calEvent.title == "RDV pour une acquisition") ? 'value="' : '' )+calEvent.title+ '"  />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="prisemandat_div"' + ((calEvent.title == "RDV pour une prise mandat") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_acquisition" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Acquisition</span>' +
+                    '<select id="acquisitions"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_acquisition" class="md-input title" name="text" type="text" value="" required  ' + ((calEvent.title == "RDV pour une prise mandat") ? 'value="RDV pour une acquisition"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="visite_div"' + ((calEvent.title == "RDV pour une visite") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_visite" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Mandat</span>' +
+                    '<select id="visites"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-width-medium-2-2" style="display : none">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_visite" class="md-input title" name="text" type="text"  ' + ((calEvent.title == "RDV pour une visite") ? 'value="RDV pour une visite"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="offre_div"' + ((calEvent.title == "RDV pour une prise offre") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_offre" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Mandat</span>' +
+                    '<select id="offres"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Prix proposé</label>' +
+                    '<input id="proposedPriceOffre" class="md-input money" name="text" type="text" required  ' + ((calEvent.title == "RDV pour une prise offre") ? 'value="' : '' ) +calEvent.hiddenDatas[0]['price']+ '" />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_offre" class="md-input title" name="text" type="text"  ' + ((calEvent.title == "RDV pour une prise offre") ? 'value="RDV pour une prise offre"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="acceptation_div" ' + ((calEvent.title == "RDV pour une acceptation") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_accept" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Mandat</span>' +
+                    '<select id="acceptations"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Prix proposé</label>' +
+                    '<input id="proposedPriceAccept" class="md-input money" name="text" type="text" required   ' + ((calEvent.title == "RDV pour une acceptation") ? 'value="' : '' ) +calEvent.hiddenDatas[0]['price']+ '" />' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_accept" class="md-input title" name="text" type="text" required   ' + ((calEvent.title == "RDV pour une acceptation") ? 'value="RDV pour une prise offre"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="evaluation_div" ' + ((calEvent.title == "RDV pour une évaluation") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_requete" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<span class="uk-form-help-block">Requête</span>' +
+                    '<select id="requetes" style="display:none"></select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_requete" class="md-input title" name="text" type="text" required   ' + ((calEvent.title == "RDV pour une évaluation") ? 'value="RDV pour une évaluation"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id="reunion_div" ' + ((calEvent.title == "RDV pour une réunion") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_reunion" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-5-2" style="display : none">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_reunion" class="md-input title" name="text" type="text" required    ' + ((calEvent.title == "RDV pour une évaluation") ? 'value="RDV pour une évaluation"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '<div id ="autres_div" ' + ((calEvent.title == "Autre") ? '' : 'style="display : none;"' ) + '>' +
+                    '<form method="POST" name="form_other" action="#" class="uk-form-stacked" id="form_validation">' +
+                    '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-5-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Titre</label>' +
+                    '<input id="title_other" class="md-input title" name="text" type="text" required    ' + ((calEvent.title == "Autre") ? 'value="Autre"' : '' )+ '/>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+
+
+                    '</div>' +
+                    '</div>' +
+                    '<div  class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-2-2">' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Déscription</label>' +
+                    '<textarea id="description" class="md-input" cols="30" rows="4">'+calEvent.description+'</textarea>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '<span class="uk-form-help-block"></span>' + '<span class="uk-form-help-block"></span>' +
+
+
+
+                    ''
                 , function () {
-                    var title = $("#title");
-                    var description = $("#description");
-                    if (title.val() !== '') {
 
-                        var url = '{{ path('meeting_edit') }}';
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: 'title=' + title.val()
-                            + '&start=' + $('#datestart').val() + " " + $('#timestart').val()
-                            + '&end=' + $('#dateend').val() + " " + $('#timeend').val()
-                            + '&id=' + calEvent.id + '&status=' + $('#status').val() + '&typeMeeting=' + $('#typeMeeting').val()
-                            + '&description=' + description.val(),
+//                        alert($("#title_recherche").val())
+                        var titleRecherche = $("#title_recherche");
+                        if (titleRecherche.val() !== '') {
+                            var eventDataRech,
+                                    eventColorRech = event_color;
+                            eventDataRech = {
 
-                            success: function () {
-                                calendar_selectable.fullCalendar('refetchEvents');
-                                UIkit.modal.alert('Le rendez-vous a été modifié avec succès.', {
-                                    labels: {
-                                        Ok: 'Fermer'
-                                    }
-                                });
-                            },
-                            error: function () {
-                                UIkit.modal.alert('Erreur', {
-                                    labels: {
-                                        Ok: 'Fermer'
-                                    }
-                                });
+                                title: titleRecherche.val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColorRech,
+                                createdBy: 'Vous'
+                            };
+
+                            var urlRech = '{{ path('bienmeeting_add') }}';
+                            $.ajax({
+                                url: urlRech,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataRech.title + '&start=null&end=null&color=' + eventColorRech
+                                + '&zone=' + $('#zone').val() + '&rue=' + $('#rue').val() + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&status=' + $('#status').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&description=' + $("#description").val()
+                                ,
+                                success: function (response) {
+                                    console.log(response);
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    console.log(response);
+                                    UIkit.modal.alert('response', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_nouvelle").val() !== '') {
+                            var eventData,
+                                    eventColor =  event_color;
+                            eventData = {
+                                title: $("#title_nouvelle").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColor ? eventColor : '',
+                                createdBy: 'Vous'
+                            };
+                            var url = '{{ path('nouvellemeeting_add') }}';
+                            $.ajax({
+                                url: url,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventData.title + '&start=null&end=null&color=' + eventData.color
+                                + '&nouvelle=' + $('#nouvelles').val() + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&status=' + $('#status').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&description=' + $("#description").val()
+                                ,
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_acquisition").val() !== '') {
+                            var eventDataa,
+                                    eventColore =  event_color;
+                            eventDataa = {
+                                title: $("#title_acquisition").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColore ? eventColore : '',
+                                createdBy: 'Vous'
+                            };
+                            var urle = '{{ path('acquisitionmeeting_add') }}';
+                            $.ajax({
+                                url: urle,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataa.title + '&start=null&end=null&color=' + eventDataa.color
+                                + '&acquisition=' + $('#acquisitions').val() + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&status=' + $('#status').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&description=' + $("#description").val(),
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_requete").val() !== '') {
+                            var eventDataRequete,
+                                    eventColorRequete =  event_color;
+                            eventDataRequete = {
+                                title: $("#title_requete").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColorRequete ? eventColorRequete : '',
+                                createdBy: 'Vous'
+                            };
+                            var urlRequete = '{{ path('requetemeeting_add') }}';
+                            var autresClients = $('#autresClients');
+                            $.ajax({
+                                url: urlRequete,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataRequete.title + '&start=null&end=null&color=' + eventDataRequete.color
+                                + '&requete=' + $('#requetes').val() + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&status=' + $('#status').val()
+                                + '&other=' + autresClients.val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&other=' + autresClients.val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&description=' + $("#description").val(),
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_offre").val() !== '') {
+                            var eventDataOffre,
+                                    eventColorOffre =  event_color;
+                            eventDataOffre = {
+                                title: $("#title_offre").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColorOffre ? eventColorOffre : '',
+                                createdBy: 'Vous'
+                            };
+                            var urlMandat = '{{ path('mandatmeeting_add') }}';
+                            $.ajax({
+                                url: urlMandat,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataOffre.title + '&start=null&end=null&color=' + eventDataOffre.color
+                                + '&mandat=' + $('#offres').val() + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&status=' + $('#status').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&typeMandatMeeting= Offre'
+                                + '&proposedPrice=' + $('#proposedPriceOffre').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&description=' + $("#description").val(),
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_accept").val() !== '') {
+                            var eventDataAccept,
+                                    eventColorAccept =  event_color;
+                            eventDataAccept = {
+                                title: $("#title_accept").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColorAccept ? eventColorAccept : '',
+                                createdBy: 'Vous'
+                            };
+                            var urlAccept = '{{ path('mandatmeeting_add') }}';
+                            $.ajax({
+                                url: urlAccept,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataAccept.title + '&start=null&end=null&color=' + eventDataAccept.color
+                                + '&mandat=' + $('#acceptations').val() + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&status=' + $('#status').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&typeMandatMeeting= Acceptation'
+                                + '&proposedPrice=' + parseFloat($('#proposedPriceAccept').val())
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&description=' + $("#description").val(),
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_reunion").val() !== '') {
+                            var eventDataReunion,
+                                    eventColorReunion =  event_color;
+                            eventDataReunion = {
+                                title: $("#title_reunion").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColorReunion ? eventColorReunion : '',
+                                createdBy: 'Vous'
+                            };
+                            var urlReunion = '{{ path('reunionmeeting_add') }}';
+                            $.ajax({
+                                url: urlReunion,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataReunion.title + '&start=null&end=null&color=' + eventDataReunion.color
+                                + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&status=' + $('#status').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&description=' + $("#description").val()
+                                ,
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_other").val() !== '') {
+                            var eventDataOther,
+                                    eventColorOther = "#0277bd";
+                            eventDataOther = {
+                                title: $("#title_other").val(),
+//                                start: start,
+//                                end: end,
+                                remindFor: $("#personnel").val(),
+                                color: eventColorOther ? eventColorOther : '',
+                                createdBy: 'Vous'
+                            };
+                            var urlOther = '{{ path('othermeeting_add') }}';
+                            $.ajax({
+                                url: urlOther,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataOther.title + '&start=null&end=null&color=' + eventDataOther.color
+                                + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&status=' + $('#status').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&description=' + $("#description").val()
+                                ,
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else if ($("#title_visite").val() !== '') {
+//                            alert(event_color);
+                            var eventDataVisite,
+                                    eventColorVisite = event_color;
+                            eventDataVisite = {
+                                title: $("#title_visite").val(),
+
+                                remindFor: $("#personnel").val(),
+                                color: eventColorVisite ? eventColorVisite : '',
+                                createdBy: 'Vous'
+                            };
+                            var urlVisite = '{{ path('visite_add') }}';
+                            $.ajax({
+                                url: urlVisite,
+                                type: 'POST',
+                                data: 'id='+calEvent.id+'&title=' + eventDataVisite.title + '&start=null&end=null&color=' + eventDataVisite.color
+                                + '&mandat=' + $('#visites').val() + +'&remindFor=' + $('#personnelId').val()
+                                + '&remindFor=' + $('#personnelId').val()
+                                + '&client=' + $('#clients').val()
+                                + '&remindFors=' + serealizeSelects($('#personnels'))
+                                + '&status=' + $('#status').val()
+                                + '&other=' + $('#autresClients').val()
+                                + '&otherNumbers=' + $('#otherNumbers').val()
+                                + '&typeMeeting=' + $('#typeMeeting').val()
+                                + '&description=' + $("#description").val()
+                                ,
+                                success: function () {
+                                    calendar_selectable.fullCalendar('refetchEvents');
+                                },
+                                error: function () {
+                                    UIkit.modal.alert('Erreur', {
+                                        labels: {
+                                            Ok: 'Fermer'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }, {
+                        labels: {
+                            Ok: 'Modifier',
+                            Cancel: 'Fermer'
+                        }
+                    });
+
+            {#if (typeof(resources) !== 'undefined') {#}
+                {#$('#personnel').val(resources.title);#}
+                {#$('#personnelId').val(resources.id);#}
+            {#}#}
+            {#else {#}
+                {#for (var k in b.calendar.resourceManager.resourcesById) {#}
+                    {#if (b.calendar.resourceManager.resourcesById.hasOwnProperty(k)) {#}
+                        {#if (b.calendar.resourceManager.resourcesById[k].title === '{{ app.user.personnel.name }}') {#}
+                            {#$('#personnel').val(b.calendar.resourceManager.resourcesById[k].title);#}
+                            {#$('#personnelId').val(b.calendar.resourceManager.resourcesById[k].id);#}
+                        {#}#}
+                    {#}#}
+                {#}#}
+            {#}#}
+            $('#meeting_delete').on('click',function () {
+                altair_helpers.content_preloader_show('md');
+                var urlRech = '{{ path('meeting_delete') }}';
+                $.ajax({
+                    url: urlRech,
+                    type: 'POST',
+                    data: 'id='+calEvent.id
+                    ,
+                    success: function (response) {
+                        console.log(response);
+                        calendar_selectable.fullCalendar('refetchEvents');
+                        altair_helpers.content_preloader_hide();
+
+                    },
+                    error: function () {
+                        console.log(response);
+                        UIkit.modal.alert('response', {
+                            labels: {
+                                Ok: 'Fermer'
                             }
                         });
                     }
-                }, {
-                    labels: {
-                        Ok: 'Modifier',
-                        Cancel: 'Fermer'
-                    }
                 });
-            $('.select').kendoComboBox({
-                filter: "contains",
-                suggest: true
             });
+            var nouvelles = $('#nouvelles');
+            var acquisitions = $('#acquisitions');
+            var requetes = $('#requetes');
+            var offres = $('#offres');
+            var acceptations = $('#acceptations');
+            var visites = $('#visites');
+            var clients = $('#clients');
+            var personnels = $('#personnels');
+            nouvelles.selectize({
+                placeholder: 'Choisir une nouvelle....             ',
+                hideSelected: true
+            });
+            acquisitions.selectize({
+                placeholder: 'Choisir une acquisition....             ',
+                hideSelected: true
+            });
+//            requetes.selectize({
+//                placeholder: 'Choisir une requête....             ',
+//                hideSelected: true
+//            });
+            offres.selectize({
+                placeholder: 'Choisir un mandat....             ',
+                hideSelected: true
+            });
+            acceptations.selectize({
+                placeholder: 'Choisir un mandat....             ',
+                hideSelected: true
+            });
+            visites.selectize({
+                placeholder: 'Choisir un mandat....             ',
+                hideSelected: true
+            });
+            clients.selectize({
+                placeholder: 'Choisir un client....             ',
+                hideSelected: true,
+                render: {
+                    item: function (data) {
+                        return "<div  data-value='" + data.value + "' data-numero='" + data.numero + "'  class='item'>"
+                                + data.text + " </div>";
+                    }
+                }
+            });
+            personnels.selectize({
+                placeholder: 'Choisir les personnels....             ',
+                hideSelected: true
+            });
+
+            setFormatNumber();
+            getClients(clients,calEvent.client);
+            getPersonnels(personnels,calEvent.remindFors,calEvent.resourceId);
+            getNouvelles(nouvelles,calEvent.hiddenDatas[0]['nouvelleId']);
+            getAcquisitions(acquisitions,calEvent.hiddenDatas[0]['acquisitionId']);
+//            getRequetes(requetes);
+            getMandats(offres,calEvent.hiddenDatas[0]['mandatId']);
+            getMandats(acceptations,calEvent.hiddenDatas[0]['mandatId']);
+            getMandats(visites,calEvent.hiddenDatas[0]['mandatId']);
         }
 
         function setFormatNumber() {
@@ -476,6 +1271,7 @@
                 array.push($(this).val())
             });
             return array;
+
         }
 
         function editEvent(calEvent, calendar_selectable) {
@@ -519,7 +1315,7 @@
             $('#numero').closest('.md-input-wrapper').addClass('md-input-filled');
         }
 
-        function getNouvelles(select) {
+        function getNouvelles(select,nouvelleId) {
             var nouvelles = select[0].selectize;
             nouvelles.clearOptions();
             var url = '{{ path('nouvelle_list') }}';
@@ -533,6 +1329,10 @@
                                 text: element.title,
                                 value: element.id
                             });
+                            if (nouvelleId == element.id)
+                            {
+                                nouvelles.setValue(element.id);
+                            }
                         });
                     }
                     else {
@@ -554,7 +1354,7 @@
             });
         }
 
-        function getAcquisitions(select) {
+        function getAcquisitions(select,acquisitionId) {
             var acquisitions = select[0].selectize;
             acquisitions.clearOptions();
             var url = '{{ path('acquisition_list') }}';
@@ -568,7 +1368,12 @@
                                 text: element.title,
                                 value: element.id
                             });
+                            if (acquisitionId == element.id)
+                            {
+                                acquisitions.setValue(element.id);
+                            }
                         });
+
                     }
                     else {
                         UIkit.modal.alert('Rien', {
@@ -588,41 +1393,9 @@
             });
         }
 
-        {#function getRequetes(select) {#}
-            {#var requetes = select[0].selectize;#}
-            {#requetes.clearOptions();#}
-            {#var url = '{{ path('requete_list') }}';#}
-            {#$.ajax({#}
-                {#url: url,#}
-                {#type: 'POST',#}
-                {#success: function (data) {#}
-                    {#if (data !== null) {#}
-                        {#$.each(data, function (key, element) {#}
-                            {#requetes.addOption({#}
-                                {#text: element.title,#}
-                                {#value: element.id#}
-                            {#});#}
-                        {#});#}
-                    {#}#}
-                    {#else {#}
-                        {#UIkit.modal.alert('Rien', {#}
-                            {#labels: {#}
-                                {#Ok: 'Fermer'#}
-                            {#}#}
-                        {#});#}
-                    {#}#}
-                {#},#}
-                {#error: function () {#}
-                    {#UIkit.modal.alert('Erreur', {#}
-                        {#labels: {#}
-                            {#Ok: 'Fermer'#}
-                        {#}#}
-                    {#});#}
-                {#}#}
-            {#});#}
-        {#}#}
 
-        function getMandats(select) {
+
+        function getMandats(select , mandatId) {
             var mandats = select[0].selectize;
             mandats.clearOptions();
             var url = '{{ path('mandat_list') }}';
@@ -636,6 +1409,10 @@
                                 text: element.title,
                                 value: element.id
                             });
+                            if (mandatId == element.id)
+                            {
+                                mandats.setValue(element.id)
+                            }
                         });
                     }
                     else {
@@ -656,7 +1433,7 @@
             });
         }
 
-        function getClients(select) {
+        function getClients(select,client) {
             var clients = select[0].selectize;
             clients.clearOptions();
             var url = '{{ path('client_list') }}';
@@ -671,6 +1448,10 @@
                                 value: element.value,
                                 numero: element.numero
                             });
+                            if (element.value == client)
+                            {
+                                clients.setValue(client)
+                            }
                         });
                     }
                     else {
@@ -691,7 +1472,7 @@
             });
         }
 
-        function getPersonnels(select) {
+        function getPersonnels(select,remindFors,resourceId) {
             var personnels = select[0].selectize;
             personnels.clearOptions();
             var url = '{{ path('personnel_list') }}';
@@ -701,11 +1482,24 @@
                 success: function (data) {
                     if (data !== null) {
                         $.each(data, function (key, element) {
+
                             personnels.addOption({
                                 text: element.title,
                                 value: element.id
                             });
+                            ids = [];
+
+
+
+
                         });
+                        $.each(remindFors, function (mykey, item) {
+                            if (item.id != resourceId)
+                            {
+                                ids.push(item.id);
+                            }
+                        });
+                        personnels.setValue(ids);
                     }
                     else {
                         UIkit.modal.alert('Rien', {
@@ -839,7 +1633,7 @@
 //                '<span class="uk-form-help-block">Couleur</span>' +
 //                calendarColorPicker +
 //                '</div>' +
-                '<div class="uk-grid  uk-grid-medium" data-uk-grid-margin>' +
+                '<div class="uk-grid uk-grid-divider  uk-grid-medium" data-uk-grid-margin>' +
                 '<div class="uk-width-medium-1-2">' +
                 '<div class="uk-form-row pers">' +
                 '<div class="parsley-row">' +
@@ -858,7 +1652,7 @@
 
                 '</div>' +
                     '<div class="uk-width-medium-1-2">' +
-                    '<div class="uk-form-row">' +
+                    '<div class="uk-form-row"  style="margin-top: -23px;">' +
                     '<div class="parsley-row">' +
                     '<span class="uk-form-help-block">Etat du rendez-vous</span>' +
                     '<select id="status" class="kendoComboBox select" style="width: 100%">' +
@@ -882,10 +1676,13 @@
                     '</div>' +
                     '</div>' +
                     '</div>' +
-                    '<div class="uk-width-medium-2-2">' +
+                    '</div>' +
+                    '<hr style="border: 1px solid; margin-top: 20px ; color: #dddddd">' +
+//                    '<div class="uk-width-medium-2-2">' +
 
-                    '<div class="uk-grid  uk-grid-medium" data-uk-grid-margin">' +
-                    '<div class="uk-width-1-2">' +
+//                    '<div class="uk-grid  uk-grid-divider   uk-grid-medium" data-uk-grid-margin">' +
+                    '<div class="uk-grid uk-grid-divider  uk-grid-medium" data-uk-grid-margin>' +
+                    '<div class="uk-width-medium-1-2">' +
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<span class="uk-form-help-block">Client</span>' +
@@ -893,28 +1690,32 @@
                     '</div>' +
                     '</div>' +
                     '<div class="uk-form-row">' +
-                    '<div class="parsley-row">' +
-                    '<label>Autres clients</label>' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Autres clients</label></span>' +
                     '<input id="autresClients" class="md-input" name="autres" type="text" />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
                     '<div class="uk-width-medium-1-2">' +
-                    '<div class="uk-form-row" style="margin-top: 27px;">' +
-                    '<div class="parsley-row">' +
-                    '<label>Numéro</label>' +
+                    '<div class="uk-form-row" style="margin-top: 18px;">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Numéro</label></span>' +
                     '<input id="numero" class="md-input" name="numero" type="text"  />' +
                     '</div>' +
                     '</div>' +
-                    '<div class="uk-form-row" style="margin-top: 27px;">' +
-                    '<div class="parsley-row">' +
-                    '<label>Autre numéro</label>' +
-                    '<input id="numero" class="md-input" name="autreNumero" type="text"  />' +
+                    '<div class="uk-form-row" style="margin-top: -3px;">' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Autre numéro</label></span>' +
+                    '<input id="otherNumbers" class="md-input" name="otherNumbers" type="text"  />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
+                    '<hr style="border: 1px solid; margin-top: 20px ; color: #dddddd">' +
                 '<div class="uk-width-medium-2-2">' +
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
@@ -938,14 +1739,16 @@
                     '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>' +
                     '<div class="uk-width-medium-2-2">' +
                     '<div class="uk-form-row">' +
-                    '<div class="parsley-row">' +
-                    '<label>Zone</label>' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Zone</label></span>' +
                     '<input id="zone" class="md-input" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
                     '<div class="uk-form-row">' +
-                    '<div class="parsley-row">' +
-                    '<label>Rue</label>' +
+                    '<div class="uk-input-group">' +
+                    '<span class="uk-form-help-block">' +
+                    '<label>Rue</label></span>' +
                     '<input id="rue" class="md-input" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
@@ -956,7 +1759,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_recherche" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_recherche" class="md-input title" name="text" type="text" required />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -980,7 +1783,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_nouvelle" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_nouvelle" class="md-input title" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -1004,7 +1807,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_acquisition" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_acquisition" class="md-input title" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -1026,7 +1829,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_visite" class="md-input" name="text" type="text" value=""  />' +
+                    '<input id="title_visite" class="md-input title" name="text" type="text" value=""  />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -1043,6 +1846,12 @@
                     '<select id="offres"></select>' +
                     '</div>' +
                     '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Prix proposé</label>' +
+                    '<input id="proposedPriceOffre" class="md-input money" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
                     '</div>' +
                     '</div>' +
                     '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
@@ -1050,15 +1859,10 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_offre" class="md-input" name="text" type="text" value=""  />' +
+                    '<input id="title_offre" class="md-input title" name="text" type="text" value=""  />' +
                     '</div>' +
                     '</div>' +
-                    '<div class="uk-form-row">' +
-                    '<div class="parsley-row">' +
-                    '<label>Prix proposé</label>' +
-                    '<input id="proposedPriceOffre" class="md-input money" name="text" type="text" value="" required />' +
-                    '</div>' +
-                    '</div>' +
+
                     '</div>' +
                     '</div>' +
                     '</form>' +
@@ -1073,6 +1877,12 @@
                     '<select id="acceptations"></select>' +
                     '</div>' +
                     '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<div class="parsley-row">' +
+                    '<label>Prix proposé</label>' +
+                    '<input id="proposedPriceAccept" class="md-input money" name="text" type="text" value="" required />' +
+                    '</div>' +
+                    '</div>' +
                     '</div>' +
                     '</div>' +
                     '<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin style="display : none">' +
@@ -1080,15 +1890,10 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_accept" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_accept" class="md-input title" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
-                    '<div class="uk-form-row">' +
-                    '<div class="parsley-row">' +
-                    '<label>Prix proposé</label>' +
-                    '<input id="proposedPriceAccept" class="md-input money" name="text" type="text" value="" required />' +
-                    '</div>' +
-                    '</div>' +
+
                     '</div>' +
                     '</div>' +
                     '</form>' +
@@ -1110,7 +1915,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_requete" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_requete" class="md-input title" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -1124,7 +1929,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_reunion" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_reunion" class="md-input title" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -1138,7 +1943,7 @@
                     '<div class="uk-form-row">' +
                     '<div class="parsley-row">' +
                     '<label>Titre</label>' +
-                    '<input id="title_other" class="md-input" name="text" type="text" value="" required />' +
+                    '<input id="title_other" class="md-input title" name="text" type="text" value="" required />' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
@@ -1166,11 +1971,13 @@
 
                 ''
                 , function () {
+
                     var titleRecherche = $("#title_recherche");
                     if (titleRecherche.val() !== '') {
                         var eventDataRech,
                             eventColorRech = event_color;
                         eventDataRech = {
+
                             title: titleRecherche.val(),
                             start: start,
                             end: end,
@@ -1189,6 +1996,7 @@
                             + '&remindFors=' + serealizeSelects($('#personnels'))
                             + '&status=' + $('#status').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&description=' + $("#description").val()
                             ,
@@ -1226,6 +2034,7 @@
                             + '&remindFors=' + serealizeSelects($('#personnels'))
                             + '&status=' + $('#status').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&description=' + $("#description").val()
                             ,
@@ -1262,6 +2071,7 @@
                             + '&client=' + $('#clients').val()
                             + '&status=' + $('#status').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&remindFors=' + serealizeSelects($('#personnels'))
                             + '&description=' + $("#description").val(),
@@ -1299,6 +2109,7 @@
                             + '&client=' + $('#clients').val()
                             + '&status=' + $('#status').val()
                             + '&other=' + autresClients.val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&other=' + autresClients.val()
                             + '&remindFors=' + serealizeSelects($('#personnels'))
@@ -1337,6 +2148,7 @@
                             + '&status=' + $('#status').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMandatMeeting= Offre'
                             + '&proposedPrice=' + $('#proposedPriceOffre').val()
                             + '&remindFors=' + serealizeSelects($('#personnels'))
@@ -1375,6 +2187,7 @@
                             + '&status=' + $('#status').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMandatMeeting= Acceptation'
                             + '&proposedPrice=' + parseFloat($('#proposedPriceAccept').val())
                             + '&remindFors=' + serealizeSelects($('#personnels'))
@@ -1413,6 +2226,7 @@
                             + '&remindFors=' + serealizeSelects($('#personnels'))
                             + '&status=' + $('#status').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&description=' + $("#description").val()
                             ,
@@ -1450,6 +2264,7 @@
                             + '&remindFors=' + serealizeSelects($('#personnels'))
                             + '&status=' + $('#status').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&description=' + $("#description").val()
                             ,
@@ -1466,7 +2281,7 @@
                         });
                     }
                     else if ($("#title_visite").val() !== '') {
-alert(event_color);
+
                         var eventDataVisite,
                             eventColorVisite = event_color;
                         eventDataVisite = {
@@ -1489,6 +2304,7 @@ alert(event_color);
                             + '&remindFors=' + serealizeSelects($('#personnels'))
                             + '&status=' + $('#status').val()
                             + '&other=' + $('#autresClients').val()
+                            + '&otherNumbers=' + $('#otherNumbers').val()
                             + '&typeMeeting=' + $('#typeMeeting').val()
                             + '&description=' + $("#description").val()
                             ,
@@ -1510,6 +2326,7 @@ alert(event_color);
                         Cancel: 'Fermer'
                     }
                 });
+
 
 
 //                    altair_forms.init();
@@ -1583,6 +2400,19 @@ alert(event_color);
             getMandats(offres);
             getMandats(acceptations);
             getMandats(visites);
+        }
+        function cleanTitles()
+        {
+
+            $('#title_recherche').val('');
+            $('#title_nouvelle').val('');
+            $('#title_acquisition').val('');
+            $('#title_visite').val('');
+            $('#title_offre').val('RDV pour une prise offre');
+            $('#title_accept').val('');
+            $('#title_requete').val('');
+            $('#title_reunion').val('');
+            $('#title_reunion').val('');
         }
     </script>
 {% endblock %}

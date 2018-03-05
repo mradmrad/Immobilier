@@ -299,8 +299,19 @@
                                                 </div>
 
 
-                                            <div style="margin-top:30%;">
+                                            <div style="margin-top:5%;">
+
                                                 <label>Préférences de contact</label>
+                                                <div class="uk-grid uk-form-row">
+                                                    <div class="uk-width-1-2">
+                                                        De :
+                                                        {{ form_widget(form.preferences.heure) }}
+                                                    </div>
+                                                    <div class="uk-width-1-2">
+                                                        A :
+                                                        {{ form_widget(form.preferences.heureFin) }}
+                                                    </div>
+                                                </div>
                                                 <div class="uk-form-row parsley-row" style="margin-top: 5%">
                                                     {{ form_widget(form.preferences.lundi) }}
                                                     Lundi
@@ -326,16 +337,7 @@
                                                     {{ form_widget(form.preferences.dimanche) }}
                                                     dimanche
                                                 </div>
-                                                <div class="uk-grid uk-form-row">
-                                                    <div class="uk-width-1-2">
-                                                        De :
-                                                        {{ form_widget(form.preferences.heure) }}
-                                                    </div>
-                                                    <div class="uk-width-1-2">
-                                                        A :
-                                                        {{ form_widget(form.preferences.heureFin) }}
-                                                    </div>
-                                                </div>
+
                                                 <div class="uk-form-row parsley-row">
 
                                                     Notes de contact :
@@ -377,7 +379,7 @@
                                                     {{ form_widget(form.mainAddress.governorate) }}
                                                 </div>
                                             </div>
-                                            <div class="uk-form-row" style="margin-top: 53%">
+                                            <div class="uk-form-row" style="margin-top: 20%">
                                                 <label for="product_edit_sn_control">Origine</label>
                                                 {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
                                                 {{ form_widget(form.origine) }}

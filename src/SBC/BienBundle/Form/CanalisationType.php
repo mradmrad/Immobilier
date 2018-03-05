@@ -26,7 +26,8 @@ class CanalisationType extends AbstractType
             'choice_attr' => function () {
                 return ['data-md-icheck' => ''];
             },
-            'expanded'=>true
+            'expanded'=>true,
+            'required'=>false
         ))
             ->add('sonede',ChoiceType::class,array(
                 'choices' => array(
@@ -40,7 +41,8 @@ class CanalisationType extends AbstractType
 //                'attr' => array(
 //                    'class' => 'md-input'
 //                ),
-                'expanded'=>true
+                'expanded'=>true,
+                'required'=>false
             ))
             ->add('gaz',ChoiceType::class,array(
                 'choices' => array(
@@ -54,7 +56,8 @@ class CanalisationType extends AbstractType
                 'choice_attr' => function () {
                     return ['data-md-icheck' => ''];
                 },
-                'expanded'=>true
+                'expanded'=>true,
+                'required'=>false
             ))
             ->add('onas',ChoiceType::class,array(
                 'choices' => array(
@@ -68,7 +71,8 @@ class CanalisationType extends AbstractType
                 'choice_attr' => function () {
                     return ['data-md-icheck' => ''];
                 },
-                'expanded'=>true
+                'expanded'=>true,
+                'required'=>false
             ))
             ->add('eclairage',ChoiceType::class,array(
                 'choices' => array(
@@ -82,7 +86,8 @@ class CanalisationType extends AbstractType
                 'choice_attr' => function () {
                     return ['data-md-icheck' => ''];
                 },
-                'expanded'=>true
+                'expanded'=>true,
+                'required'=>false
             ))
             ->add('telephone',ChoiceType::class,array(
                 'choices' => array(
@@ -96,7 +101,8 @@ class CanalisationType extends AbstractType
                 'choice_attr' => function () {
                     return ['data-md-icheck' => ''];
                 },
-                'expanded'=>true
+                'expanded'=>true,
+                'required'=>false
             ))
             ->add('route',ChoiceType::class,array(
                 'choices' => array(
@@ -110,7 +116,8 @@ class CanalisationType extends AbstractType
                 'choice_attr' => function () {
                     return ['data-md-icheck' => ''];
                 },
-                'expanded'=>true
+                'expanded'=>true,
+                'required'=>false
             ))
             ->add('trottoir',ChoiceType::class,array(
                     'choices' => array(
@@ -124,7 +131,8 @@ class CanalisationType extends AbstractType
                     'choice_attr' => function () {
                         return ['data-md-icheck' => ''];
                     },
-                    'expanded'=>true
+                    'expanded'=>true,
+                    'required'=>false
                 )
 
             );

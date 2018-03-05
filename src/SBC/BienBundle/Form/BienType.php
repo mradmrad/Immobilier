@@ -42,7 +42,9 @@ class BienType extends AbstractType
     {
 
         $builder
-            ->add('title')
+            ->add('title',TextType::class,array(
+                'required'=>false
+            ))
             ->add('description', TextareaType::class, array(
                 'required' => false,
             ))
@@ -411,8 +413,8 @@ class BienType extends AbstractType
                     'empty_data' => null,
 //                    'required' => false,
                     'attr' => array(
-                        'class' => 'kendoComboBox select',
-                        'style' => 'width:100%'
+//                        'class' => 'kendoComboBox select',
+//                        'style' => 'width:100%'
                     )
                 )
             )
@@ -485,6 +487,7 @@ class BienType extends AbstractType
                 'class' => Adresse::class,
                 'placeholder' => 'Choisir le numéro',
                 'empty_data' => null,
+                'required'=> false
             ))
 //            ->add('agency', EntityType::class, array(
 //                'class' => Agency::class,
@@ -532,6 +535,24 @@ class BienType extends AbstractType
                     'data-uk-grid-margin' => ''
                 )
             ))
+            ->add('representants', CollectionType::class, array(
+                'entry_type' => ProprietaireSelfType::class,
+                'allow_add' => true,
+                'by_reference' => false,
+                'attr' => array(
+                    'class' => 'uk-grid',
+                    'data-uk-grid-margin' => ''
+                )
+            ))
+            ->add('locataires', CollectionType::class, array(
+                'entry_type' => ProprietaireSelfType::class,
+                'allow_add' => true,
+                'by_reference' => false,
+                'attr' => array(
+                    'class' => 'uk-grid',
+                    'data-uk-grid-margin' => ''
+                )
+            ))
             ->add('procurations', CollectionType::class, array(
                 'entry_type' => ProcurationType::class,
                 'allow_add' => true,
@@ -541,16 +562,15 @@ class BienType extends AbstractType
                     'data-uk-grid-margin' => ''
                 )
             ))
-            ->add('representants',ChoiceType::class,array(
+            ->add('representantscomme',ChoiceType::class,array(
                 'choices' => array(
-                    'Propriétaire' => 'Propriétaire',
-                    'Par procuration' => 'Par procuration',
+                    'Représentant par procuration' => 'Représentant par procuration',
                     'Représentant de société' => 'Représentant de société'
 
                 ),
                 'attr' => array(
                     'data-md-selectize' => 'data-md-selectize',
-                    'onchange' => 'qualityChanged()'
+//                    'onchange' => 'qualityChanged()'
                 )
             ))
             ->add('societePoste',ChoiceType::class,array(

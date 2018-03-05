@@ -23,7 +23,8 @@ class PersonnelController extends Controller
      */
     public function indexAction()
     {
-        $personnels = $this->getDoctrine()->getManager()->getRepository('PersonnelBundle:Personnel')->findAll();
+        $id = $this->getUser()->getId();
+        $personnels = $this->getDoctrine()->getManager()->getRepository('PersonnelBundle:Personnel')->MyfindAll($id);
 
         return $this->render('@Personnel/Personnel/index.html.twig', array(
             'personnels' => $personnels,
@@ -57,10 +58,10 @@ class PersonnelController extends Controller
      */
     public function allOrOneByRoleAction()
     {
-        if ($this->isGranted('ROLE_SUPER_ADMIN'))
-            $personnels = $this->getDoctrine()->getManager()->getRepository('PersonnelBundle:Personnel')->meetingsPersonnels();
-        else
-            $personnels = $this->getDoctrine()->getManager()->getRepository('PersonnelBundle:Personnel')->find($this->getUser()->getPersonnel());
+//        if ($this->isGranted('ROLE_SUPER_ADMIN'))
+            $personnels = $this->getDoctrine()->getManager()->getRepository('PersonnelBundle:Personnel')->MyfindAll(0);
+//        else
+//            $personnels = $this->getDoctrine()->getManager()->getRepository('PersonnelBundle:Personnel')->find($this->getUser()->getPersonnel());
 
 
 

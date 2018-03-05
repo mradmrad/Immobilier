@@ -41,7 +41,7 @@ class Bien implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
 
@@ -284,6 +284,20 @@ class Bien implements \JsonSerializable
     private $owners;
 
     /**
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     * @Assert\Valid()
+     */
+    private $representants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     * @Assert\Valid()
+     */
+    private $locataires;
+
+    /**
      * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Procuration", mappedBy="bien", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(name="procuration_id", referencedColumnName="id")
      * @Assert\Valid()
@@ -295,7 +309,7 @@ class Bien implements \JsonSerializable
      *
      * @var string
      */
-    private $representants;
+    private $representantscomme;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -321,6 +335,7 @@ class Bien implements \JsonSerializable
 
     /**
      * @ORM\ManyToOne(targetEntity="SBC\GeoTunisieBundle\Entity\Adresse")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $address;
 
@@ -507,9 +522,9 @@ class Bien implements \JsonSerializable
     private $style;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="proximite", type="string", length=255 , nullable=true)
+     * @ORM\Column(name="proximite", type="array", length=255 , nullable=true)
      */
     private $proximite;
 
@@ -522,9 +537,9 @@ class Bien implements \JsonSerializable
 
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="influence", type="string", length=255 , nullable=true)
+     * @ORM\Column(name="influence", type="array", length=255 , nullable=true)
      */
     private $influence;
 
@@ -2559,5 +2574,29 @@ class Bien implements \JsonSerializable
     public function getSde()
     {
         return $this->sde;
+    }
+
+    /**
+     * Set loisir
+     *
+     * @param string $loisir
+     *
+     * @return Bien
+     */
+    public function setLoisir($loisir)
+    {
+        $this->loisir = $loisir;
+
+        return $this;
+    }
+
+    /**
+     * Get loisir
+     *
+     * @return string
+     */
+    public function getLoisir()
+    {
+        return $this->loisir;
     }
 }

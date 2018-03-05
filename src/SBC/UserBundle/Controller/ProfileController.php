@@ -162,8 +162,9 @@ class ProfileController extends BaseController
         $form->setData($user);
         $form->handleRequest($request);
         $roles = $user->getRoles();
-
+//        die(var_dump('here'));
         if ($form->isSubmitted() && $form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $user->setRoles($roles);
             $userManager = $this->get('fos_user.user_manager');
@@ -195,7 +196,7 @@ class ProfileController extends BaseController
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updatePassword($user);
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('user_show', array('id' => $user->getId()));
+            return $this->redirectToRoute('personnel_index');
         }
 
         

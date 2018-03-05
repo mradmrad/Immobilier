@@ -116,14 +116,14 @@ class Requete
     /**
      * @var bool
      *
-     * @ORM\Column(name="furnished", type="boolean")
+     * @ORM\Column(name="furnished", type="boolean" , nullable = true)
      */
     private $furnished;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="notfurnished", type="boolean")
+     * @ORM\Column(name="notfurnished", type="boolean",nullable = true)
      */
     private $notfurnished;
 

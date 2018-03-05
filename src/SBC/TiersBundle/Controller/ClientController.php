@@ -247,7 +247,7 @@ class ClientController extends Controller
         $liste = array();
         foreach ($clients as $client) {
             $liste[] = array(
-                'text' => $client->getDenomination(),
+                'text' => $client->getDenomination().' '.$client->getPrenom(),
                 'value' => $client->getCode(),
                 'numero' => $client->getTel()
             );

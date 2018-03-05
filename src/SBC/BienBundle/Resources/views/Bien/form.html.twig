@@ -330,31 +330,14 @@
                     </div>
                 </div>
             </div>
-            <ul class="uk-tab" data-uk-tab="{connect:'#tabs'}" id="tabs_1">
+            <ul class="uk-tab" data-uk-tab="{connect:'#tabs', swiping: false}" id="tabs_1">
                 <li class="uk-active"><a href="#">Général</a></li>
                 <li><a href="#">Détails</a></li>
                 <li><a href="#">Photos & Papiers</a></li>
             </ul>
             <ul id="tabs" class="uk-switcher uk-margin">
                 <li>
-                    {#<div class="md-card">#}
-                    {#<div class="md-card-toolbar">#}
-                    {#<h3 class="md-card-toolbar-heading-text">#}
-                    {#Details#}
-                    {#</h3>#}
-                    {#</div>#}
-                    {#<div class="md-card-content large-padding">#}
-                    {#<div class="uk-form-row">#}
-                    {#<div class="parsley-row">#}
-                    {#<span class="uk-form-help-block">Raison</span>#}
-                    {#{{ form_widget(form.nature) }}#}
-                    {#<span>     {{ form_errors(form.nature) }} </span>#}
-                    {#</div>#}
-                    {#</div>#}
 
-                    {#</div>#}
-                    {#</div>#}
-                    {#</div>#}
                     <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
 
                         <div class="uk-width-5-10  uk-width-large-5-10">
@@ -379,7 +362,7 @@
                                                                 id="gouvernorat"
                                                                 data-md-selectize data-md-selectize-bottom
                                                                 onchange="getVilles(this)">
-                                                            {% if bien.id is not null %}
+                                                            {% if bien.address is not null %}
                                                                 <option value="{{ bien.address.rue.localite.ville.gouvernorat.id }}">
                                                                     {{ bien.address.rue.localite.ville.gouvernorat.name }}
                                                                 </option>
@@ -629,14 +612,14 @@
                         </div>
                         <div class="md-card-content large-padding">
                             <div class="uk-grid">
-                                <div class="uk-width-1-4">
+                                {#<div class="uk-width-1-4">#}
 
-                                    En qualité de :
-                                </div>
-                                <div class="uk-width-3-4">
+                                    {#En qualité de :#}
+                                {#</div>#}
+                                {#<div class="uk-width-3-4">#}
 
-                                    {{ form_widget(form.representants) }}
-                                </div>
+                                    {#{{ form_widget(form.representants) }}#}
+                                {#</div>#}
 
                             </div>
 
@@ -646,7 +629,7 @@
                                     Propriétaire <a id="addOwner"><i class="material-icons md-24">&#xE146;</i></a>
                                     :
                                 </div>
-                                <div class="uk-width-3-4">
+                                <div style="border-bottom:1px solid" class="uk-width-3-4">
                                     <div class="md-card-content large-padding">
                                         {% if bien.id == 0 or form.owners|length ==0 %}
                                             {{ form_widget(form.owners) }}
@@ -664,6 +647,7 @@
                                                             </div>
                                                         </div>
                                                         <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
                                                             <i class="material-icons md-24">&#xE872;</i>
                                                         </a>
                                                     </div>
@@ -674,46 +658,30 @@
                                     </div>
                                 </div>
 
-                            </div>
-
-                            <div id="procurations_div" class="uk-grid">
                                 <div class="uk-width-1-4">
-                                    Procurations <a id="addProcuration"><i class="material-icons md-24">&#xE146;</i></a>
 
+                                    Représenté par <a id="addRepresentant"><i class="material-icons md-24">&#xE146;</i></a>
+                                    :
                                 </div>
-                                <div class="uk-width-3-4">
+                                <div style="border-bottom:1px solid"  class="uk-width-2-4">
                                     <div class="md-card-content large-padding">
-                                        {% if bien.id == 0 or form.procurations|length ==0 %}
-                                            {{ form_widget(form.procurations) }}
+                                        {% if bien.id == 0 or form.representants|length ==0 %}
+                                            {{ form_widget(form.representants) }}
                                         {% else %}
-                                            <div id="{{ form.procurations.vars.id }}" class="uk-grid"
+                                            <div id="{{ form.representants.vars.id }}" class="uk-grid"
                                                  data-uk-grid-margin
-                                                 data-prototype="{{ form_widget(form.procurations.vars.prototype)|e('html_attr') }}">
-                                                {% for procuration in form.procurations %}
-                                                    <div class="uk-width-medium-1-4 blockSection">
+                                                 data-prototype="{{ form_widget(form.representants.vars.prototype)|e('html_attr') }}">
+                                                {% for rep in form.representants %}
+                                                    <div class="uk-width-medium-2-4 blockSection">
                                                         <div class="uk-form-row">
                                                             <div class="parsley-row">
-                                                                {{ form_label(procuration.dateProcuration,   "Date procuration"  ) }}
-                                                                {{ form_widget(procuration.dateProcuration) }}
-                                                                <span>{{ form_errors(procuration.dateProcuration) }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="uk-form-row">
-                                                            <div class="parsley-row">
-                                                                {{ form_label(procuration.lieu,   "Lieu"  ) }}
-                                                                {{ form_widget(procuration.lieu) }}
-                                                                <span> {{ form_errors(procuration.lieu) }}</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="uk-form-row">
-                                                            <div class="parsley-row">
-                                                                {{ form_label(procuration.representant,   "Donne procuration à"  ) }}
-                                                                {{ form_widget(procuration.representant) }}
-                                                                <span>{{ form_errors(procuration.representant) }}</span>
+                                                                {{ form_label(rep.client,   "Propriétaire"  ) }}
+                                                                {{ form_widget(rep.client) }}
+                                                                <span>{{ form_errors(rep.client) }}</span>
                                                             </div>
                                                         </div>
                                                         <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
                                                             <i class="material-icons md-24">&#xE872;</i>
                                                         </a>
                                                     </div>
@@ -721,26 +689,123 @@
                                             </div>
                                         {% endif %}
 
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-4">
+
+                                        <div class="uk-input-group" style="width:100%;">
+                                            {#<span class="uk-input-group-addon">#}
+                                            {##}
+                                            {#</span>#}
+                                            <span class="uk-form-help-block">Comme</span>
+                                            {{ form_widget(form.representantscomme) }}
+                                            <span> {{ form_errors(form.representantscomme) }} </span>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="uk-width-1-4">
+
+                                    Locataires <a id="addLocataire"><i class="material-icons md-24">&#xE146;</i></a>
+                                    :
+                                </div>
+                                <div  style="border-bottom:1px solid" class="uk-width-3-4">
+                                    <div class="md-card-content large-padding">
+                                        {% if bien.id == 0 or form.locataires|length ==0 %}
+                                            {{ form_widget(form.locataires) }}
+                                        {% else %}
+                                            <div id="{{ form.locataires.vars.id }}" class="uk-grid"
+                                                 data-uk-grid-margin
+                                                 data-prototype="{{ form_widget(form.locataires.vars.prototype)|e('html_attr') }}">
+                                                {% for loc in form.locataires %}
+                                                    <div class="uk-width-medium-2-4 blockSection">
+                                                        <div class="uk-form-row">
+                                                            <div class="parsley-row">
+                                                                {{ form_label(loc.client,   "Propriétaire"  ) }}
+                                                                {{ form_widget(loc.client) }}
+                                                                <span>{{ form_errors(loc.client) }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
+                                                            <i class="material-icons md-24">&#xE872;</i>
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
 
                                     </div>
                                 </div>
-                            </div>
-                            <div id="societe_div" class="uk-grid">
-                                <div class="uk-width-1-4">Representant :</div>
-                                <div class="uk-width-3-4">
-                                    <div class="uk-input-group">
-                                                   <span class="uk-input-group-addon">
-                                        <label>Poste</label></span>
-                                        {{ form_widget(form.societePoste) }}
-                                    </div>
-                                    <div class="uk-input-group">
-                                                   <span class="uk-input-group-addon">
-                                        <label>Nom et prénom</label></span>
-                                        {{ form_widget(form.representantNom) }}
-                                    </div>
-                                </div>
 
                             </div>
+
+                            {#<div id="procurations_div" class="uk-grid">#}
+                                {#<div class="uk-width-1-4">#}
+                                    {#Procurations <a id="addProcuration"><i class="material-icons md-24">&#xE146;</i></a>#}
+
+                                {#</div>#}
+                                {#<div class="uk-width-3-4">#}
+                                    {#<div class="md-card-content large-padding">#}
+                                        {#{% if bien.id == 0 or form.procurations|length ==0 %}#}
+                                            {#{{ form_widget(form.procurations) }}#}
+                                        {#{% else %}#}
+                                            {#<div id="{{ form.procurations.vars.id }}" class="uk-grid"#}
+                                                 {#data-uk-grid-margin#}
+                                                 {#data-prototype="{{ form_widget(form.procurations.vars.prototype)|e('html_attr') }}">#}
+                                                {#{% for procuration in form.procurations %}#}
+                                                    {#<div class="uk-width-medium-1-4 blockSection">#}
+                                                        {#<div class="uk-form-row">#}
+                                                            {#<div class="parsley-row">#}
+                                                                {#{{ form_label(procuration.dateProcuration,   "Date procuration"  ) }}#}
+                                                                {#{{ form_widget(procuration.dateProcuration) }}#}
+                                                                {#<span>{{ form_errors(procuration.dateProcuration) }}</span>#}
+                                                            {#</div>#}
+                                                        {#</div>#}
+                                                        {#<div class="uk-form-row">#}
+                                                            {#<div class="parsley-row">#}
+                                                                {#{{ form_label(procuration.lieu,   "Lieu"  ) }}#}
+                                                                {#{{ form_widget(procuration.lieu) }}#}
+                                                                {#<span> {{ form_errors(procuration.lieu) }}</span>#}
+                                                            {#</div>#}
+                                                        {#</div>#}
+
+                                                        {#<div class="uk-form-row">#}
+                                                            {#<div class="parsley-row">#}
+                                                                {#{{ form_label(procuration.representant,   "Donne procuration à"  ) }}#}
+                                                                {#{{ form_widget(procuration.representant) }}#}
+                                                                {#<span>{{ form_errors(procuration.representant) }}</span>#}
+                                                            {#</div>#}
+                                                        {#</div>#}
+                                                        {#<a class="btn-close">#}
+                                                            {#<i class="material-icons md-24">&#xE872;</i>#}
+                                                        {#</a>#}
+                                                    {#</div>#}
+                                                {#{% endfor %}#}
+                                            {#</div>#}
+                                        {#{% endif %}#}
+
+
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+                            {#<div id="societe_div" class="uk-grid">#}
+                                {#<div class="uk-width-1-4">Representant :</div>#}
+                                {#<div class="uk-width-3-4">#}
+                                    {#<div class="uk-input-group">#}
+                                                   {#<span class="uk-input-group-addon">#}
+                                        {#<label>Poste</label></span>#}
+                                        {#{{ form_widget(form.societePoste) }}#}
+                                    {#</div>#}
+                                    {#<div class="uk-input-group">#}
+                                                   {#<span class="uk-input-group-addon">#}
+                                        {#<label>Nom et prénom</label></span>#}
+                                        {#{{ form_widget(form.representantNom) }}#}
+                                    {#</div>#}
+                                {#</div>#}
+
+                            {#</div>#}
 
                         </div>
 
@@ -790,7 +855,7 @@
                                                    <span class="uk-input-group-addon">
                                                   {{ form_label(form.title,   "Titre de propriété"  ) }}</span>
                                                 {{ form_widget(form.title,
-                                                {'attr': {'class': 'md-input', 'required':'', 'data-parsley-title':'3'}}) }}
+                                                {'attr': {'class': 'md-input'}}) }}
                                                 <span>     {{ form_errors(form.title) }} </span>
                                             </div>
                                         </div>
@@ -866,7 +931,7 @@
                                                     <span class="uk-input-group-addon">
                                                     {{ form_label(form.zone,   "Zone"  ) }}</span>
                                                 {{ form_widget(form.zone,
-                                                {'attr': {'class': 'md-input', 'required':'', 'data-parsley-title':'3'}}) }}
+                                                {'attr': {'class': 'md-input'}}) }}
                                                 <span>     {{ form_errors(form.zone) }} </span>
                                             </div>
                                         </div>
@@ -900,50 +965,50 @@
                             </div>
                         </div>
 
-                        <div class="md-card">
-                            <div class="md-card-toolbar">
-                                <h3 class="md-card-toolbar-heading-text">
-                                    {{ form_label(form.description, "Texte descriptif (Site)") }}
-                                </h3>
-                            </div>
-                            <div class="md-card-content large-padding">
-                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
-                                    <div class="uk-width-large-2-2">
-                                        <div class="uk-form-row">
-                                            <div class="uk-input-group">
-                                                    <span class="uk-input-group-addon">
-                                                {{ form_label(form.titre,'Titre du bien') }}</span>
-                                                {{ form_widget(form.titre) }}
-                                                <span> {{ form_errors(form.titre) }} </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="uk-width-large-2-2">
-                                        <div class="uk-form-row">
-                                            <div class="uk-input-group">
-                                                  <span class="uk-form-help-block">
-                                        {{ form_label(form.vitrine,   "Description"  ) }}</span>
-                                                {{ form_widget(form.description, {'attr': {'class': 'md-input', 'name':'description',
-                                                    'cols':'10', 'rows':'8', 'data-parsley-trigger':'keyup',
-                                                    'data-parsley-validation-threshold':'10'}}) }}
-                                                <span> {{ form_errors(form.description) }} </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="uk-width-large-2-2">
-                                    <div class="uk-input-group">
-                                                    <span class="uk-form-help-block">
-                                        {{ form_label(form.vitrine,   "Texte fiche vitrine"  ) }}</span>
-                                        {{ form_widget(form.vitrine, {'attr': {'class': 'md-input', 'name':'description',
-                                            'cols':'10', 'rows':'8', 'data-parsley-trigger':'keyup',
-                                            'data-parsley-validation-threshold':'10'}}) }}
+                        {#<div class="md-card">#}
+                            {#<div class="md-card-toolbar">#}
+                                {#<h3 class="md-card-toolbar-heading-text">#}
+                                    {#{{ form_label(form.description, "Texte descriptif (Site)") }}#}
+                                {#</h3>#}
+                            {#</div>#}
+                            {#<div class="md-card-content large-padding">#}
+                                {#<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>#}
+                                    {#<div class="uk-width-large-2-2">#}
+                                        {#<div class="uk-form-row">#}
+                                            {#<div class="uk-input-group">#}
+                                                    {#<span class="uk-input-group-addon">#}
+                                                {#{{ form_label(form.titre,'Titre du bien') }}</span>#}
+                                                {#{{ form_widget(form.titre) }}#}
+                                                {#<span> {{ form_errors(form.titre) }} </span>#}
+                                            {#</div>#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                    {#<div class="uk-width-large-2-2">#}
+                                        {#<div class="uk-form-row">#}
+                                            {#<div class="uk-input-group">#}
+                                                  {#<span class="uk-form-help-block">#}
+                                        {#{{ form_label(form.vitrine,   "Description"  ) }}</span>#}
+                                                {#{{ form_widget(form.description, {'attr': {'class': 'md-input', 'name':'description',#}
+                                                    {#'cols':'10', 'rows':'8', 'data-parsley-trigger':'keyup',#}
+                                                    {#'data-parsley-validation-threshold':'10'}}) }}#}
+                                                {#<span> {{ form_errors(form.description) }} </span>#}
+                                            {#</div>#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="uk-width-large-2-2">#}
+                                    {#<div class="uk-input-group">#}
+                                                    {#<span class="uk-form-help-block">#}
+                                        {#{{ form_label(form.vitrine,   "Texte fiche vitrine"  ) }}</span>#}
+                                        {#{{ form_widget(form.vitrine, {'attr': {'class': 'md-input', 'name':'description',#}
+                                            {#'cols':'10', 'rows':'8', 'data-parsley-trigger':'keyup',#}
+                                            {#'data-parsley-validation-threshold':'10'}}) }}#}
 
-                                    </div>
-                                </div>
-                            </div>
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
 
-                        </div>
+                        {#</div>#}
                         <div class="md-card">
                             <div class="md-card-toolbar">
                                 <h3 class="md-card-toolbar-heading-text">
@@ -1321,7 +1386,7 @@
                                     </div>
                                 </div>
 
-                            </div style=>
+                            </div>
                             <div class="uk-width-2-2">
                                 <div class="md-card">
 
@@ -2011,7 +2076,398 @@
             </div>
         </div>
     </div>
+    <div class="uk-modal" id="modal-addDemandeur">
+        <form method="post" id="clientform" action="/demos/immobilier/web/app_dev.php/client/add">
+
+            <div class="uk-modal-dialog" style="width: 100%">
+                <button type="button" class="uk-modal-close uk-close"></button>
+                <div class="uk-modal-header"><h2>Ajouter un client</h2></div>
+                <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                    <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Cin (recto-verso)
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+
+                                    <div class="uk-width-medium-1-2">
+                                        {{ form_widget(clientform.cinRecto.file, {'attr': {'class': ''  }}) }}
+                                        <span> {{ form_errors(clientform.cinRecto.file) }} </span>
+                                        {{ form_widget(clientform.cinRecto.description, {'attr': {'class': ''  }}) }}
+                                    </div>
+                                    <div class="uk-width-medium-1-2">
+                                        {{ form_widget(clientform.cinVerso.file, {'attr': {'class': ''  }}) }}
+                                        <span> {{ form_errors(clientform.cinRecto.file) }} </span>
+                                        {{ form_widget(clientform.cinVerso.description, {'attr': {'class': ''  }}) }}
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="md-card">
+
+                            <div class="md-card-content">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                    <div class="uk-form-row parsley-row">
+                                        Nom :
+                                        <label for="product_edit_manufacturer_control" id="label_nom">
+
+                                        </label>
+                                        <br>
+                                        Prénom :
+                                        <label for="product_edit_manufacturer_control" id="label_prenom">
+
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="md-card">
+
+                            <div class="md-card-content">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+
+                                    <div class="uk-form-row parsley-row">
+                                        Portable :
+                                        <label for="product_edit_manufacturer_control" id="tel_label">
+
+                                        </label>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="md-card">
+
+                            <div class="md-card-content">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+
+
+                                    <div class="uk-form-row parsley-row">
+                                        Email :
+
+                                        <label for="product_edit_manufacturer_control" id="mail_label">
+
+                                        </label>
+                                        {#<input type="text" class="md-input" id="product_edit_manufacturer_control" name="product_edit_manufacturer_control" value="Samsung"/>#}
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-toolbar">
+                                <h3 class="md-card-toolbar-heading-text">
+                                    Préférences
+                                </h3>
+                            </div>
+                            <div class="md-card-content">
+                                <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                    <div class="uk-width-1-2">
+                                        <label id="Lundi" style="color : red">Lundi</label><br>
+
+                                        <label id="Mercredi" style="color : red">Mercredi</label><br>
+
+                                        <label id="Vendredi" style="color : red">Vendredi</label><br>
+
+                                        <label id="Dimanche" style="color : red">Dimanche</label><br>
+                                    </div>
+                                    <div class="uk-width-1-2">
+                                        <label id="Mardi" style="color : red">Mardi</label><br>
+                                        <label id="Jeudi" style="color : red">Jeudi</label><br>
+                                        <label id="Samedi" style="color : red">Samedi</label><br>
+                                    </div>
+                                    <div class="uk-width-1-2">
+                                        De :
+                                        <br>
+                                        A :
+                                    </div>
+                                    <div class="uk-width-1-2">
+                                        <label id="de_label"></label>
+                                        <br>
+                                        <label id="a_label"></label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-xLarge-8-10  uk-width-large-8-10">
+
+
+                        <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+
+                            <!--==================================================-->
+                            <div class="uk-width-xLarge-10-10  uk-width-large-10-10">
+                                <div class="md-card">
+                                    <div class="md-card-toolbar">
+                                        <h3 class="md-card-toolbar-heading-text">
+                                            Détails
+                                        </h3>
+                                    </div>
+                                    <div class="md-card-content">
+                                        <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin>
+                                            <div class="uk-width-large-1-2">
+
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Prenom</label></span>
+                                                        {{ form_widget(clientform.prenom) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Nom</label></span>
+                                                        {{ form_widget(clientform.denomination) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>CIN/RC</label></span>
+                                                        {{ form_widget(clientform.identifier,{'attr': {'class': 'md-input'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Date de naissance</label></span>
+                                                        {{ form_widget(clientform.naissance) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Lieu</label></span>
+                                                        {{ form_widget(clientform.birthplace) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Nationalité</label></span>
+                                                        {{ form_widget(clientform.nationalite) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-large-1-2">
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Sexe</label></span>
+                                                        {{ form_widget(clientform.sexe) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                    <span class="uk-input-group-addon"><label>Situation
+                                                            familiale</label></span>
+                                                        {{ form_widget(clientform.familySituation) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                    <span class="uk-input-group-addon"><label>Niveau
+                                                            d'études</label></span>
+                                                        {{ form_widget(clientform.etude) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Travail</label></span>
+                                                        {{ form_widget(clientform.travail) }}
+                                                    </div>
+                                                </div>
+                                                <div class="uk-width-1-1">
+                                                    <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Domaine</label></span>
+                                                        {{ form_widget(clientform.domaine) }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="uk-width-large-1-2">
+                                                <div class="md-card-toolbar">
+                                                    <h3 class="md-card-toolbar-heading-text">
+                                                        Contact
+                                                    </h3>
+                                                </div>
+                                                <div class="md-card-content">
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Portable
+                                                                favoris</label></span>
+                                                            {{ form_widget(clientform.tel) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Portable
+                                                                1</label></span>
+                                                            {{ form_widget(clientform.secondtel) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Portable
+                                                                2</label></span>
+                                                            {{ form_widget(clientform.thirdtel) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Tél
+                                                                bureau</label></span>
+                                                            {{ form_widget(clientform.telbureau) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-grid uk-form-row">
+                                                        <div class="uk-width-large-1-3">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon"><label>Fax</label></span>
+                                                            {{ form_widget(clientform.fax) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon"><label>Email</label></span>
+                                                            {{ form_widget(clientform.website) }}
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div style="margin-top:30%;">
+                                                        <label>Préférences de contact</label>
+                                                        <div class="uk-form-row parsley-row" style="margin-top: 5%">
+                                                            {{ form_widget(clientform.preferences.lundi) }}
+                                                            Lundi
+                                                            {{ form_widget(clientform.preferences.mardi) }}
+                                                            Mardi
+                                                            {{ form_widget(clientform.preferences.mercredi) }}
+                                                            Mercredi
+
+
+                                                            {#</div>#}
+                                                            {#<div class="uk-form-row parsley-row">#}
+                                                            {{ form_widget(clientform.preferences.jeudi) }}
+                                                            jeudi
+                                                            {{ form_widget(clientform.preferences.vendredi) }}
+                                                            vendredi
+                                                            {{ form_widget(clientform.preferences.samedi) }}
+                                                            samedi
+                                                            {#</div>#}
+                                                            {#<div class="uk-form-row parsley-row">#}
+                                                            {{ form_widget(clientform.preferences.dimanche) }}
+                                                            dimanche
+                                                        </div>
+                                                        <div class="uk-grid uk-form-row">
+                                                            <div class="uk-width-1-2">
+                                                                De :
+                                                                {{ form_widget(clientform.preferences.heure) }}
+                                                            </div>
+                                                            <div class="uk-width-1-2">
+                                                                A :
+                                                                {{ form_widget(clientform.preferences.heureFin) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="uk-form-row parsley-row">
+
+                                                            Notes de contact :
+                                                            {{ form_widget(clientform.preferences.note) }}
+                                                        </div>
+                                                    </div>
+                                                    {#<hr class="uk-grid-divider">#}
+
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-large-1-2">
+                                                <div class="md-card-toolbar">
+                                                    <h3 class="md-card-toolbar-heading-text">
+                                                        Adresse
+                                                    </h3>
+                                                </div>
+                                                <div class="md-card-content">
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon"><label>Adresse</label></span>
+                                                            {{ form_widget(clientform.mainAddress.address) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                        <span class="uk-input-group-addon"><label>Code
+                                                                postale</label></span>
+                                                            {{ form_widget(clientform.mainAddress.zipCode) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon"><label>Ville</label></span>
+                                                            {{ form_widget(clientform.mainAddress.city) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-width-1-1">
+                                                        <div class="uk-input-group">
+                                                            <span class="uk-input-group-addon"><label>Gouvernorate</label></span>
+                                                            {{ form_widget(clientform.mainAddress.governorate) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-form-row" style="margin-top: 53%">
+                                                        <label for="product_edit_sn_control">Origine</label>
+                                                        {#<input type="text" class="md-input" id="product_edit_sn_control" name="product_edit_sn_control" value="SM-G925TZKFTMB"/>#}
+                                                        {{ form_widget(clientform.origine) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-form-row">
+                                    <label for="product_edit_description_control">Autre détails</label>
+                                    {#<textarea class="md-input" name="product_edit_description_control" id="product_edit_description_control" cols="30" rows="4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquam necessitatibus suscipit velit voluptatibus! Ab accusamus ad adipisci alias aliquid at atque consectetur, dicta dignissimos, distinctio dolores esse fugiat iste laborum libero magni maiores maxime modi nemo neque, nesciunt nisi nulla optio placeat quas quia quibusdam quis saepe sit ullam!</textarea>#}
+                                    {{ form_widget(clientform.moreInformations) }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="uk-modal-footer uk-text-left">
+                    <button type="submit" class="md-btn md-btn-primary" onclick="newDemandeur(this)">
+                        Ajouter
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </div>
+<script src="{{ asset('js/compiled/mainWithDropify_dropify.min_1.js') }}"></script>
+
+<!--  form file input functions -->
+{#<script src="{{ asset('template/assets/js/kendoui_custom.min.js') }}"></script>#}
+    {#<script src="{{ asset('template/assets/js/kendoui_custom.min.js') }}"></script>#}
+<script src="{{ asset('bundles/immobilier/assets/js/pages/forms_file_input.min.js') }}"></script>
 <script>
 
     $(function () {
@@ -2024,23 +2480,24 @@
             filter: "contains",
             suggest: true
         });
-        {#var ismapped = $('#sbc_bienbundle_bien_ismapped');#}
-        {#if (!ismapped.is(':checked')) {#}
-        {#$('#displaymap').css("display", "none");#}
-        {#}#}
-        {#ismapped.on('ifChanged', function () {#}
-        {#ismapped.on('ifChecked', function () {#}
-        {#$('#displaymap').css("display", "block");#}
-        {#{% if  bien.ismapped %}#}
-        {#googleMapApiLaunch($('#sbc_bienbundle_bien_longitude').val(), $('#sbc_bienbundle_bien_latitude').val());#}
-        {#{% else %}#}
-        {#googleMapApiLaunch(10.227091, 36.771820);#}
-        {#{% endif %}#}
-        {#});#}
-        {#ismapped.on('ifUnchecked', function () {#}
-        {#$('#displaymap').css("display", "none");#}
-        {#});#}
-        {#});#}
+        var ismapped = $('#sbc_bienbundle_bien_ismapped');
+//        if (!ismapped.is(':checked')) {
+//        $('#displaymap').css("display", "none");
+//        }
+//        ismapped.on('ifChanged', function () {
+//        ismapped.on('ifChecked', function () {
+//        $('#displaymap').css("display", "block");
+
+        {% if  bien.id != null %}
+        googleMapApiLaunch($('#sbc_bienbundle_bien_longitude').val(), $('#sbc_bienbundle_bien_latitude').val());
+        {% else %}
+        googleMapApiLaunch(10.227091, 36.771820);
+        {% endif %}
+
+//        ismapped.on('ifUnchecked', function () {
+//        $('#displaymap').css("display", "none");
+//        });
+//        });
         var categories = $('#categories');
         categories.selectize({
             placeholder: 'Choisir une catégorie....             ',
@@ -2048,20 +2505,18 @@
         });
         getCategories(categories);
     });
-    {% if  bien.ismapped %}
+
     {% set lng = bien.longitude %}
     {% set lat = bien.latitude %}
-    {% else %}
-    {% set lng = 10.227091 %}
-    {% set lat = 36.771820 %}
-    {% endif %}
+
     var init_lng = '{{ lng }}';
     var init_lat = '{{ lat }}';
 
-    setTimeout(function () {
-        googleMapApiLaunch(init_lng, init_lat);
-    }, 650);
+//    setTimeout(function () {
+//        googleMapApiLaunch(init_lng, init_lat);
+//    }, 650);
     function googleMapApiLaunch(lng, lat) {
+
         var longitude = $('#sbc_bienbundle_bien_longitude');
         var latitude = $('#sbc_bienbundle_bien_latitude');
         {% if bien.id != 0 %}
@@ -2098,10 +2553,10 @@
         //dragend event of maker
         google.maps.event.addListener(marker, 'dragend', function () {
             //console.log(marker.getPosition());
-            if ($('#sbc_bienbundle_bien_ismapped').is(':checked')) {
+//            if ($('#sbc_bienbundle_bien_ismapped').is(':checked')) {
                 longitude.val(marker.getPosition().lng());
                 latitude.val(marker.getPosition().lat());
-            }
+//            }
         });
     }
     function getCategories(select) {
@@ -3382,15 +3837,20 @@
     $(function () {
         var ownersDOM = $('#' + '{{ form.owners.vars.id }}');
         var representantsDOM = $('#' + '{{ form.representants.vars.id }}');
+        var locatairesDOM = $('#' + '{{ form.locataires.vars.id }}');
         var procurationsDOM = $('#' + '{{ form.procurations.vars.id }}');
         var picturesDOM = $('#' + '{{ form.pictures.vars.id }}');
         var papersDOM = $('#' + '{{ form.papers.vars.id }}');
         var buildPrototypes = {
             counterOwners: ownersDOM.children().length,
-            prototypeOwners: ownersDOM.attr('data-prototype'),
-            owners: ownersDOM,
             counterRepresentants: representantsDOM.children().length,
+            counterLocataires: locatairesDOM.children().length,
+            prototypeOwners: ownersDOM.attr('data-prototype'),
             prototypeRepresentants: representantsDOM.attr('data-prototype'),
+            prototypeLocataires: locatairesDOM.attr('data-prototype'),
+            owners: ownersDOM,
+            locataires: locatairesDOM,
+//            prototypeRepresentants: representantsDOM.attr('data-prototype'),
             representants: representantsDOM,
             counterProcurations: procurationsDOM.children().length,
             prototypeProcurations: procurationsDOM.attr('data-prototype'),
@@ -3406,7 +3866,12 @@
                     buildPrototypes.buildOwnerSection();
                 });
                 $('#addRepresentant').on('click', function () {
+
+
                     buildPrototypes.buildRepresentantSection();
+                });
+                $('#addLocataire').on('click', function () {
+                    buildPrototypes.buildLocataireSection();
                 });
                 $('#addProcuration').on('click', function () {
                     buildPrototypes.buildProcurationSection();
@@ -3428,23 +3893,117 @@
                 var block = temp.replace(/__name__/g, this.counterOwners);
                 this.owners.append(block);
                 this.owners.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    autoBind: false,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                    {#dataTextField: "text",#}
+                    {#dataValueField: "value",#}
+                    {#dataSource: {#}
+                        {#url: "{{ path('client_list') }}",#}
+                    {#},#}
+
+                    {#filter: "contains",#}
+                    {#suggest: true#}
+                {#});#}
                 this.reInit();
             },
             buildRepresentantSection: function () {
+//                alert('here')
                 this.counterRepresentants++;
-                var prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
+                prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
                 var temp = SFCollectionAnalyzer.buildTemplate(prototypeRepresentantsDOM, templateRepresentant());
                 var block = temp.replace(/__name__/g, this.counterRepresentants);
                 this.representants.append(block);
                 this.representants.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    autoBind: false,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
                 this.reInit();
             },
+            buildLocataireSection: function () {
+                this.counterLocataires++;
+                prototypeLocatairesDOM = $('<div/>').html(this.prototypeLocataires).contents();
+                var temp = SFCollectionAnalyzer.buildTemplate(prototypeLocatairesDOM, templateLocataire());
+                var block = temp.replace(/__name__/g, this.counterLocataires);
+                this.locataires.append(block);
+                this.locataires.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    filter: "contains",
+                    autoBind: false,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
+                });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
+                this.reInit();
+            },
+//            buildRepresentantSection: function () {
+//                this.counterRepresentants++;
+//                var prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
+//                var temp = SFCollectionAnalyzer.buildTemplate(prototypeRepresentantsDOM, templateRepresentant());
+//                var block = temp.replace(/__name__/g, this.counterRepresentants);
+//                this.representants.append(block);
+//                this.representants.find('select').kendoComboBox({
+//                    filter: "contains",
+//                    suggest: true
+//                });
+//                this.reInit();
+//            },
             buildProcurationSection: function () {
                 this.counterProcurations++;
                 var prototypeProcurationsDOM = $('<div/>').html(this.prototypeProcurations).contents();
@@ -3887,24 +4446,24 @@
                 '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
                 '</div>';
     }
-    function templateRepresentant() {
-        return '<div class="uk-width-medium-1-4 bloc">' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Propriétaire</label>' +
-                '#client#' +
-                '</div>' +
-                '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Representant</label>' +
-                '#representant#' +
-                '</div>' +
-                '</div>' +
-                '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
-                '</div>'
-                ;
-    }
+//    function templateRepresentant() {
+//        return '<div class="uk-width-medium-1-4 bloc">' +
+//                '<div class="uk-form-row">' +
+//                '<div class="parsley-row">' +
+//                '<label>Propriétaire</label>' +
+//                '#client#' +
+//                '</div>' +
+//                '</div>' +
+//                '<div class="uk-form-row">' +
+//                '<div class="parsley-row">' +
+//                '<label>Representant</label>' +
+//                '#representant#' +
+//                '</div>' +
+//                '</div>' +
+//                '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
+//                '</div>'
+//                ;
+//    }
     function templateOwner() {
         return '<div class="uk-width-medium-1-2 bloc">' +
                 '<div class="uk-form-row">' +
@@ -3913,7 +4472,37 @@
                 '#client#' +
                 '</div>' +
                 '</div>' +
-                '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
+                '<a  id="addDemandeur" onclick="dropify()"'+
+'        title="Ajouter un demandeur"'+
+      '  data-uk-modal="{target:\'#modal-addDemandeur\'}"><i class="material-icons md-24">account_circle</i><i class="material-icons md-24">&#xE872;</i></a>' +
+                '</div>'
+                ;
+    }
+    function templateRepresentant() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Représentant</label>' +
+                '#client#' +
+                '</div>' +
+                '</div>' +
+                '<a  id="addDemandeur" onclick="dropify()"'+
+                '        title="Ajouter un demandeur"'+
+                '  data-uk-modal="{target:\'#modal-addDemandeur\'}"><i class="material-icons md-24">account_circle</i><i class="material-icons md-24">&#xE872;</i></a>' +
+                '</div>'
+                ;
+    }
+    function templateLocataire() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Locataire</label>' +
+                '#client#' +
+                '</div>' +
+                '</div>' +
+                '<a  id="addDemandeur" onclick="dropify()"'+
+                '        title="Ajouter un demandeur"'+
+                '  data-uk-modal="{target:\'#modal-addDemandeur\'}"><i class="material-icons md-24">account_circle</i><i class="material-icons md-24">&#xE872;</i></a>' +
                 '</div>'
                 ;
     }
@@ -4097,6 +4686,257 @@
 
 
         }
+
+    }
+    function dropify() {
+        var cin_recto = $('#sbc_tiersbundle_client_cinRecto_file');
+        var cin_verso = $('#sbc_tiersbundle_client_cinVerso_file');
+        $('#sbc_tiersbundle_client_cinRecto_description').css('width', '-webkit-fill-available');
+        $('#sbc_tiersbundle_client_cinVerso_description').css('width', '-webkit-fill-available');
+        $(function ($) {
+
+            $('.dropify-clear').on('click', function () {
+                cin_recto.prop('required', false);
+                cin_verso.prop('required', false);
+            });
+            cin_verso.dropify({
+                {#defaultFile: '{{ vich_uploader_asset(client.cinRecto, 'file') }}',#}
+                messages: {
+                    'default': 'Cliquez ici',
+                    'replace': 'Cliquez ici',
+                    'remove': 'Supprimer',
+                    'error': 'Une erreur s\'est survenue'
+                }
+            });
+            cin_recto.dropify({
+                {#defaultFile: '{{ vich_uploader_asset(client.cinRecto, 'file') }}',#}
+                messages: {
+                    'default': 'Cliquez ici',
+                    'replace': 'Cliquez ici ',
+                    'remove': 'Supprimer',
+                    'error': 'Une erreur s\'est survenue'
+                }
+            });
+            $('.dropify-wrapper').css('height', '60%');
+        });
+        (function () {
+            /**add address and contact functions**/
+            var addressDOM = $('.address-block');
+            var contactDOM = $('.contact-block');
+            var _countAddress = addressDOM.children().length;
+            var _countContact = contactDOM.children().length;
+
+            $('#addAddress').on('click', function (e) {
+//                var addressForm = addressDOM.attr('data-prototype');
+                var addressForm = addressBlock();
+                addressForm = addressForm.replace(/__name__/g, _countAddress);
+                addressDOM.append(addressForm);
+                _countAddress++;
+                altair_md.init();
+                altair_forms.init();
+            });
+
+            $('#addContact').on('click', function (e) {
+//                var contactForm = contactDOM.attr('data-prototype');
+                var contactForm = contactBlock();
+                contactForm = contactForm.replace(/__name__/g, _countContact);
+                contactDOM.append(contactForm);
+                _countContact++;
+                altair_md.init();
+            });
+        })();
+
+        function addressBlock() {
+            block = '<div class="uk-width-medium-1-3 block-form">' +
+                    '<div class="uk-form-row parsley-row">' +
+                    '<label for="product_editnufacturer_control">Titre</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][title]" required/>' +
+                    '</div>' +
+                    '<div class="uk-form-row parsley-row">' +
+                    '<label for="product_edit_manufacturer_control">Adresse</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][address]" required/>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<label for="product_edit_manufacturer_control">Cité</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][city]"/>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<label for="product_edit_manufacturer_control">Governorat</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][governorate]"/>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<label for="product_edit_manufacturer_control">Code postal</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[addresses][__name__][zipCode]"/>' +
+                    '</div>' +
+                    '<br>' +
+                    '<div class="uk-width-medium-1-6">' +
+                    '<a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>' +
+                    '</div>' +
+                    '</div>';
+
+            return block;
+        }
+
+        function contactBlock() {
+            block = '<div class="uk-width-medium-1-3 block-form">' +
+                    '<div class="uk-form-row parsley-row">' +
+                    '<label for="product_editnufacturer_control">Dénomination</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][denomination]" required/>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<label for="product_edit_manufacturer_control">Description</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][description]"/>' +
+                    '</div>' +
+                    '<div class="uk-form-row">' +
+                    '<label for="product_edit_manufacturer_control">Adresse mail</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][mail]"/>' +
+                    '</div>' +
+                    '<div class="uk-form-row parsley-row">' +
+                    '<label for="product_edit_manufacturer_control">Téléphone</label>' +
+                    '<input type="text" class="md-input" name="sbc_tiersbundle_client[contacts][__name__][tel]" required/>' +
+                    '</div>' +
+                    '<br>' +
+                    '<div class="uk-width-medium-1-6">' +
+                    '<a class="md-btn md-btn-danger md-btn-wave-light" href="javascript:void(0)" onclick="deleteBlock(this)">Supprimer</a>' +
+                    '</div>' +
+                    '</div>';
+
+            return block;
+        }
+
+        function deleteBlock(btn) {
+            $(btn).closest('.block-form').remove();
+        }
+
+        $("#sbc_tiersbundle_client_preferences_lundi").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#Lundi').css('color', 'red');
+            }
+            else {
+                $('#Lundi').css('color', 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_mardi").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#Mardi').css('color', 'red');
+            }
+            else {
+                $('#Mardi').css('color', 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_mercredi").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#Mercredi').css('color', 'red');
+            }
+            else {
+                $('#Mercredi').css('color', 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_jeudi").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#Jeudi').css('color', 'red');
+            }
+            else {
+                $('#Jeudi').css('color', 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_vendredi").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#Vendredi').css('color', 'red');
+            }
+            else {
+                $('#Vendredi').css('color', 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_samedi").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#samedi').css('color', 'red');
+            }
+            else {
+                $('#Samedi').css('color', 'green');
+            }
+        });
+        $("#sbc_tiersbundle_client_preferences_dimanche").on('ifChanged', function () {
+            if ($(this).closest('div').hasClass('checked')) {
+                $('#Dimanche').css('color', 'red');
+            }
+            else {
+                $('#Dimanche').css('color', 'green');
+            }
+        });
+        $('#sbc_tiersbundle_client_preferences_heure_minute').on('change', function () {
+            var minute = $('#sbc_tiersbundle_client_preferences_heure_minute  option:selected').text();
+            var heure = $('#sbc_tiersbundle_client_preferences_heure_hour  option:selected').text();
+            $('#de_label').text(heure + ":" + minute);
+        });
+        $('#sbc_tiersbundle_client_preferences_heure_hour').on('change', function () {
+            var minute = $('#sbc_tiersbundle_client_preferences_heure_minute  option:selected').text();
+            var heure = $('#sbc_tiersbundle_client_preferences_heure_hour  option:selected').text();
+            $('#de_label').text(heure + ":" + minute);
+        });
+        $('#sbc_tiersbundle_client_preferences_heureFin_minute').on('change', function () {
+            var minute = $('#sbc_tiersbundle_client_preferences_heureFin_minute  option:selected').text();
+            var heure = $('#sbc_tiersbundle_client_preferences_heureFin_hour  option:selected').text();
+            $('#de_label').text(heure + ":" + minute);
+        });
+
+        $('#sbc_tiersbundle_client_preferences_heureFin_hour').on('change', function () {
+            var minute = $('#sbc_tiersbundle_client_preferences_heureFin_minute  option:selected').text();
+            var heure = $('#sbc_tiersbundle_client_preferences_heureFin_hour  option:selected').text();
+            $('#a_label').text(heure + ":" + minute);
+        })
+
+    }
+    function newDemandeur(elem) {
+
+        var frm = $('#clientform');
+
+//        alert($(elem('id')))
+
+        frm.submit(function (e) {
+
+            e.preventDefault();
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+//                    $(".dynamic").each(function() {
+//                        var mySelect = $(this).find('select');
+//                        var widget = mySelect.data('kendoComboBox');
+//                        var dataSource = widget.dataSource;
+//                        dataSource.add({
+//                            dataTextField: data.denomination,
+//                            dataValueField: data.code
+//                        });
+//
+//                        dataSource.one("sync", function() {
+//                            widget.select(dataSource.view().length - 1);
+//                        });
+//
+//                        dataSource.sync();
+//                    });
+//                    this.reInit();
+                    console.log('Submission was successful.');
+
+
+                    UIkit.modal.alert('Le client a été ajouté avec succès', {
+                        labels: {
+                            Ok: 'Fermer'
+                        }
+                    });
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    console.log(data);
+                }
+            });
+        });
+
+
+    }
+
+    function getClientDetails(code) {
 
     }
 </script>

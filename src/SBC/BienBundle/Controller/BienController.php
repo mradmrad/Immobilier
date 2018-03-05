@@ -7,6 +7,8 @@ use SBC\BienBundle\Entity\Bien;
 use SBC\BienBundle\Entity\Equipement;
 use SBC\BienBundle\Form\BienType;
 use SBC\BienBundle\Form\EquipementType;
+use SBC\TiersBundle\Entity\Client;
+use SBC\TiersBundle\Form\ClientType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -65,20 +67,21 @@ class BienController extends Controller
      */
     public function newAction(Request $request)
     {
+        $client = new Client();
         $bien = new Bien();
         $bien->setType(Bien::RECHERCHE);
         $bien->setCreatedBy($this->getUser()->getPersonnel());
         $bien->setDescription(' ');
-
+        $clientform = $this->createForm(ClientType::class,$client);
         $form = $this->createForm(BienType::class, $bien);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($bien);
             $em->flush();
 
-            return $this->redirectToRoute('bien_show', array('id' => $bien->getId()));
+            return $this->redirectToRoute('bien_index');
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -93,6 +96,7 @@ class BienController extends Controller
             'gouvernorats' => $gouvernorats,
             'form' => $form->createView(),
             'formEquipement' => $formEquipement->createView(),
+            'clientform' => $clientform->createView()
         ));
     }
 
@@ -121,7 +125,7 @@ class BienController extends Controller
         $editForm = $this->createForm(BienType::class, $bien);
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($editForm->isSubmitted()) {
             foreach ($editForm->get('pictures')->getData() as $picture) {
                 if ($picture->getDescription() == null) {
                     $bien->removePicture($picture);
@@ -159,7 +163,7 @@ class BienController extends Controller
 
             $em->persist($bien);
             $em->flush();
-            return $this->redirectToRoute('bien_show', array('id' => $bien->getId()));
+            return $this->redirectToRoute('bien_index');
         }
 
         $gouvernorats = $em->getRepository('GeoTunisieBundle:Gouvernorat')->findAll();

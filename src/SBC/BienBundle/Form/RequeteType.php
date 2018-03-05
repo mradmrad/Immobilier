@@ -44,7 +44,8 @@ class RequeteType extends AbstractType
                         'Non' => 'Non',
                         'Pas d\'importance'=>'Pas d\'importance'
                     ),
-                    'expanded'=>true
+                    'expanded'=>true,
+                    'data' => 'Non'
 
                 )
             )
@@ -64,9 +65,15 @@ class RequeteType extends AbstractType
             ->add('bedroom',TextType::class,array(
                 'required'=>false,
             ))
-            ->add('bathroom',TextType::class)
-            ->add('piece',TextType::class)
-            ->add('sde',TextType::class)
+            ->add('bathroom',TextType::class,array(
+                'required'=> false
+            ))
+            ->add('piece',TextType::class,array(
+                'required'=> false
+            ))
+            ->add('sde',TextType::class,array(
+                'required'=> false
+            ))
             ->add('totalAreaMin')
             ->add('coveredAreaMin')
 

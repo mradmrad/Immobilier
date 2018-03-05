@@ -57,8 +57,8 @@ class PersonnelRepository extends \Doctrine\ORM\EntityRepository
         $query = $this->createQueryBuilder('p')
             ->from('SBC\UserBundle\Entity\User', 'user')
             ->select('IDENTITY(user.personnel)')
-            ->where('user.enabled = 1')
-        ->andWhere('user.id != '.$myid);
+            ->where('user.enabled = 1');
+//        ->andWhere('user.id != '.$myid);
 
         $qb = $this->createQueryBuilder('personnel');
 

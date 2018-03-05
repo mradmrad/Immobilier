@@ -60,8 +60,11 @@
                                     <td>  {{ bien.typeBien.name }}</td>
                                     <td>
                                         {% for owner in bien.owners %}
-
+                                        {% if owner.client %}
                                             {{ owner.client.denomination }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
                                             <br>
                                         {% endfor %}
 
@@ -69,7 +72,11 @@
                                     <td>
                                         {% for owner in bien.owners %}
 
-                                            {{ owner.client.telfixe }}
+                                            {% if owner.client %}
+                                            {{ owner.client.tel }}
+                                        {% else %}
+                                                -
+                                            {% endif %}
                                             <br>
                                         {% endfor %}
 

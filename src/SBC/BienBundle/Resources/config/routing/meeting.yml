@@ -15,6 +15,6 @@ meeting_edit:
     methods:  [GET, POST]
 
 meeting_delete:
-    path:     /{id}/delete
+    path:     /delete
     defaults: { _controller: "BienBundle:Meeting:delete" }
-    methods:  DELETE
+    methods:  [GET, POST]

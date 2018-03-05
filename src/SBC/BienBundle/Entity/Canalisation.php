@@ -24,56 +24,56 @@ class Canalisation
     /**
      * @var string
      *
-     * @ORM\Column(name="steg", type="string", length=255)
+     * @ORM\Column(name="steg", type="string", length=255,nullable = true)
      */
     private $steg;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sonede", type="string", length=255)
+     * @ORM\Column(name="sonede", type="string", length=255,nullable = true)
      */
     private $sonede;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="gaz", type="string", length=255)
+     * @ORM\Column(name="gaz", type="string", length=255,nullable = true)
      */
     private $gaz;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="onas", type="string", length=255)
+     * @ORM\Column(name="onas", type="string", length=255,nullable = true)
      */
     private $onas;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="eclairage", type="string", length=255)
+     * @ORM\Column(name="eclairage", type="string", length=255,nullable = true)
      */
     private $eclairage;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telephone", type="string", length=255)
+     * @ORM\Column(name="telephone", type="string", length=255,nullable = true)
      */
     private $telephone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="route", type="string", length=255)
+     * @ORM\Column(name="route", type="string", length=255,nullable = true)
      */
     private $route;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="trottoir", type="string", length=255)
+     * @ORM\Column(name="trottoir", type="string", length=255,nullable = true)
      */
     private $trottoir;
 

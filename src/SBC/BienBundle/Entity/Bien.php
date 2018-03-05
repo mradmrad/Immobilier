@@ -41,7 +41,7 @@ class Bien implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
 
@@ -186,8 +186,6 @@ class Bien implements \JsonSerializable
     private $exterieur;
 
 
-
-
     /**
      * @var bool
      *
@@ -223,9 +221,9 @@ class Bien implements \JsonSerializable
     private $agency;
 
     /**
- * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\TypeBien")
- * @ORM\JoinColumn(nullable=true)
- */
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\TypeBien")
+     * @ORM\JoinColumn(nullable=true)
+     */
     private $typeBien;
 
     /**
@@ -284,6 +282,20 @@ class Bien implements \JsonSerializable
     private $owners;
 
     /**
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(name="representant_id", referencedColumnName="id")
+     * @Assert\Valid()
+     */
+    private $representants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(name="locataire_id", referencedColumnName="id")
+     * @Assert\Valid()
+     */
+    private $locataires;
+
+    /**
      * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Procuration", mappedBy="bien", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(name="procuration_id", referencedColumnName="id")
      * @Assert\Valid()
@@ -295,7 +307,7 @@ class Bien implements \JsonSerializable
      *
      * @var string
      */
-    private $representants;
+    private $representantscomme;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -321,6 +333,7 @@ class Bien implements \JsonSerializable
 
     /**
      * @ORM\ManyToOne(targetEntity="SBC\GeoTunisieBundle\Entity\Adresse")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $address;
 
@@ -507,9 +520,9 @@ class Bien implements \JsonSerializable
     private $style;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="proximite", type="string", length=255 , nullable=true)
+     * @ORM\Column(name="proximite", type="array", length=255 , nullable=true)
      */
     private $proximite;
 
@@ -522,9 +535,9 @@ class Bien implements \JsonSerializable
 
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="influence", type="string", length=255 , nullable=true)
+     * @ORM\Column(name="influence", type="array", length=255 , nullable=true)
      */
     private $influence;
 
@@ -534,9 +547,6 @@ class Bien implements \JsonSerializable
      * @ORM\Column(name="margeNegociation", type="string", length=255 , nullable=true)
      */
     private $margeNegociation;
-
-
-
 
 
     /**
@@ -1430,7 +1440,7 @@ class Bien implements \JsonSerializable
 
     public function addProcuration(Procuration $procuration)
     {
-
+        $procuration->setBien($this);
         $procuration->setBien($this);
         $this->procurations[] = $procuration;
 
@@ -1453,8 +1463,6 @@ class Bien implements \JsonSerializable
     {
         return $this->procurations;
     }
-
-    
 
 
     /**
@@ -2259,7 +2267,6 @@ class Bien implements \JsonSerializable
         return $this->commision;
     }
 
-    
 
     /**
      * Add paper
@@ -2512,7 +2519,6 @@ class Bien implements \JsonSerializable
     }
 
 
-
     /**
      * Set piece
      *
@@ -2583,5 +2589,88 @@ class Bien implements \JsonSerializable
     public function getLoisir()
     {
         return $this->loisir;
+    }
+
+    /**
+     * Set representantscomme
+     *
+     * @param string $representantscomme
+     *
+     * @return Bien
+     */
+    public function setRepresentantscomme($representantscomme)
+    {
+        $this->representantscomme = $representantscomme;
+
+        return $this;
+    }
+
+    /**
+     * Get representantscomme
+     *
+     * @return string
+     */
+    public function getRepresentantscomme()
+    {
+        return $this->representantscomme;
+    }
+
+    /**
+     * Add representant
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $representant
+     *
+     * @return Bien
+     */
+    public function addRepresentant(\SBC\BienBundle\Entity\ProprietaireSelf $representant)
+    {
+        $representant->setBien($this);
+        $this->representants[] = $representant;
+
+        return $this;
+    }
+
+    /**
+     * Remove representant
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $representant
+     */
+    public function removeRepresentant(\SBC\BienBundle\Entity\ProprietaireSelf $representant)
+    {
+        $this->representants->removeElement($representant);
+    }
+
+    /**
+     * Add locataire
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $locataire
+     *
+     * @return Bien
+     */
+    public function addLocataire(\SBC\BienBundle\Entity\ProprietaireSelf $locataire)
+    {
+        $this->locataires[] = $locataire;
+
+        return $this;
+    }
+
+    /**
+     * Remove locataire
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $locataire
+     */
+    public function removeLocataire(\SBC\BienBundle\Entity\ProprietaireSelf $locataire)
+    {
+        $this->locataires->removeElement($locataire);
+    }
+
+    /**
+     * Get locataires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLocataires()
+    {
+        return $this->locataires;
     }
 }

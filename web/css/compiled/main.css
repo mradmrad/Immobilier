@@ -2716,7 +2716,7 @@ select.uk-form-width-mini {
 }
 
 .uk-form-row + .uk-form-row {
-    margin-top: 15px
+    /*margin-top: 15px*/
 }
 
 .uk-form-help-inline {
@@ -9567,7 +9567,7 @@ a.uk-thumbnail:focus, a.uk-thumbnail:hover {
 }
 
 .uk-modal.uk-modal-dialog-replace .uk-modal-content {
-    font-size: 18px
+    /*font-size: 18px*/
 }
 
 .uk-modal-spinner {
@@ -9713,7 +9713,7 @@ a.uk-thumbnail:focus, a.uk-thumbnail:hover {
 }
 
 .uk-form-row + .uk-form-row {
-    margin-top: 24px
+    /*margin-top: 24px*/
 }
 
 .uk-form-stacked .uk-form-label {
@@ -9758,7 +9758,9 @@ a.uk-thumbnail:focus, a.uk-thumbnail:hover {
 .uk-input-group {
     position: relative;
     display: table;
-    border-collapse: separate
+    border-collapse: separate;
+    margin-top: 5px;
+    width: 100%;
 }
 
 .uk-input-group > input[type=text] {
@@ -9774,13 +9776,13 @@ a.uk-thumbnail:focus, a.uk-thumbnail:hover {
 }
 
 .uk-input-group-addon {
-    width: 1%;
-    white-space: nowrap;
+    width: 150px;
+    /*white-space: nowrap;*/
     vertical-align: middle;
     line-height: 1;
-    text-align: center;
-    padding: 0 16px;
-    font-size: 16px;
+    /*text-align: right;*/
+    /*padding: 0 16px;*/
+    /*font-size: 16px;*/
     min-width: 22px
 }
 
@@ -15909,7 +15911,7 @@ input:not([type]).md-input, input[type=text].md-input, input[type=password].md-i
     font: 400 15px/18px Roboto, sans-serif;
     box-shadow: inset 0 -1px 0 transparent;
     box-sizing: border-box;
-    padding: 12px 4px;
+    /*padding: 12px 4px;*/
     background: 0 0;
     width: 100%;
     display: block
@@ -16043,7 +16045,7 @@ textarea.no_autosize {
 .md-input-wrapper > label {
     color: #727272;
     position: absolute;
-    top: 16px;
+    /*top: 16px;*/
     left: 4px;
     right: 0;
     pointer-events: none;
@@ -17340,6 +17342,9 @@ button.md-icon {
     margin-top: 10px
 }
 
+.iradio_md + label {
+    margin-right: 15px;
+}
 .icheckbox_md, .iradio_md {
     display: inline-block;
     vertical-align: middle;
@@ -17366,7 +17371,26 @@ button.md-icon {
     z-index: 10
 }
 
+.icheckbox_md + label{
+    margin-right: 25px;
+}
+
+.equipements-list {
+    height: 250px;
+    overflow: auto;
+    border: solid 1px #cccccc;
+    padding: 5px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.equipements-list li {
+    display: inline-block;
+    padding-right: 20px;
+    padding-bottom: 10px;
+}
 .icheckbox_md {
+    margin-right: 5px;
     border: 2px solid rgba(0, 0, 0, .54);
     border-radius: 2px;
     width: 18px;
@@ -17432,11 +17456,13 @@ button.md-icon {
 }
 
 .iradio_md {
+    margin-right: 5px;
     border: 2px solid rgba(0, 0, 0, .54);
     width: 20px;
     height: 20px;
     border-radius: 50%
 }
+
 
 .iradio_md:after {
     content: '';
@@ -17486,6 +17512,10 @@ button.md-icon {
 .icheck-inline {
     display: inline-block;
     margin: 0 16px 16px 0
+}
+
+.icheck-inline label {
+    margin-right: 10px;
 }
 
 .icheck-inline + .parsley-errors-list {
@@ -18709,7 +18739,8 @@ body.CodeMirror-fullscreen-active .CodeMirror-fullscreen #code_editor_close {
 
 .parsley-errors-list {
     color: #e53935;
-    margin-top: 0
+    margin-top: 0;
+    display: none;
 }
 
 .parsley-errors-list span {
@@ -19239,6 +19270,7 @@ div.dt-button-background {
 }
 
 .fc-unthemed .fc-month-button:after {
+    color: #8f0000;
     content: '\e42a'
 }
 
@@ -19247,6 +19279,7 @@ div.dt-button-background {
 }
 
 .fc-unthemed .fc-agendaDay-button:after {
+    color:#00A000 ;
     content: '\e8df'
 }
 
@@ -24008,6 +24041,7 @@ address p + p {
     }
 }
 
+
 .app_theme_a .uk-alert {
     background: #3f51b5
 }
@@ -26686,19 +26720,19 @@ address p + p {
 }
 
 .app_theme_g #header_main {
-    background: #8e24aa;
+    background: #4caf50;
 }
 
 .app_theme_g .header_double_height:after {
-    background: #8e24aa;
+    background: #4caf50;
 }
 
 .app_theme_g #top_bar .top_bar_nav > li > a:hover {
-    box-shadow: inset 0 -3px 0 #8e24aa;
+    box-shadow: inset 0 -3px 0 #4caf50;
 }
 
 .app_theme_g #top_bar .top_bar_nav > li.uk-active a {
-    box-shadow: inset 0 -3px 0 #8e24aa;
+    box-shadow: inset 0 -3px 0 #4caf50;
 }
 
 .app_theme_g .user_heading {

@@ -4,6 +4,7 @@ namespace SBC\UserBundle\Form\Type;
 
 use SBC\PersonnelBundle\Entity\Personnel;
 use FOS\UserBundle\Form\Type\ProfileFormType as BaseType;
+use SBC\PersonnelBundle\Form\PersonnelType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -43,11 +44,12 @@ class ProfileEditFormType extends BaseType
                     )
                 )
             )
-            ->add('personnel', EntityType::class, array(
-                'class' => Personnel::class,
-                'placeholder' => 'Choisir un personnel',
-                'empty_data' => null
-            ))
+//            ->add('personnel', EntityType::class, array(
+//                'class' => Personnel::class,
+//                'placeholder' => 'Choisir un personnel',
+//                'empty_data' => null
+//            ))
+            ->add('personnel',PersonnelType::class)
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'options' => array('translation_domain' => 'FOSUserBundle'),

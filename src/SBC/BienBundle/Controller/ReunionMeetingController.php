@@ -22,18 +22,40 @@ class ReunionMeetingController extends Controller
      */
     public function addAction(Request $request)
     {
-        $reunionMeeting = new ReunionMeeting();
         $em = $this->getDoctrine()->getManager();
+        if ($request->request->get('id') != '')
+        {
+            $oldEntity = $em->getRepository('BienBundle:Meeting')->find($request->request->get('id'));
+            $reunionMeeting = $this->cast($oldEntity,ReunionMeeting::class);
+            $em->remove($oldEntity);
+            $em->flush();
+            $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
+            $reunionMeeting->addRemindFor($remindFor);
+//            foreach ($bienMeeting->getRemindFors() as $remindFor)
+//            {
+//                $bienMeeting->removeRemindFor($remindFor);
+//            }
+        }
+        else {
+            $reunionMeeting = new ReunionMeeting();
+        }
 
         $reunionMeeting->setCreatedBy($this->getUser()->getPersonnel());
-        $reunionMeeting->setBeginDate(new \DateTime($request->request->get('start')));
+        ($request->request->get('start') != 'null') ? $reunionMeeting->setBeginDate(new \DateTime($request->request->get('start'))) : '';
+//        $reunionMeeting->setBeginDate(new \DateTime($request->request->get('start')));
         $reunionMeeting->setColor($request->request->get('color'));
-        $reunionMeeting->setFinishDate(new \DateTime($request->request->get('end')));
+        ($request->request->get('end') != 'null') ? $reunionMeeting->setFinishDate(new \DateTime($request->request->get('end'))) : '';
+//        $reunionMeeting->setFinishDate(new \DateTime($request->request->get('end')));
         $reunionMeeting->setTitle($request->request->get('title'));
         $reunionMeeting->setOtherclients($request->request->get('other'));
 
-        $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
-        $reunionMeeting->addRemindFor($remindFor);
+        if ($request->request->get('id') == '')
+        {
+            if ($request->request->get('remindFor') != '') {
+                $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
+                $reunionMeeting->addRemindFor($remindFor);
+            }
+        }
 
         $client = $em->getRepository('TiersBundle:Client')->find($request->request->get('client'));
         $reunionMeeting->setClient($client);
@@ -44,7 +66,7 @@ class ReunionMeetingController extends Controller
                 $reunionMeeting->addRemindFor($em->getRepository('PersonnelBundle:Personnel')->find($remindFore));
             }
         }
-
+        $reunionMeeting->setOtherNumbers($request->request->get('otherNumbers'));
         $reunionMeeting->setStatus($request->request->get('status'));
         $reunionMeeting->setTypeMeeting($request->request->get('typeMeeting'));
         $reunionMeeting->setDescription($request->request->get('description'));
@@ -60,5 +82,25 @@ class ReunionMeetingController extends Controller
             $message = $e->getMessage();
         }
         return new JsonResponse(array('success' => $success, 'message' => $message));
+    }
+    function cast($object, $class) {
+
+        /**
+         * This is a beautifully ugly hack.
+         *
+         * First, we serialize our object, which turns it into a string, allowing
+         * us to muck about with it using standard string manipulation methods.
+         *
+         * Then, we use preg_replace to change it's defined type to the class
+         * we're casting it to, and then serialize the string back into an
+         * object.
+         */
+        return unserialize(
+            preg_replace(
+                '/^O:\d+:"[^"]++"/',
+                'O:'.strlen($class).':"'.$class.'"',
+                serialize($object)
+            )
+        );
     }
 }

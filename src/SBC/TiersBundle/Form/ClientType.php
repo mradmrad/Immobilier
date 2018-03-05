@@ -266,9 +266,11 @@ class ClientType extends TiersType
                     'data-md-selectize-bottom' => '',
                     'class' => 'md-input'
                 ),
-                'placeholder' => 'Choisissez une étude ...',
+                'empty_data'=> true,
+//                'placeholder' => true,
                 'required'=> false,
                 'choices' => array(
+                    '-'=>null,
                     'Doctorat' => 'Doctorat',
 'Universitaire' => 'Universitaire' ,
 'Diplôme de Formation Professionnelle' => 'Diplôme de Formation Professionnelle' ,
@@ -287,6 +289,7 @@ class ClientType extends TiersType
                 'placeholder' => 'Choisissez le travail ...',
                 'required'=> false,
                 'choices' => array(
+                    '-'=>null,
                     'Directeur Général' => 'Directeur Général',
         'Gérant' => 'Gérant',
         'Directeur' => 'Directeur',
@@ -309,6 +312,7 @@ class ClientType extends TiersType
                 'placeholder' => 'Choisissez un domaine ...',
                 'required'=> false,
                 'choices' => array(
+                    '-'=>null,
                     'Agricultures' => 'Agricultures',
                     'Agro-alimentaire' => 'Agro-alimentaire',
                     'Environnement' => 'Environnement',

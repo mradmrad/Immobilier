@@ -31,9 +31,11 @@ class MeetingController extends Controller
      * @return JsonResponse
      * @Security("has_role('ROLE_SUPER_ADMIN') or has_role('ROLE_AGENT') or has_role('ROLE_COORDINATEUR') or has_role('ROLE_SUPERVISEUR') or has_role('ROLE_WEB_MARKETING')")
      */
-    public function deleteAction(Meeting $meeting)
+    public function deleteAction(Request $request)
     {
+        $id = $request->request->get('id');
         $em = $this->getDoctrine()->getManager();
+        $meeting = $em->getRepository('BienBundle:Meeting')->find($id);
         $success = true;
         $msg = '';
         try {
@@ -61,8 +63,54 @@ class MeetingController extends Controller
 
         $events = array();
         foreach ($meetings as $meeting) {
+
             foreach ($meeting->getRemindFors() as $remindFor) {
+                $remindFors = array();
+                $hiddenDatas = array();
+                switch ($meeting->getTitle()) {
+                    case 'RDV pour une recherche':
+
+                       $hiddenDatas[] = array('zone'=>$meeting->getZone(),'rue'=>$meeting->getRue());
+                        break;
+                    case 'RDV pour une acquisition':
+
+                        $hiddenDatas[] = ($meeting->getNouvelle() != null ) ? array('nouvelleId'=>$meeting->getNouvelle()->getId()): '';
+                        break;
+                    case 'RDV pour une prise mandat':
+                        $hiddenDatas[] = ($meeting->getAcquisition() != null ) ? array('acquisitionId'=>$meeting->getAcquisition()->getId()): '';
+                        break;
+                    case 'RDV pour une visite':
+//                        $hiddenDatas[] = ($meeting->getNouvelle() != null ) ? array('mandatId'=>$meeting->getNouvelle()->getId()): '';
+                       $hiddenDatas[] = array();
+                        break;
+                    case 'RDV pour une prise offre':
+                        $hiddenDatas[] = ($meeting->getMandat() != null ) ? array('mandatId'=>$meeting->getMandat()->getId(),'price'=>$meeting->getProposedPrice()): '';
+                        break;
+                    case 'RDV pour une acceptation':
+                        $hiddenDatas[] = ($meeting->getMandat() != null ) ? array('mandatId'=>$meeting->getMandat()->getId(),'price'=>$meeting->getProposedPrice()): '';
+                        break;
+                    case 'RDV pour une évaluation':
+                        $hiddenDatas[] = array();
+                        break;
+                    case 'RDV pour une réunion':
+                        $hiddenDatas[] = array();
+                        break;
+                    case 'Autre':
+                        $hiddenDatas[] = array();
+                    break;
+                    default:
+                        break;
+
+                }
+                foreach ($meeting->getRemindFors() as $remindFore)
+                {
+                    $remindFors[] = array('id'=> $remindFore->getId(),'name'=> $remindFore->getName());
+                }
+
                 $manyReminders = ($meeting->getRemindFors()->count() > 1) ? false : true;
+
+
+
                 $events[] = array(
                     'id' => $meeting->getId(),
                     'title' => $meeting->getTitle(),
@@ -74,17 +122,21 @@ class MeetingController extends Controller
                     'remindFor' => $remindFor->getName(),
                     'status' => $meeting->getStatus(),
                     'typeMeeting' => $meeting->getTypeMeeting(),
-                    'remindFors' => $meeting->getRemindFors(),
-                    'client' =>  ($meeting->getClient() == null)? '-' : $meeting->getClient()->getDenomination(),
+                    'otherNumbers' => $meeting->getOtherNumbers(),
+                    'remindFors' => $remindFors,
+                    'client' =>  ($meeting->getClient() == null)? '-' : $meeting->getClient()->getCode(),
+                    'clientName' =>($meeting->getClient() == null)? '-' : $meeting->getClient()->getPrenom().' '.$meeting->getClient()->getDenomination(),
                     'tel' => ($meeting->getClient() == null)? '-' : $meeting->getClient()->getTel(),
                     'others' => $meeting->getOtherClients(),
                     'manyReminds' => $manyReminders,
                     'resourceEditable' => $manyReminders,
-                    'description' => $meeting->getDescription()
+                    'description' => $meeting->getDescription(),
+                    'hiddenDatas'=>$hiddenDatas
                 );
             }
         }
 
+//        die();
         return new JsonResponse($events);
     }
 

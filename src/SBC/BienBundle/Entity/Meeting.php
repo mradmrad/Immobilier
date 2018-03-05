@@ -63,6 +63,13 @@ class Meeting extends Event
     /**
      * @var string
      *
+     * @ORM\Column(name="othernumbers", type="string", length=255)
+     */
+    private $otherNumbers;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text")
      */
     private $description;
@@ -216,5 +223,29 @@ class Meeting extends Event
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set otherNumbers
+     *
+     * @param string $otherNumbers
+     *
+     * @return Meeting
+     */
+    public function setOtherNumbers($otherNumbers)
+    {
+        $this->otherNumbers = $otherNumbers;
+
+        return $this;
+    }
+
+    /**
+     * Get otherNumbers
+     *
+     * @return string
+     */
+    public function getOtherNumbers()
+    {
+        return $this->otherNumbers;
     }
 }

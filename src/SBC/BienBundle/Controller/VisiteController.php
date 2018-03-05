@@ -21,16 +21,33 @@ class VisiteController extends Controller
      */
     public function addAction(Request $request)
     {
-        $visite = new Visite();
         $em = $this->getDoctrine()->getManager();
+        if ($request->request->get('id') != '')
+        {
+            $oldEntity = $em->getRepository('BienBundle:Meeting')->find($request->request->get('id'));
+            $visite = $this->cast($oldEntity,Visite::class);
+            $em->remove($oldEntity);
+            $em->flush();
+            $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
+            $visite->addRemindFor($remindFor);
+//            foreach ($bienMeeting->getRemindFors() as $remindFor)
+//            {
+//                $bienMeeting->removeRemindFor($remindFor);
+//            }
+        }
+        else {
+            $visite = new Visite();
+        }
 
         $visite->setCreatedBy($this->getUser()->getPersonnel());
-        $visite->setBeginDate(new \DateTime($request->request->get('start')));
+        ($request->request->get('start') != 'null') ? $visite->setBeginDate(new \DateTime($request->request->get('start'))) : '';
+//        $visite->setBeginDate(new \DateTime($request->request->get('start')));
         $visite->setColor($request->request->get('color'));
-        $visite->setFinishDate(new \DateTime($request->request->get('end')));
+        ($request->request->get('end') != 'null') ? $visite->setFinishDate(new \DateTime($request->request->get('end'))) : '';
+//        $visite->setFinishDate(new \DateTime($request->request->get('end')));
         $visite->setTitle($request->request->get('title'));
         $visite->setOtherclients($request->request->get('other'));
-
+        $visite->setOtherNumbers($request->request->get('otherNumbers'));
         $remindFor = $em->getRepository('PersonnelBundle:Personnel')->find($request->request->get('remindFor'));
         $visite->addRemindFor($remindFor);
 
@@ -71,6 +88,25 @@ class VisiteController extends Controller
             'message' => $message
         ));
     }
+    function cast($object, $class) {
 
+        /**
+         * This is a beautifully ugly hack.
+         *
+         * First, we serialize our object, which turns it into a string, allowing
+         * us to muck about with it using standard string manipulation methods.
+         *
+         * Then, we use preg_replace to change it's defined type to the class
+         * we're casting it to, and then serialize the string back into an
+         * object.
+         */
+        return unserialize(
+            preg_replace(
+                '/^O:\d+:"[^"]++"/',
+                'O:'.strlen($class).':"'.$class.'"',
+                serialize($object)
+            )
+        );
+    }
 
 }
