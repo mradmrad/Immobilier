@@ -333,16 +333,16 @@
                                 <span class="menu_title">Zoning</span>
                             </a>
                             <ul>
-                                <li title="Villes" {% if current_route_name == 'ville_index' or current_route_name == 'ville_add' %} class="act_item" {% endif %}>
-                                    <a href="{{ path('ville_index') }}">
-                                        <span class="menu_title">Villes</span>
-                                    </a>
-                                </li>
-                                <li title="Localités" {% if current_route_name == 'localite_index' or current_route_name == 'localite_add' %} class="act_item" {% endif %}>
-                                    <a href="{{ path('localite_index') }}">
-                                        <span class="menu_title">Localités</span>
-                                    </a>
-                                </li>
+                                {#<li title="Villes" {% if current_route_name == 'ville_index' or current_route_name == 'ville_add' %} class="act_item" {% endif %}>#}
+                                    {#<a href="{{ path('ville_index') }}">#}
+                                        {#<span class="menu_title">Villes</span>#}
+                                    {#</a>#}
+                                {#</li>#}
+                                {#<li title="Localités" {% if current_route_name == 'localite_index' or current_route_name == 'localite_add' %} class="act_item" {% endif %}>#}
+                                    {#<a href="{{ path('localite_index') }}">#}
+                                        {#<span class="menu_title">Localités</span>#}
+                                    {#</a>#}
+                                {#</li>#}
                                 <li title="Localités" {% if current_route_name == 'rue_index' or current_route_name == 'rue_add' %} class="act_item" {% endif %}>
                                     <a href="{{ path('rue_index') }}">
                                         <span class="menu_title">Rues</span>

@@ -21,16 +21,16 @@ class RueController extends Controller
      */
     public function indexAction()
     {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN') and !$this->isGranted('ROLE_AGENT') and !$this->isGranted('ROLE_COORDINATEUR') and !$this->isGranted('ROLE_WEB_MARKETING') and !$this->isGranted('ROLE_SUPERVISEUR')) {
-            throw new AccessDeniedHttpException('AccessDenied');
-        }
+//        if (!$this->isGranted('ROLE_SUPER_ADMIN') and !$this->isGranted('ROLE_AGENT') and !$this->isGranted('ROLE_COORDINATEUR') and !$this->isGranted('ROLE_WEB_MARKETING') and !$this->isGranted('ROLE_SUPERVISEUR')) {
+//            throw new AccessDeniedHttpException('AccessDenied');
+//        }
 
         $em = $this->getDoctrine()->getManager();
+        $gouvernorats = $em->getRepository('GeoTunisieBundle:Gouvernorat')->findAll();
 
-        $rues = $em->getRepository('GeoTunisieBundle:Rue')->findAll();
 
         return $this->render('GeoTunisieBundle:Rue:index.html.twig', array(
-            'rues' => $rues,
+            'gouvernorats' => $gouvernorats,
         ));
     }
 
