@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="SBC\BienBundle\Repository\ProprietaireRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"proprietaire"="Proprietaire", "representant"="Representant" , "proprietaire_self"="ProprietaireSelf", "en_qualite_de"="EnQualiteDe", "procuration"="Procuration"})
+ * @ORM\DiscriminatorMap({"proprietaire"="Proprietaire", "representant"="Representant" , "proprietaire_self"="ProprietaireSelf", "locataire"="Locataire" , "representant_bien"="RepresentantBien" , "en_qualite_de"="EnQualiteDe", "procuration"="Procuration"})
  */
 class Proprietaire
 {

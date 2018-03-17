@@ -536,7 +536,7 @@ class BienType extends AbstractType
                 )
             ))
             ->add('representants', CollectionType::class, array(
-                'entry_type' => ProprietaireSelfType::class,
+                'entry_type' => RepresentantBienType::class,
                 'allow_add' => true,
                 'by_reference' => false,
                 'attr' => array(
@@ -545,7 +545,7 @@ class BienType extends AbstractType
                 )
             ))
             ->add('locataires', CollectionType::class, array(
-                'entry_type' => ProprietaireSelfType::class,
+                'entry_type' => LocataireType::class,
                 'allow_add' => true,
                 'by_reference' => false,
                 'attr' => array(

@@ -98,8 +98,11 @@
                                 <div class="parsley-row">
                                     <span class="uk-form-help-block">Rue :</span>
                                         <span id="rue_span">
-                                        {% if acquisition.bien %}
-                                            {{ bien.address.rue }}
+                                        {% if acquisition.bien is not null %}
+                                            {% if acquisition.bien.address is not null %}
+                                            {{ acquisition.bien.address.rue }}
+
+                                                {% endif %}
                                         {% else %}
                                             -
                                         {% endif %}
@@ -110,8 +113,10 @@
                                 <div class="parsley-row">
                                     <span class="uk-form-help-block">Sous ville :</span>
                                         <span id="sousVille_span">
-                                        {% if acquisition.bien %}
-                                            {{ bien.address.rue.localite }}
+                                        {% if acquisition.bien is not null %}
+                                            {% if acquisition.bien.address is not null %}
+                                            {{ acquisition.bien.address.rue.localite }}
+                                            {% endif %}
                                         {% else %}
                                             -
                                         {% endif %}
@@ -122,8 +127,10 @@
                                 <div class="parsley-row">
                                     <span class="uk-form-help-block">Ville :</span>
                                         <span id="ville_span">
-                                    {% if acquisition.bien %}
-                                        {{ bien.address.rue.localite.ville }}
+                                    {% if acquisition.bien is not null %}
+                                            {% if acquisition.bien.address is not null %}
+                                        {{ acquisition.bien.address.rue.localite.ville }}
+                                            {% endif %}
                                     {% else %}
                                         -
                                     {% endif %}
@@ -134,8 +141,10 @@
                                 <div class="parsley-row">
                                     <span class="uk-form-help-block">Gouvernorat :</span>
                                         <span id="gouvernorat_span">
-                                       {% if acquisition.bien %}
-                                           {{ bien.address.rue }}
+                                       {% if acquisition.bien is not null %}
+                                            {% if acquisition.bien.address is not null %}
+                                           {{ acquisition.bien.address.rue }}
+                                            {% endif %}
                                        {% else %}
                                            -
                                        {% endif %}
@@ -223,8 +232,8 @@
                                 </div>
                                 <div class="uk-width-1-4">
                                     {% if acquisition.bien %}
-                                    {% if bien.owners %}
-                                        {% for owner in  bien.owners %}
+                                    {% if acquisition.bien.owners %}
+                                        {% for owner in  acquisition.bien.owners %}
                                             {{ owner.client.denomination }}
                                             {{ owner.client.prenom }}
                                             <br>
@@ -237,8 +246,8 @@
                                 </div>
                                 <div class="uk-width-1-4">
                                     {% if acquisition.bien %}
-                                    {% if bien.owners %}
-                                        {% for owner in  bien.owners %}
+                                    {% if acquisition.bien.owners %}
+                                        {% for owner in  acquisition.bien.owners %}
                                             {{ owner.client.tel }}
                                             <br>
                                         {% endfor %}
@@ -249,8 +258,8 @@
                                 </div>
                                 <div class="uk-width-1-4">
                                     {% if acquisition.bien %}
-                                    {% if bien.owners %}
-                                        {% for owner in  bien.owners %}
+                                    {% if acquisition.bien.owners %}
+                                        {% for owner in  acquisition.bien.owners %}
                                             {{ owner.client.website }}
                                             <br>
                                         {% endfor %}
@@ -264,8 +273,8 @@
                                 </div>
                                 <div class="uk-width-1-4">
                                     {% if acquisition.bien %}
-                                    {% if bien.owners %}
-                                        {% for representant in  bien.representants %}
+                                    {% if acquisition.bien.owners %}
+                                        {% for representant in  acquisition.bien.representants %}
                                             {{ representant.representant.denomination }}
                                             {{ representant.representant.prenom }}
                                             <br>
@@ -277,8 +286,8 @@
                                 </div>
                                 <div class="uk-width-1-4">
                                     {% if acquisition.bien %}
-                                    {% if bien.owners %}
-                                        {% for representant in  bien.representants %}
+                                    {% if acquisition.bien.owners %}
+                                        {% for representant in  acquisition.bien.representants %}
                                             {{ representant.representant.tel }}
                                             <br>
                                         {% endfor %}
@@ -289,8 +298,8 @@
                                 </div>
                                 <div class="uk-width-1-4">
                                     {% if acquisition.bien %}
-                                    {% if bien.owners %}
-                                        {% for representant in  bien.representants %}
+                                    {% if acquisition.bien.owners %}
+                                        {% for representant in  acquisition.bien.representants %}
                                             {{ representant.representant.website }}
                                             <br>
                                         {% endfor %}
@@ -326,7 +335,7 @@
                                 </div>
                                 <div class="uk-width-1-2">
                                     {% if acquisition.bien %}
-                                    {{ bien.creationDate|date('d-m-Y') }}
+                                    {{ acquisition.bien.creationDate|date('d-m-Y') }}
                                     {% endif %}
                                 </div>
                                 <div class="uk-width-1-2">
@@ -334,8 +343,8 @@
                                 </div>
                                 <div class="uk-width-1-2">
                                     {% if acquisition.bien %}
-                                    {% if bien.createdBy %}
-                                        {{ bien.createdBy }}
+                                    {% if acquisition.bien.createdBy %}
+                                        {{ acquisition.bien.createdBy }}
                                         {% endif %}
                                     {% else %}
                                         -
@@ -346,7 +355,7 @@
                                 </div>
                                 <div class="uk-width-1-2">
                                     {% if acquisition.bien %}
-                                    {{ bien.updatedAt|date('d-m-Y') }}
+                                    {{ acquisition.bien.updatedAt|date('d-m-Y') }}
                                     {% endif %}
                                 </div>
                                 <div class="uk-width-1-2">
@@ -354,8 +363,8 @@
                                 </div>
                                 <div class="uk-width-1-2">
                                     {% if acquisition.bien %}
-                                    {% if bien.createdBy %}
-                                        {{ bien.createdBy }}
+                                    {% if acquisition.bien.createdBy %}
+                                        {{ acquisition.bien.createdBy }}
                                         {% endif %}
                                     {% else %}
                                         -
@@ -366,31 +375,14 @@
                     </div>
                 </div>
             </div>
-            <ul class="uk-tab" data-uk-tab="{connect:'#tabs'}" id="tabs_1">
+            <ul class="uk-tab" data-uk-tab="{connect:'#tabs', swiping: false}" id="tabs_1">
                 <li class="uk-active"><a href="#">Général</a></li>
                 <li><a href="#">Détails</a></li>
                 <li><a href="#">Photos & Papiers</a></li>
+                <li><a href="#">Evaluation</a></li>
             </ul>
             <ul id="tabs" class="uk-switcher uk-margin">
                 <li>
-                    {#<div class="md-card">#}
-                    {#<div class="md-card-toolbar">#}
-                    {#<h3 class="md-card-toolbar-heading-text">#}
-                    {#Details#}
-                    {#</h3>#}
-                    {#</div>#}
-                    {#<div class="md-card-content large-padding">#}
-                    {#<div class="uk-form-row">#}
-                    {#<div class="parsley-row">#}
-                    {#<span class="uk-form-help-block">Raison</span>#}
-                    {#{{ form_widget(form.bien.nature) }}#}
-                    {#<span>     {{ form_errors(form.bien.nature) }} </span>#}
-                    {#</div>#}
-                    {#</div>#}
-
-                    {#</div>#}
-                    {#</div>#}
-                    {#</div>#}
                     <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
 
                         <div class="uk-width-5-10  uk-width-large-5-10">
@@ -416,9 +408,9 @@
                                                                 data-md-selectize data-md-selectize-bottom
                                                                 onchange="getVilles(this)">
                                                             {% if acquisition.bien %}
-                                                            {% if bien.id is not null %}
-                                                                <option value="{{ bien.address.rue.localite.ville.gouvernorat.id }}">
-                                                                    {{ bien.address.rue.localite.ville.gouvernorat.name }}
+                                                            {% if acquisition.bien.address is not null %}
+                                                                <option value="{{ acquisition.bien.address.rue.localite.ville.gouvernorat.id }}">
+                                                                    {{ acquisition.bien.address.rue.localite.ville.gouvernorat.name }}
                                                                 </option>
                                                             {% endif %}
                                                             {% endif %}
@@ -465,9 +457,9 @@
                                                                 data-md-selectize-bottom
                                                                 onchange="getLocalites(this)">
                                                             {% if acquisition.bien %}
-                                                            {% if bien.id is not null %}
-                                                                <option value="{{ bien.address.rue.localite.ville.id }}">
-                                                                    {{ bien.address.rue.localite.ville.name }}
+                                                            {% if acquisition.bien.address is not null %}
+                                                                <option value="{{ acquisition.bien.address.rue.localite.ville.id }}">
+                                                                    {{ acquisition.bien.address.rue.localite.ville.name }}
                                                                 </option>
                                                             {% endif %}
                                                             {% endif %}
@@ -511,9 +503,9 @@
                                                                 data-md-selectize data-md-selectize-bottom
                                                                 onchange="getRues(this)">
                                                             {% if acquisition.bien %}
-                                                            {% if bien.id is not null %}
-                                                                <option value="{{ bien.address.rue.localite.id }}">
-                                                                    {{ bien.address.rue.localite.name }}
+                                                            {% if acquisition.bien.address is not null %}
+                                                                <option value="{{ acquisition.bien.address.rue.localite.id }}">
+                                                                    {{ acquisition.bien.address.rue.localite.name }}
                                                                 </option>
                                                             {% endif %}
                                                             {% endif %}
@@ -561,9 +553,9 @@
                                                                 data-md-selectize data-md-selectize-bottom
                                                                 onchange="getAdresses(this)">
                                                             {% if acquisition.bien %}
-                                                            {% if bien.id is not null %}
-                                                                <option value="{{ bien.address.rue.id }}">
-                                                                    {{ bien.address.rue.name }}
+                                                            {% if acquisition.bien.address is not null %}
+                                                                <option value="{{ acquisition.bien.address.rue.id }}">
+                                                                    {{ acquisition.bien.address.rue.name }}
                                                                 </option>
                                                             {% endif %}
                                                             {% endif %}
@@ -673,14 +665,14 @@
                         </div>
                         <div class="md-card-content large-padding">
                             <div class="uk-grid">
-                                <div class="uk-width-1-4">
+                                {#<div class="uk-width-1-4">#}
 
-                                    En qualité de :
-                                </div>
-                                <div class="uk-width-3-4">
+                                {#En qualité de :#}
+                                {#</div>#}
+                                {#<div class="uk-width-3-4">#}
 
-                                    {{ form_widget(form.bien.representants) }}
-                                </div>
+                                {#{{ form_widget(form.representants) }}#}
+                                {#</div>#}
 
                             </div>
 
@@ -690,109 +682,183 @@
                                     Propriétaire <a id="addOwner"><i class="material-icons md-24">&#xE146;</i></a>
                                     :
                                 </div>
-                                <div class="uk-width-3-4">
+                                <div style="border-bottom:1px solid" class="uk-width-3-4">
                                     <div class="md-card-content large-padding">
-                                        {% if acquisition.bien %}
-                                        {% if bien.id == 0 or form.owners|length ==0 %}
+                                        {% if acquisition.id == 0 or form.bien.owners|length ==0 %}
                                             {{ form_widget(form.bien.owners) }}
-                                            {% endif %}
                                         {% else %}
                                             <div id="{{ form.bien.owners.vars.id }}" class="uk-grid"
                                                  data-uk-grid-margin
                                                  data-prototype="{{ form_widget(form.bien.owners.vars.prototype)|e('html_attr') }}">
-                                                {% if acquisition.bien %}
                                                 {% for owner in form.bien.owners %}
                                                     <div class="uk-width-medium-2-4 blockSection">
                                                         <div class="uk-form-row">
                                                             <div class="parsley-row">
                                                                 {{ form_label(owner.client,   "Propriétaire"  ) }}
-                                                                {{ form_widget(owner.client) }}
+                                                                {{ form_widget(owner.client , {'attr' : {'class' : 'select'}}) }}
                                                                 <span>{{ form_errors(owner.client) }}</span>
                                                             </div>
                                                         </div>
                                                         <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
                                                             <i class="material-icons md-24">&#xE872;</i>
                                                         </a>
                                                     </div>
                                                 {% endfor %}
-                                                {% endif %}
                                             </div>
                                         {% endif %}
 
                                     </div>
                                 </div>
 
-                            </div>
-
-                            <div id="procurations_div" class="uk-grid">
                                 <div class="uk-width-1-4">
-                                    Procurations <a id="addProcuration"><i class="material-icons md-24">&#xE146;</i></a>
 
+                                    Représenté par <a id="addRepresentant"><i class="material-icons md-24">&#xE146;</i></a>
+                                    :
                                 </div>
-                                <div class="uk-width-3-4">
+                                <div style="border-bottom:1px solid"  class="uk-width-2-4">
                                     <div class="md-card-content large-padding">
-                                        {% if acquisition.bien %}
-                                        {% if acquisition.bien.id == 0 or form.bien.procurations|length ==0 %}
-                                            {{ form_widget(form.bien.procurations) }}
-                                            {% endif %}
+                                        {% if acquisition.id == 0 or form.bien.representants|length ==0 %}
+                                            {{ form_widget(form.bien.representants) }}
                                         {% else %}
-                                            <div id="{{ form.bien.procurations.vars.id }}" class="uk-grid"
+                                            <div id="{{ form.bien.representants.vars.id }}" class="uk-grid"
                                                  data-uk-grid-margin
-                                                 data-prototype="{{ form_widget(form.bien.procurations.vars.prototype)|e('html_attr') }}">
-                                                {% if acquisition.bien %}
-                                                {% for procuration in form.bien.procurations %}
-                                                    <div class="uk-width-medium-1-4 blockSection">
+                                                 data-prototype="{{ form_widget(form.bien.representants.vars.prototype)|e('html_attr') }}">
+                                                {% for rep in form.bien.representants %}
+                                                    <div class="uk-width-medium-2-4 blockSection">
                                                         <div class="uk-form-row">
                                                             <div class="parsley-row">
-                                                                {{ form_label(procuration.dateProcuration,   "Date procuration"  ) }}
-                                                                {{ form_widget(procuration.dateProcuration) }}
-                                                                <span>{{ form_errors(procuration.dateProcuration) }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="uk-form-row">
-                                                            <div class="parsley-row">
-                                                                {{ form_label(procuration.lieu,   "Lieu"  ) }}
-                                                                {{ form_widget(procuration.lieu) }}
-                                                                <span> {{ form_errors(procuration.lieu) }}</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="uk-form-row">
-                                                            <div class="parsley-row">
-                                                                {{ form_label(procuration.representant,   "Donne procuration à"  ) }}
-                                                                {{ form_widget(procuration.representant) }}
-                                                                <span>{{ form_errors(procuration.representant) }}</span>
+                                                                {{ form_label(rep.client,   "Propriétaire"  ) }}
+                                                                {{ form_widget(rep.client , {'attr' : {'class' : 'select'}}) }}
+                                                                <span>{{ form_errors(rep.client) }}</span>
                                                             </div>
                                                         </div>
                                                         <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
                                                             <i class="material-icons md-24">&#xE872;</i>
                                                         </a>
                                                     </div>
                                                 {% endfor %}
-                                                {% endif %}
                                             </div>
                                         {% endif %}
 
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-4">
+
+                                    <div class="uk-input-group" style="width:100%;">
+                                        {#<span class="uk-input-group-addon">#}
+                                        {##}
+                                        {#</span>#}
+                                        <span class="uk-form-help-block">Comme</span>
+                                        {{ form_widget(form.bien.representantscomme) }}
+                                        <span> {{ form_errors(form.bien.representantscomme) }} </span>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="uk-width-1-4">
+
+                                    Locataires <a id="addLocataire"><i class="material-icons md-24">&#xE146;</i></a>
+                                    :
+                                </div>
+                                <div  style="border-bottom:1px solid" class="uk-width-3-4">
+                                    <div class="md-card-content large-padding">
+                                        {% if acquisition.id == 0 or form.bien.locataires|length ==0 %}
+                                            {{ form_widget(form.bien.locataires) }}
+                                        {% else %}
+                                            <div id="{{ form.bien.locataires.vars.id }}" class="uk-grid"
+                                                 data-uk-grid-margin
+                                                 data-prototype="{{ form_widget(form.bien.locataires.vars.prototype)|e('html_attr') }}">
+                                                {% for loc in form.bien.locataires %}
+                                                    <div class="uk-width-medium-2-4 blockSection">
+                                                        <div class="uk-form-row">
+                                                            <div class="parsley-row">
+                                                                {{ form_label(loc.client,   "Propriétaire"  ) }}
+                                                                {{ form_widget(loc.client , {'attr' : {'class' : 'select'}}) }}
+                                                                <span>{{ form_errors(loc.client) }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
+                                                            <i class="material-icons md-24">&#xE872;</i>
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
 
                                     </div>
                                 </div>
-                            </div>
-                            <div id="societe_div" class="uk-grid">
-                                <div class="uk-width-1-4">Representant :</div>
-                                <div class="uk-width-3-4">
-                                    <div class="uk-input-group">
-                                                   <span class="uk-input-group-addon">
-                                        <label>Poste</label></span>
-                                        {{ form_widget(form.bien.societePoste) }}
-                                    </div>
-                                    <div class="uk-input-group">
-                                                   <span class="uk-input-group-addon">
-                                        <label>Nom et prénom</label></span>
-                                        {{ form_widget(form.bien.representantNom) }}
-                                    </div>
-                                </div>
 
                             </div>
+
+                            {#<div id="procurations_div" class="uk-grid">#}
+                            {#<div class="uk-width-1-4">#}
+                            {#Procurations <a id="addProcuration"><i class="material-icons md-24">&#xE146;</i></a>#}
+
+                            {#</div>#}
+                            {#<div class="uk-width-3-4">#}
+                            {#<div class="md-card-content large-padding">#}
+                            {#{% if nouvelle.id == 0 or form.procurations|length ==0 %}#}
+                            {#{{ form_widget(form.procurations) }}#}
+                            {#{% else %}#}
+                            {#<div id="{{ form.procurations.vars.id }}" class="uk-grid"#}
+                            {#data-uk-grid-margin#}
+                            {#data-prototype="{{ form_widget(form.procurations.vars.prototype)|e('html_attr') }}">#}
+                            {#{% for procuration in form.procurations %}#}
+                            {#<div class="uk-width-medium-1-4 blockSection">#}
+                            {#<div class="uk-form-row">#}
+                            {#<div class="parsley-row">#}
+                            {#{{ form_label(procuration.dateProcuration,   "Date procuration"  ) }}#}
+                            {#{{ form_widget(procuration.dateProcuration) }}#}
+                            {#<span>{{ form_errors(procuration.dateProcuration) }}</span>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="uk-form-row">#}
+                            {#<div class="parsley-row">#}
+                            {#{{ form_label(procuration.lieu,   "Lieu"  ) }}#}
+                            {#{{ form_widget(procuration.lieu) }}#}
+                            {#<span> {{ form_errors(procuration.lieu) }}</span>#}
+                            {#</div>#}
+                            {#</div>#}
+
+                            {#<div class="uk-form-row">#}
+                            {#<div class="parsley-row">#}
+                            {#{{ form_label(procuration.representant,   "Donne procuration à"  ) }}#}
+                            {#{{ form_widget(procuration.representant) }}#}
+                            {#<span>{{ form_errors(procuration.representant) }}</span>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<a class="btn-close">#}
+                            {#<i class="material-icons md-24">&#xE872;</i>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#{% endfor %}#}
+                            {#</div>#}
+                            {#{% endif %}#}
+
+
+                            {#</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div id="societe_div" class="uk-grid">#}
+                            {#<div class="uk-width-1-4">Representant :</div>#}
+                            {#<div class="uk-width-3-4">#}
+                            {#<div class="uk-input-group">#}
+                            {#<span class="uk-input-group-addon">#}
+                            {#<label>Poste</label></span>#}
+                            {#{{ form_widget(form.societePoste) }}#}
+                            {#</div>#}
+                            {#<div class="uk-input-group">#}
+                            {#<span class="uk-input-group-addon">#}
+                            {#<label>Nom et prénom</label></span>#}
+                            {#{{ form_widget(form.representantNom) }}#}
+                            {#</div>#}
+                            {#</div>#}
+
+                            {#</div>#}
 
                         </div>
 
@@ -1441,7 +1507,7 @@
                             </div>
                             <div class="md-card-content large-padding">
                                 {% if acquisition.bien %}
-                                {% if bien.id == 0 or form.pictures|length ==0 %}
+                                {% if acquisition.bien.id == 0 or form.bien.pictures|length ==0 %}
                                     {{ form_widget(form.bien.pictures) }}
                                     {% endif %}
                                 {% else %}
@@ -1485,7 +1551,7 @@
                             </div>
                             <div class="md-card-content large-padding">
                                 {% if acquisition.bien %}
-                                {% if bien.id == 0 or form.papers|length ==0 %}
+                                {% if acquisition.bien.id == 0 or form.bien.papers|length ==0 %}
 
 
 
@@ -1527,6 +1593,94 @@
                         </div>
                     </div>
                 </li>
+                <li><div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+
+                        <div class="uk-width-10-10">
+                            <div class="md-card">
+                                <div class="md-card-toolbar">
+                                    <h3 class="md-card-toolbar-heading-text">
+                                       Evaluations
+                                    </h3>
+                                </div>
+                                <div class="md-card-content">
+                                    <div class="uk-width-1-1">
+                                        <div class="uk-input-group">
+                                                    <span class="uk-input-group-addon">
+                                                    {{ form_label(form.bien.estimatedPrice,   "Estimation client"  ) }}</span>
+                                            {{ form_widget(form.bien.estimatedPrice, {'attr': {'class': 'md-input numeric'}}) }}
+                                            <span>     {{ form_errors(form.bien.estimatedPrice) }} </span>
+                                        </div>
+                                    </div>
+
+                                    <table style="width: 100%;margin-top: 10%;margin-bottom: 10%">
+                                        <thead>
+                                        <th colspan="6" style="border-bottom: 1px solid;"> <a id="addEvaluation" title="Ajouter une évaluation">
+                                                <i class="material-icons md-24">add</i>
+                                            </a>Minimum</th>
+                                        <th colspan="6" style="border-bottom: 1px solid;">Maximum</th>
+                                        </thead>
+                                        <tbody id="{{ form.evaluations.vars.id }}"
+                                               data-prototype="{{ form_widget(form.evaluations.vars.prototype)|e('html_attr') }}">
+                                     {% for evaluation in form.evaluations %}
+                                         <tr>
+                                             <td> <a id="addEvaluation" title="Ajouter une évaluation">
+                                                     <i class="material-icons md-24">delete</i>
+                                                 </a>Sup terrain</td>
+                                             <td>{{ form_widget(evaluation.supTerrainMin) }}</td>
+                                             <td>X</td>
+                                             <td>{{ form_widget(evaluation.supTerrainPMin) }}</td>
+                                             <td>=</td>
+                                             <td>{{ form_widget(evaluation.supTerrainTMin) }}</td>
+                                             <td>Sup terrain</td>
+                                             <td>{{ form_widget(evaluation.supTerrainMax) }}</td>
+                                             <td>X</td>
+                                             <td>{{ form_widget(evaluation.supTerrainPMax) }}</td>
+                                             <td>=</td>
+                                             <td>{{ form_widget(evaluation.supTerrainTMax) }}</td>
+
+                                         </tr>
+                                         <tr>
+                                             <td>Sup couvert</td>
+                                             <td>{{ form_widget(evaluation.supCouvertMin) }}</td>
+                                             <td>X</td>
+                                             <td>{{ form_widget(evaluation.supCouvertPMin) }}</td>
+                                             <td>=</td>
+                                             <td>{{ form_widget(evaluation.supCouvertTMin) }}</td>
+                                             <td>Sup couvert</td>
+                                             <td>{{ form_widget(evaluation.supCouvertMax) }}</td>
+                                             <td>X</td>
+                                             <td>{{ form_widget(evaluation.supCouvertPMax) }}</td>
+                                             <td>=</td>
+                                             <td>{{ form_widget(evaluation.supCouvertTMax) }}</td>
+
+                                         </tr>
+                                     {% endfor %}
+
+
+                                        </tbody>
+                                        <tfoot>
+                                        {#<tr>#}
+                                            {#<td colspan="5" style="text-align: right;">Total :</td>#}
+                                            {#<td><input id="MinTotal" type="text" style="width: 80px"></td>#}
+                                            {#<td colspan="5" style="text-align: right;">Total :</td>#}
+                                            {#<td><input id="MaxTotal" type="text" style="width: 80px"></td>#}
+
+                                        {#</tr>#}
+                                        </tfoot>
+                                    </table>
+                                    <div class="uk-width-1-1">
+                                        <div class="uk-input-group">
+                                                    <span class="uk-input-group-addon">
+                                                    {{ form_label(form.bien.price,   "Estimation Green-Duck"  ) }}</span>
+                                            {{ form_widget(form.bien.price, {'attr': {'class': 'md-input numeric'}}) }}
+                                            <span>     {{ form_errors(form.bien.price) }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div></li>
             </ul>
 
         </div>
@@ -1541,6 +1695,7 @@
     </div>
     {#{{ form_rest(form) }}#}
     {{ form_end(form, {'render_rest': false}) }}
+    {#{{ form_end(form) }}#}
     <div class="uk-modal" id="modal-ajouterVille">
         <div class="uk-modal-dialog">
             <button type="button" class="uk-modal-close uk-close"></button>
@@ -3443,16 +3598,21 @@
     $(function () {
         var ownersDOM = $('#' + '{{ form.bien.owners.vars.id }}');
         var representantsDOM = $('#' + '{{ form.bien.representants.vars.id }}');
+        var locatairesDOM = $('#' + '{{ form.bien.locataires.vars.id }}');
         var procurationsDOM = $('#' + '{{ form.bien.procurations.vars.id }}');
         var picturesDOM = $('#' + '{{ form.bien.pictures.vars.id }}');
         var papersDOM = $('#' + '{{ form.bien.papers.vars.id }}');
+        var evaluationsDOM = $('#' + '{{ form.evaluations.vars.id }}');
         var buildPrototypes = {
             counterOwners: ownersDOM.children().length,
             prototypeOwners: ownersDOM.attr('data-prototype'),
             owners: ownersDOM,
             counterRepresentants: representantsDOM.children().length,
+            prototypeLocataires: locatairesDOM.attr('data-prototype'),
+            locataires: locatairesDOM,
             prototypeRepresentants: representantsDOM.attr('data-prototype'),
             representants: representantsDOM,
+            counterLocataires: locatairesDOM.children().length,
             counterProcurations: procurationsDOM.children().length,
             prototypeProcurations: procurationsDOM.attr('data-prototype'),
             procurations: procurationsDOM,
@@ -3462,12 +3622,21 @@
             counterPapers: papersDOM.children().length,
             prototypePapers: papersDOM.attr('data-prototype'),
             papers: papersDOM,
+            counterEvaluations: evaluationsDOM.children().length,
+            prototypeEvaluations: evaluationsDOM.attr('data-prototype'),
+            evaluations: evaluationsDOM,
             init: function () {
                 $('#addOwner').on('click', function () {
                     buildPrototypes.buildOwnerSection();
                 });
+                $('#addEvaluation').on('click', function () {
+                    buildPrototypes.buildEvaluationSection();
+                });
                 $('#addRepresentant').on('click', function () {
                     buildPrototypes.buildRepresentantSection();
+                });
+                $('#addLocataire').on('click', function () {
+                    buildPrototypes.buildLocataireSection();
                 });
                 $('#addProcuration').on('click', function () {
                     buildPrototypes.buildProcurationSection();
@@ -3489,21 +3658,117 @@
                 var block = temp.replace(/__name__/g, this.counterOwners);
                 this.owners.append(block);
                 this.owners.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    suggest: true,
+                    autoBind: true,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
                 this.reInit();
             },
             buildRepresentantSection: function () {
+//                alert('here')
                 this.counterRepresentants++;
-                var prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
+                prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
                 var temp = SFCollectionAnalyzer.buildTemplate(prototypeRepresentantsDOM, templateRepresentant());
                 var block = temp.replace(/__name__/g, this.counterRepresentants);
                 this.representants.append(block);
                 this.representants.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    suggest: true,
+                    autoBind: true,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
+                this.reInit();
+            },
+            buildLocataireSection: function () {
+                this.counterLocataires++;
+                prototypeLocatairesDOM = $('<div/>').html(this.prototypeLocataires).contents();
+                var temp = SFCollectionAnalyzer.buildTemplate(prototypeLocatairesDOM, templateLocataire());
+                var block = temp.replace(/__name__/g, this.counterLocataires);
+                this.locataires.append(block);
+                this.locataires.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    filter: "contains",
+                    suggest: true,
+                    autoBind: true,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
+                });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
+                this.reInit();
+            },
+            buildEvaluationSection: function () {
+                this.counterEvaluations++;
+                var prototypeEvaluationsDOM = $('<div/>').html(this.prototypeEvaluations).contents();
+console.log(prototypeEvaluationsDOM)
+                var temp = SFCollectionAnalyzer.buildTemplate(prototypeEvaluationsDOM, templateEvaluation());
+
+                var block = temp.replace(/__name__/g, this.counterEvaluations);
+                this.evaluations.append(block);
+
                 this.reInit();
             },
             buildProcurationSection: function () {
@@ -3943,33 +4208,51 @@
                 '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
                 '</div>';
     }
-    function templateRepresentant() {
-        return '<div class="uk-width-medium-1-4 bloc">' +
+    function templateOwner() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
                 '<div class="uk-form-row">' +
                 '<div class="parsley-row">' +
                 '<label>Propriétaire</label>' +
                 '#client#' +
                 '</div>' +
                 '</div>' +
-                '<div class="uk-form-row">' +
-                '<div class="parsley-row">' +
-                '<label>Representant</label>' +
-                '#representant#' +
-                '</div>' +
-                '</div>' +
-                '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
+                '<a  id="addDemandeur" onclick="addDemandeur()"'+
+                '        title="Ajouter un demandeur"'+
+                '  ><i class="material-icons md-24">account_circle</i>' +
+                '</a><a onclick="deleteClient(this)"' +
+                '<i class="material-icons md-24">&#xE872;</i></a>' +
                 '</div>'
                 ;
     }
-    function templateOwner() {
-        return '<div class="uk-width-medium-2-4 bloc">' +
+    function templateRepresentant() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
                 '<div class="uk-form-row">' +
                 '<div class="parsley-row">' +
-                '<label>Propriétaire</label>' +
+                '<label>Représentant</label>' +
                 '#client#' +
                 '</div>' +
                 '</div>' +
-                '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
+                '<a  id="addDemandeur" onclick="addDemandeur()"'+
+                '        title="Ajouter un demandeur"'+
+                '  ><i class="material-icons md-24">account_circle</i>' +
+                '</a><a onclick="deleteClient(this)"' +
+                '<i class="material-icons md-24">&#xE872;</i></a>' +
+                '</div>'
+                ;
+    }
+    function templateLocataire() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Locataire</label>' +
+                '#client#' +
+                '</div>' +
+                '</div>' +
+                '<a  id="addDemandeur" onclick="addDemandeur()"'+
+                '        title="Ajouter un demandeur"'+
+                '  ><i class="material-icons md-24">account_circle</i>' +
+                '</a><a onclick="deleteClient(this)"' +
+                '<i class="material-icons md-24">&#xE872;</i></a>' +
                 '</div>'
                 ;
     }
@@ -4012,6 +4295,42 @@
                 '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
                 '</div>' +
                 '<hr>';
+
+
+    }
+    function templateEvaluation() {
+        return        ` <tr>
+                                            <td><a onclick="removeEvaluation(this)" title="Supprimer">
+                                                     <i class="material-icons md-24">delete</i>
+                                                 </a>Sup terrain</td>
+                                            <td>#supTerrainMin#</td>
+                                            <td>X</td>
+                                            <td>#supTerrainPMin#</td>
+                                            <td>=</td>
+                                            <td>#supTerrainTMin#</td>
+                                            <td>Sup terrain</td>
+                                            <td>#supTerrainMax#</td>
+                                            <td>X</td>
+                                            <td>#supTerrainPMax#</td>
+                                            <td>=</td>
+                                            <td>#supTerrainTMax#</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Sup couvert</td>
+                                            <td>#supCouvertMin#</td>
+                                            <td>X</td>
+                                            <td>#supCouvertPMin#</td>
+                                            <td>=</td>
+                                            <td>#supCouvertTMin#</td>
+                                            <td>Sup couvert</td>
+                                            <td>#supCouvertMax#</td>
+                                            <td>X</td>
+                                            <td>#supCouvertPMax#</td>
+                                            <td>=</td>
+                                            <td>#supCouvertTMax#</td>
+
+                                        </tr>`;
 
 
     }
@@ -4262,6 +4581,7 @@
 
 
     }
+
     $(document).ready(function () {
         hideDivs();
         $('#procurations_div').hide();
@@ -4336,5 +4656,40 @@
 
         }
 
+    }
+    function areaChanged(elem) {
+        var area = $(elem).val();
+        var price = $(elem).closest('td').next('td').next('td').find('input');
+        var total = price.closest('td').next('td').next('td').find('input');
+
+        if(price.val() == '')
+        {
+           price.val(1);
+        }
+        total.val(parseFloat(area)*parseFloat(price.val()));
+    }
+    function priceEChanged(elem) {
+
+        var price = $(elem).val();
+        var area = $(elem).closest('td').prev('td').prev('td').find('input');
+        var total = $(elem).closest('td').next('td').next('td').find('input');
+        if (area.val() == '')
+        {
+            area.val(1);
+        }
+        total.val(parseFloat(area.val())*parseFloat(price));
+    }
+    function removeEvaluation(elem)
+    {
+        $(elem).closest('tr').next('tr').remove();
+        $(elem).closest('tr').remove();
+    }
+    function addDemandeur() {
+        var win = window.open('{{ path('client_new') }}',' Ajouter un client - Green Duck immobilier');
+        win.focus();
+    }
+    function deleteClient(elem)
+    {
+        $(elem).closest('div').remove();
     }
 </script>

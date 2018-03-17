@@ -282,14 +282,14 @@ class Bien implements \JsonSerializable
     private $owners;
 
     /**
-     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\RepresentantBien", mappedBy="bien", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(name="representant_id", referencedColumnName="id")
      * @Assert\Valid()
      */
     private $representants;
 
     /**
-     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Locataire", mappedBy="bien", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(name="locataire_id", referencedColumnName="id")
      * @Assert\Valid()
      */
@@ -555,6 +555,8 @@ class Bien implements \JsonSerializable
      */
     private $contrats;
 
+
+
     /**
      * @ORM\ManyToMany(targetEntity="SBC\BienBundle\Entity\Commodite", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
@@ -591,6 +593,7 @@ class Bien implements \JsonSerializable
         $this->owners = new ArrayCollection();
         $this->procurations = new ArrayCollection();
         $this->representants = new ArrayCollection();
+        $this->evaluation = new ArrayCollection();
 
         $this->coveredArea = 0;
         $this->totalArea = 0;
@@ -2350,29 +2353,7 @@ class Bien implements \JsonSerializable
         return $this->titre;
     }
 
-    /**
-     * Set representants
-     *
-     * @param string $representants
-     *
-     * @return Bien
-     */
-    public function setRepresentants($representants)
-    {
-        $this->representants = $representants;
-
-        return $this;
-    }
-
-    /**
-     * Get representants
-     *
-     * @return string
-     */
-    public function getRepresentants()
-    {
-        return $this->representants;
-    }
+   
 
     /**
      * Set societePoste
@@ -2618,11 +2599,11 @@ class Bien implements \JsonSerializable
     /**
      * Add representant
      *
-     * @param \SBC\BienBundle\Entity\ProprietaireSelf $representant
+     * @param \SBC\BienBundle\Entity\RepresentantBien $representant
      *
      * @return Bien
      */
-    public function addRepresentant(\SBC\BienBundle\Entity\ProprietaireSelf $representant)
+    public function addRepresentant(\SBC\BienBundle\Entity\RepresentantBien $representant)
     {
         $representant->setBien($this);
         $this->representants[] = $representant;
@@ -2633,9 +2614,9 @@ class Bien implements \JsonSerializable
     /**
      * Remove representant
      *
-     * @param \SBC\BienBundle\Entity\ProprietaireSelf $representant
+     * @param \SBC\BienBundle\Entity\RepresentantBien $representant
      */
-    public function removeRepresentant(\SBC\BienBundle\Entity\ProprietaireSelf $representant)
+    public function removeRepresentant(\SBC\BienBundle\Entity\RepresentantBien $representant)
     {
         $this->representants->removeElement($representant);
     }
@@ -2647,8 +2628,9 @@ class Bien implements \JsonSerializable
      *
      * @return Bien
      */
-    public function addLocataire(\SBC\BienBundle\Entity\ProprietaireSelf $locataire)
+    public function addLocataire(\SBC\BienBundle\Entity\Locataire $locataire)
     {
+        $locataire->setBien($this);
         $this->locataires[] = $locataire;
 
         return $this;
@@ -2659,7 +2641,7 @@ class Bien implements \JsonSerializable
      *
      * @param \SBC\BienBundle\Entity\ProprietaireSelf $locataire
      */
-    public function removeLocataire(\SBC\BienBundle\Entity\ProprietaireSelf $locataire)
+    public function removeLocataire(\SBC\BienBundle\Entity\Locataire $locataire)
     {
         $this->locataires->removeElement($locataire);
     }
@@ -2672,5 +2654,17 @@ class Bien implements \JsonSerializable
     public function getLocataires()
     {
         return $this->locataires;
+    }
+
+
+
+    /**
+     * Get representants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRepresentants()
+    {
+        return $this->representants;
     }
 }

@@ -51,14 +51,14 @@ class Acquisition
     /**
      * @var float
      *
-     * @ORM\Column(name="min", type="float",nullable=true)
+     * @ORM\Column(name="land", type="float")
      */
     private $land;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="covered", type="float",nullable=true)
+     * @ORM\Column(name="covered", type="float")
      */
     private $covered;
 
@@ -101,7 +101,7 @@ class Acquisition
     private $meetings;
 
     /**
-     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Evaluation", mappedBy="acquisition", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Evaluation", mappedBy="acquisition")
      */
     private $evaluations;
 
@@ -393,7 +393,6 @@ class Acquisition
      */
     public function addEvaluation(\SBC\BienBundle\Entity\Evaluation $evaluation)
     {
-        $evaluation->setAcquisition($this);
         $this->evaluations[] = $evaluation;
 
         return $this;
@@ -417,53 +416,5 @@ class Acquisition
     public function getEvaluations()
     {
         return $this->evaluations;
-    }
-
-    /**
-     * Set land
-     *
-     * @param float $land
-     *
-     * @return Acquisition
-     */
-    public function setLand($land)
-    {
-        $this->land = $land;
-
-        return $this;
-    }
-
-    /**
-     * Get land
-     *
-     * @return float
-     */
-    public function getLand()
-    {
-        return $this->land;
-    }
-
-    /**
-     * Set covered
-     *
-     * @param float $covered
-     *
-     * @return Acquisition
-     */
-    public function setCovered($covered)
-    {
-        $this->covered = $covered;
-
-        return $this;
-    }
-
-    /**
-     * Get covered
-     *
-     * @return float
-     */
-    public function getCovered()
-    {
-        return $this->covered;
     }
 }

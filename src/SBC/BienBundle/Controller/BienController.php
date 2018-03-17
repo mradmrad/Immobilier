@@ -77,6 +77,7 @@ class BienController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+//            die(var_dump(sizeof($bien->getRepresentants())));
             $em = $this->getDoctrine()->getManager();
             $em->persist($bien);
             $em->flush();
@@ -125,6 +126,8 @@ class BienController extends Controller
         $editForm = $this->createForm(BienType::class, $bien);
         $editForm->handleRequest($request);
 
+        $client = new Client();
+        $clientform = $this->createForm(ClientType::class,$client);
         if ($editForm->isSubmitted()) {
             foreach ($editForm->get('pictures')->getData() as $picture) {
                 if ($picture->getDescription() == null) {
@@ -135,22 +138,23 @@ class BienController extends Controller
                 }
             }
 
-            foreach ($bien->getProcurations() as $procuration) {
-                if ($procuration->getClient() == null) {
-                    $bien->removeProcuration($procuration);
-                    $em->remove($procuration);
-                } else {
-                    $bien->addProcuration($procuration);
-                }
-            }
-//            foreach ($bien->getRepresentants() as $representant) {
-//                if ($representant->getClient() == null) {
-//                    $bien->removeRepresentant($representant);
-//                    $em->remove($representant);
+//            foreach ($bien->getProcurations() as $procuration) {
+//                if ($procuration->getClient() == null) {
+//                    $bien->removeProcuration($procuration);
+//                    $em->remove($procuration);
 //                } else {
-//                    $bien->addRepresentant($representant);
+//                    $bien->addProcuration($procuration);
 //                }
 //            }
+////            foreach ($bien->getRepresentants() as $representant) {
+////                if ($representant->getClient() == null) {
+////                    $bien->removeRepresentant($representant);
+////                    $em->remove($representant);
+////                } else {
+////                    $bien->addRepresentant($representant);
+////                }
+////            }
+
 
             foreach ($bien->getOwners() as $owner) {
                 if ($owner->getClient() == null) {
@@ -160,7 +164,22 @@ class BienController extends Controller
                     $bien->addOwner($owner);
                 }
             }
-
+            foreach ($bien->getRepresentants() as $owner) {
+                if ($owner->getClient() == null) {
+                    $bien->removeRepresentant($owner);
+                    $em->remove($owner);
+                } else {
+                    $bien->addRepresentant($owner);
+                }
+            }
+            foreach ($bien->getLocataires() as $owner) {
+                if ($owner->getClient() == null) {
+                    $bien->removeLocataire($owner);
+                    $em->remove($owner);
+                } else {
+                    $bien->addLocataire($owner);
+                }
+            }
             $em->persist($bien);
             $em->flush();
             return $this->redirectToRoute('bien_index');
@@ -172,6 +191,7 @@ class BienController extends Controller
             'bien' => $bien,
             'gouvernorats' => $gouvernorats,
             'form' => $editForm->createView(),
+            'clientform' => $clientform->createView()
 
         ));
     }

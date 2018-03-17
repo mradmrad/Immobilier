@@ -7,6 +7,7 @@ use SBC\BienBundle\Entity\Bien;
 use SBC\UtilsBundle\Utils\MoneyTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,24 +38,31 @@ class AcquisitionType extends AbstractType
 //                    ))
 //                    ->addModelTransformer(new MoneyTransformer()))
 //            ->add('description');
+//
+//        if ($builder->getData() != null && $builder->getData()->getBien() != null) {
+//
+//            $builder->add('bien', EntityType::class, array(
+//                    'class' => Bien::class,
+//                    'placeholder' => '',
+//                    'empty_data' => null,
+//                    'attr' => array(
+//                        'class' => 'kendoComboBox select',
+//                        'style' => 'width:100%'
+//                    )
+//
+//                )
+//            );
+//        }
+//        else {
+            $builder->add('bien', BienType::class)
+            ->add('evaluations',CollectionType::class,array(
+                'entry_type' => EvaluationType::class,
+                'allow_add' => true,
+                'by_reference' => false,
 
-        if ($builder->getData() != null && $builder->getData()->getBien() != null) {
-
-            $builder->add('bien', EntityType::class, array(
-                    'class' => Bien::class,
-                    'placeholder' => '',
-                    'empty_data' => null,
-                    'attr' => array(
-                        'class' => 'kendoComboBox select',
-                        'style' => 'width:100%'
-                    )
-
-                )
-            );
-        }
-        else {
-            $builder->add('bien', BienType::class);
-        };
+            ))
+            ;
+//        };
     }
 
     /**

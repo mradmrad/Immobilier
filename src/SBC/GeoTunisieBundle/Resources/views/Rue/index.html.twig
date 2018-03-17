@@ -868,8 +868,8 @@
         }
         function newLocalite() {
             var localiteName = $('#localiteName');
-            var localiteNameIsValid = localiteName.parsley().isValid();
-            if (localiteNameIsValid) {
+//            var localiteNameIsValid = localiteName.parsley().isValid();
+//            if (localiteNameIsValid) {
                 var url = '{{ path('localite_new') }}';
                 $.ajax({
                     async: true,
@@ -877,30 +877,8 @@
                     url: url,
                     data: "localite=" + localiteName.val() + "&ville=" + villValue.val(),
                     success: function (json) {
-                        if (json.success === false || json.message !== '') {
-                            window.Parsley.addValidator('localite', {
-                                validateString: function () {
-                                    return false;
-                                },
-                                messages: {
-                                    en: 'Cette localité existe déjà.',
-                                    fr: "Cette localité existe déjà"
-                                }
-                            });
-                            localiteName.on('change', function () {
-                                window.Parsley.addValidator('localite', {
-                                    validateString: function () {
-                                        return true;
-                                    }
-                                });
-                                localiteName.parsley().validate();
-                            });
-                        } else {
-                            window.Parsley.addValidator('localite', {
-                                validateString: function () {
-                                    return true;
-                                }
-                            });
+
+
                             UIkit.modal.alert('La localité a été ajoutée avec succès', {
                                 labels: {
                                     Ok: 'Fermer'
@@ -912,17 +890,12 @@
                                 value: json.id
                             });
                             localites.addItem(json.id);
-                        }
-                        localiteName.parsley().validate();
+
                     },
                     error: function () {
-                        localiteName.parsley().validate();
                     }
                 });
-            }
-            else {
-                localiteName.parsley().validate();
-            }
+
         }
         function newRue() {
             var rueName = $('#rueName');

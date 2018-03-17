@@ -260,10 +260,10 @@
                                     <span class="uk-form-help-block">Representé par :</span>
                                 </div>
                                 <div class="uk-width-1-4">
-                                    {% if nouvelle.owners %}
+                                    {% if nouvelle.representants %}
                                         {% for representant in  nouvelle.representants %}
-                                            {{ representant.representant.denomination }}
-                                            {{ representant.representant.prenom }}
+                                            {{ representant.client.denomination }}
+                                            {{ representant.client.prenom }}
                                             <br>
                                         {% endfor %}
                                     {% else %}
@@ -271,9 +271,9 @@
                                     {% endif %}
                                 </div>
                                 <div class="uk-width-1-4">
-                                    {% if nouvelle.owners %}
+                                    {% if nouvelle.representants %}
                                         {% for representant in  nouvelle.representants %}
-                                            {{ representant.representant.tel }}
+                                            {{ representant.client.tel }}
                                             <br>
                                         {% endfor %}
                                     {% else %}
@@ -281,9 +281,9 @@
                                     {% endif %}
                                 </div>
                                 <div class="uk-width-1-4">
-                                    {% if nouvelle.owners %}
+                                    {% if nouvelle.representants %}
                                         {% for representant in  nouvelle.representants %}
-                                            {{ representant.representant.website }}
+                                            {{ representant.client.website }}
                                             <br>
                                         {% endfor %}
                                     {% else %}
@@ -294,14 +294,35 @@
                                     <span class="uk-form-help-block">Locataire :</span>
                                 </div>
                                 <div class="uk-width-1-4">
-
-                                    -
+                                    {% if nouvelle.locataires %}
+                                        {% for representant in  nouvelle.locataires %}
+                                            {{ representant.client.denomination }}
+                                            {{ representant.client.prenom }}
+                                            <br>
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                 </div>
                                 <div class="uk-width-1-4">
-                                    -
+                                    {% if nouvelle.locataires %}
+                                        {% for representant in  nouvelle.locataires %}
+                                            {{ representant.client.tel }}
+                                            <br>
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                 </div>
                                 <div class="uk-width-1-4">
-                                    -
+                                    {% if nouvelle.locataires %}
+                                        {% for representant in  nouvelle.locataires %}
+                                            {{ representant.client.website }}
+                                            <br>
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -349,7 +370,7 @@
                     </div>
                 </div>
             </div>
-            <ul class="uk-tab" data-uk-tab="{connect:'#tabs'}" id="tabs_1">
+            <ul class="uk-tab" data-uk-tab="{connect:'#tabs', swiping: false}" id="tabs_1">
                 <li class="uk-active"><a href="#">Général</a></li>
                 <li><a href="#">Détails</a></li>
                 <li><a href="#">Photos & Papiers</a></li>
@@ -648,14 +669,14 @@
                         </div>
                         <div class="md-card-content large-padding">
                             <div class="uk-grid">
-                                <div class="uk-width-1-4">
+                                {#<div class="uk-width-1-4">#}
 
-                                    En qualité de :
-                                </div>
-                                <div class="uk-width-3-4">
+                                {#En qualité de :#}
+                                {#</div>#}
+                                {#<div class="uk-width-3-4">#}
 
-                                    {{ form_widget(form.representants) }}
-                                </div>
+                                {#{{ form_widget(form.representants) }}#}
+                                {#</div>#}
 
                             </div>
 
@@ -665,7 +686,7 @@
                                     Propriétaire <a id="addOwner"><i class="material-icons md-24">&#xE146;</i></a>
                                     :
                                 </div>
-                                <div class="uk-width-3-4">
+                                <div style="border-bottom:1px solid" class="uk-width-3-4">
                                     <div class="md-card-content large-padding">
                                         {% if nouvelle.id == 0 or form.owners|length ==0 %}
                                             {{ form_widget(form.owners) }}
@@ -678,11 +699,12 @@
                                                         <div class="uk-form-row">
                                                             <div class="parsley-row">
                                                                 {{ form_label(owner.client,   "Propriétaire"  ) }}
-                                                                {{ form_widget(owner.client) }}
+                                                                {{ form_widget(owner.client , {'attr' : {'class' : 'select'}}) }}
                                                                 <span>{{ form_errors(owner.client) }}</span>
                                                             </div>
                                                         </div>
                                                         <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
                                                             <i class="material-icons md-24">&#xE872;</i>
                                                         </a>
                                                     </div>
@@ -693,46 +715,30 @@
                                     </div>
                                 </div>
 
-                            </div>
-
-                            <div id="procurations_div" class="uk-grid">
                                 <div class="uk-width-1-4">
-                                    Procurations <a id="addProcuration"><i class="material-icons md-24">&#xE146;</i></a>
 
+                                    Représenté par <a id="addRepresentant"><i class="material-icons md-24">&#xE146;</i></a>
+                                    :
                                 </div>
-                                <div class="uk-width-3-4">
+                                <div style="border-bottom:1px solid"  class="uk-width-2-4">
                                     <div class="md-card-content large-padding">
-                                        {% if nouvelle.id == 0 or form.procurations|length ==0 %}
-                                            {{ form_widget(form.procurations) }}
+                                        {% if nouvelle.id == 0 or form.representants|length ==0 %}
+                                            {{ form_widget(form.representants) }}
                                         {% else %}
-                                            <div id="{{ form.procurations.vars.id }}" class="uk-grid"
+                                            <div id="{{ form.representants.vars.id }}" class="uk-grid"
                                                  data-uk-grid-margin
-                                                 data-prototype="{{ form_widget(form.procurations.vars.prototype)|e('html_attr') }}">
-                                                {% for procuration in form.procurations %}
-                                                    <div class="uk-width-medium-1-4 blockSection">
+                                                 data-prototype="{{ form_widget(form.representants.vars.prototype)|e('html_attr') }}">
+                                                {% for rep in form.representants %}
+                                                    <div class="uk-width-medium-2-4 blockSection">
                                                         <div class="uk-form-row">
                                                             <div class="parsley-row">
-                                                                {{ form_label(procuration.dateProcuration,   "Date procuration"  ) }}
-                                                                {{ form_widget(procuration.dateProcuration) }}
-                                                                <span>{{ form_errors(procuration.dateProcuration) }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="uk-form-row">
-                                                            <div class="parsley-row">
-                                                                {{ form_label(procuration.lieu,   "Lieu"  ) }}
-                                                                {{ form_widget(procuration.lieu) }}
-                                                                <span> {{ form_errors(procuration.lieu) }}</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="uk-form-row">
-                                                            <div class="parsley-row">
-                                                                {{ form_label(procuration.representant,   "Donne procuration à"  ) }}
-                                                                {{ form_widget(procuration.representant) }}
-                                                                <span>{{ form_errors(procuration.representant) }}</span>
+                                                                {{ form_label(rep.client,   "Propriétaire"  ) }}
+                                                                {{ form_widget(rep.client , {'attr' : {'class' : 'select'}}) }}
+                                                                <span>{{ form_errors(rep.client) }}</span>
                                                             </div>
                                                         </div>
                                                         <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
                                                             <i class="material-icons md-24">&#xE872;</i>
                                                         </a>
                                                     </div>
@@ -740,26 +746,123 @@
                                             </div>
                                         {% endif %}
 
+                                    </div>
+                                </div>
+                                <div class="uk-width-1-4">
+
+                                    <div class="uk-input-group" style="width:100%;">
+                                        {#<span class="uk-input-group-addon">#}
+                                        {##}
+                                        {#</span>#}
+                                        <span class="uk-form-help-block">Comme</span>
+                                        {{ form_widget(form.representantscomme) }}
+                                        <span> {{ form_errors(form.representantscomme) }} </span>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="uk-width-1-4">
+
+                                    Locataires <a id="addLocataire"><i class="material-icons md-24">&#xE146;</i></a>
+                                    :
+                                </div>
+                                <div  style="border-bottom:1px solid" class="uk-width-3-4">
+                                    <div class="md-card-content large-padding">
+                                        {% if nouvelle.id == 0 or form.locataires|length ==0 %}
+                                            {{ form_widget(form.locataires) }}
+                                        {% else %}
+                                            <div id="{{ form.locataires.vars.id }}" class="uk-grid"
+                                                 data-uk-grid-margin
+                                                 data-prototype="{{ form_widget(form.locataires.vars.prototype)|e('html_attr') }}">
+                                                {% for loc in form.locataires %}
+                                                    <div class="uk-width-medium-2-4 blockSection">
+                                                        <div class="uk-form-row">
+                                                            <div class="parsley-row">
+                                                                {{ form_label(loc.client,   "Propriétaire"  ) }}
+                                                                {{ form_widget(loc.client , {'attr' : {'class' : 'select'}}) }}
+                                                                <span>{{ form_errors(loc.client) }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <a class="btn-close">
+                                                            <i class="material-icons md-24">account_circle</i>
+                                                            <i class="material-icons md-24">&#xE872;</i>
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
 
                                     </div>
                                 </div>
-                            </div>
-                            <div id="societe_div" class="uk-grid">
-                                <div class="uk-width-1-4">Representant :</div>
-                                <div class="uk-width-3-4">
-                                    <div class="uk-input-group">
-                                                   <span class="uk-input-group-addon">
-                                        <label>Poste</label></span>
-                                        {{ form_widget(form.societePoste) }}
-                                    </div>
-                                    <div class="uk-input-group">
-                                                   <span class="uk-input-group-addon">
-                                        <label>Nom et prénom</label></span>
-                                        {{ form_widget(form.representantNom) }}
-                                    </div>
-                                </div>
 
                             </div>
+
+                            {#<div id="procurations_div" class="uk-grid">#}
+                            {#<div class="uk-width-1-4">#}
+                            {#Procurations <a id="addProcuration"><i class="material-icons md-24">&#xE146;</i></a>#}
+
+                            {#</div>#}
+                            {#<div class="uk-width-3-4">#}
+                            {#<div class="md-card-content large-padding">#}
+                            {#{% if nouvelle.id == 0 or form.procurations|length ==0 %}#}
+                            {#{{ form_widget(form.procurations) }}#}
+                            {#{% else %}#}
+                            {#<div id="{{ form.procurations.vars.id }}" class="uk-grid"#}
+                            {#data-uk-grid-margin#}
+                            {#data-prototype="{{ form_widget(form.procurations.vars.prototype)|e('html_attr') }}">#}
+                            {#{% for procuration in form.procurations %}#}
+                            {#<div class="uk-width-medium-1-4 blockSection">#}
+                            {#<div class="uk-form-row">#}
+                            {#<div class="parsley-row">#}
+                            {#{{ form_label(procuration.dateProcuration,   "Date procuration"  ) }}#}
+                            {#{{ form_widget(procuration.dateProcuration) }}#}
+                            {#<span>{{ form_errors(procuration.dateProcuration) }}</span>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="uk-form-row">#}
+                            {#<div class="parsley-row">#}
+                            {#{{ form_label(procuration.lieu,   "Lieu"  ) }}#}
+                            {#{{ form_widget(procuration.lieu) }}#}
+                            {#<span> {{ form_errors(procuration.lieu) }}</span>#}
+                            {#</div>#}
+                            {#</div>#}
+
+                            {#<div class="uk-form-row">#}
+                            {#<div class="parsley-row">#}
+                            {#{{ form_label(procuration.representant,   "Donne procuration à"  ) }}#}
+                            {#{{ form_widget(procuration.representant) }}#}
+                            {#<span>{{ form_errors(procuration.representant) }}</span>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<a class="btn-close">#}
+                            {#<i class="material-icons md-24">&#xE872;</i>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#{% endfor %}#}
+                            {#</div>#}
+                            {#{% endif %}#}
+
+
+                            {#</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div id="societe_div" class="uk-grid">#}
+                            {#<div class="uk-width-1-4">Representant :</div>#}
+                            {#<div class="uk-width-3-4">#}
+                            {#<div class="uk-input-group">#}
+                            {#<span class="uk-input-group-addon">#}
+                            {#<label>Poste</label></span>#}
+                            {#{{ form_widget(form.societePoste) }}#}
+                            {#</div>#}
+                            {#<div class="uk-input-group">#}
+                            {#<span class="uk-input-group-addon">#}
+                            {#<label>Nom et prénom</label></span>#}
+                            {#{{ form_widget(form.representantNom) }}#}
+                            {#</div>#}
+                            {#</div>#}
+
+                            {#</div>#}
 
                         </div>
 
@@ -3400,7 +3503,7 @@
     $(function () {
         var ownersDOM = $('#' + '{{ form.owners.vars.id }}');
         var representantsDOM = $('#' + '{{ form.representants.vars.id }}');
-        var procurationsDOM = $('#' + '{{ form.procurations.vars.id }}');
+        var locatairesDOM = $('#' + '{{ form.locataires.vars.id }}');
         var picturesDOM = $('#' + '{{ form.pictures.vars.id }}');
         var papersDOM = $('#' + '{{ form.papers.vars.id }}');
         var buildPrototypes = {
@@ -3408,11 +3511,14 @@
             prototypeOwners: ownersDOM.attr('data-prototype'),
             owners: ownersDOM,
             counterRepresentants: representantsDOM.children().length,
+            prototypeLocataires: locatairesDOM.attr('data-prototype'),
+            locataires: locatairesDOM,
             prototypeRepresentants: representantsDOM.attr('data-prototype'),
             representants: representantsDOM,
-            counterProcurations: procurationsDOM.children().length,
-            prototypeProcurations: procurationsDOM.attr('data-prototype'),
-            procurations: procurationsDOM,
+            counterLocataires: locatairesDOM.children().length,
+//            counterProcurations: procurationsDOM.children().length,
+//            prototypeProcurations: procurationsDOM.attr('data-prototype'),
+//            procurations: procurationsDOM,
             counterPictures: picturesDOM.children().length,
             prototypePictures: picturesDOM.attr('data-prototype'),
             pictures: picturesDOM,
@@ -3423,8 +3529,12 @@
                 $('#addOwner').on('click', function () {
                     buildPrototypes.buildOwnerSection();
                 });
+
                 $('#addRepresentant').on('click', function () {
                     buildPrototypes.buildRepresentantSection();
+                });
+                $('#addLocataire').on('click', function () {
+                    buildPrototypes.buildLocataireSection();
                 });
                 $('#addProcuration').on('click', function () {
                     buildPrototypes.buildProcurationSection();
@@ -3446,33 +3556,106 @@
                 var block = temp.replace(/__name__/g, this.counterOwners);
                 this.owners.append(block);
                 this.owners.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    suggest: true,
+                    autoBind: true,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
                 this.reInit();
             },
             buildRepresentantSection: function () {
+//                alert('here')
                 this.counterRepresentants++;
-                var prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
+                prototypeRepresentantsDOM = $('<div/>').html(this.prototypeRepresentants).contents();
                 var temp = SFCollectionAnalyzer.buildTemplate(prototypeRepresentantsDOM, templateRepresentant());
                 var block = temp.replace(/__name__/g, this.counterRepresentants);
                 this.representants.append(block);
                 this.representants.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    suggest: true,
+                    autoBind: true,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
                 this.reInit();
             },
-            buildProcurationSection: function () {
-                this.counterProcurations++;
-                var prototypeProcurationsDOM = $('<div/>').html(this.prototypeProcurations).contents();
-                var temp = SFCollectionAnalyzer.buildTemplate(prototypeProcurationsDOM, templateProcuration());
-                var block = temp.replace(/__name__/g, this.counterProcurations);
-                this.procurations.append(block);
-                this.procurations.find('select').kendoComboBox({
+            buildLocataireSection: function () {
+                this.counterLocataires++;
+                prototypeLocatairesDOM = $('<div/>').html(this.prototypeLocataires).contents();
+                var temp = SFCollectionAnalyzer.buildTemplate(prototypeLocatairesDOM, templateLocataire());
+                var block = temp.replace(/__name__/g, this.counterLocataires);
+                this.locataires.append(block);
+                this.locataires.find('select').kendoComboBox({
+//                    placeholder: "Select product",
+                    dataTextField: "text",
+                    dataValueField: "value",
                     filter: "contains",
-                    suggest: true
+                    suggest: true,
+                    autoBind: true,
+                    minLength: 1,
+                    dataSource: {
+                        type: "odata",
+                        serverFiltering: true,
+                        transport: {
+                            read: {
+                                url: "{{ path('client_list') }}"
+                            }
+                        }
+                    }
                 });
+                {#this.owners.find('select').kendoComboBox({#}
+                {#dataTextField: "text",#}
+                {#dataValueField: "value",#}
+                {#dataSource: {#}
+                {#url: "{{ path('client_list') }}",#}
+                {#},#}
+
+                {#filter: "contains",#}
+                {#suggest: true#}
+                {#});#}
                 this.reInit();
             },
             buildPictureSection: function () {
@@ -3902,35 +4085,54 @@
             '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
             '</div>';
     }
-    function templateRepresentant() {
-        return '<div class="uk-width-medium-1-4 bloc">' +
-            '<div class="uk-form-row">' +
-            '<div class="parsley-row">' +
-            '<label>Propriétaire</label>' +
-            '#client#' +
-            '</div>' +
-            '</div>' +
-            '<div class="uk-form-row">' +
-            '<div class="parsley-row">' +
-            '<label>Representant</label>' +
-            '#representant#' +
-            '</div>' +
-            '</div>' +
-            '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
-            '</div>'
-            ;
-    }
+
     function templateOwner() {
         return '<div class="uk-width-medium-1-2 bloc">' +
-            '<div class="uk-form-row">' +
-            '<div class="parsley-row">' +
-            '<label>Propriétaire</label>' +
-            '#client#' +
-            '</div>' +
-            '</div>' +
-            '<a class="btn-close"><i class="material-icons md-24">&#xE872;</i></a>' +
-            '</div>'
-            ;
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Propriétaire</label>' +
+                '#client#' +
+                '</div>' +
+                '</div>' +
+                '<a  id="addDemandeur" onclick="addDemandeur()"'+
+                '        title="Ajouter un demandeur"'+
+                '  ><i class="material-icons md-24">account_circle</i>' +
+                '</a><a onclick="deleteClient(this)"' +
+                '<i class="material-icons md-24">&#xE872;</i></a>' +
+                '</div>'
+                ;
+    }
+    function templateRepresentant() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Représentant</label>' +
+                '#client#' +
+                '</div>' +
+                '</div>' +
+                '<a  id="addDemandeur" onclick="addDemandeur()"'+
+                '        title="Ajouter un demandeur"'+
+                '  ><i class="material-icons md-24">account_circle</i>' +
+                '</a><a onclick="deleteClient(this)"' +
+                '<i class="material-icons md-24">&#xE872;</i></a>' +
+                '</div>'
+                ;
+    }
+    function templateLocataire() {
+        return '<div class="uk-width-medium-1-2 bloc">' +
+                '<div class="uk-form-row">' +
+                '<div class="parsley-row">' +
+                '<label>Locataire</label>' +
+                '#client#' +
+                '</div>' +
+                '</div>' +
+                '<a  id="addDemandeur" onclick="addDemandeur()"'+
+                '        title="Ajouter un demandeur"'+
+                '  ><i class="material-icons md-24">account_circle</i>' +
+                '</a><a onclick="deleteClient(this)"' +
+                '<i class="material-icons md-24">&#xE872;</i></a>' +
+                '</div>'
+                ;
     }
     function templatePicture(counter) {
         return '<div class="uk-width-medium-4-4 bloc" style="margin-top: 25px">' +
@@ -4114,5 +4316,13 @@
 
         }
 
+    }
+    function addDemandeur() {
+        var win = window.open('{{ path('client_new') }}',' Ajouter un client - Green Duck immobilier');
+        win.focus();
+    }
+    function deleteClient(elem)
+    {
+        $(elem).closest('div').remove();
     }
 </script>

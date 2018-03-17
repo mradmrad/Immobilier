@@ -105,14 +105,14 @@ class AcquisitionController extends Controller
         $form = $this->createForm(AcquisitionType::class, $acquisition);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $acquisition->getBien()->setCreatedBy($this->getUser()->getPersonnel());
             $acquisition->getBien()->setType(Bien::ACQUISITION);
             $em = $this->getDoctrine()->getManager();
             $em->persist($acquisition);
             $em->flush();
 
-            return $this->redirectToRoute('acquisition_show', array('id' => $acquisition->getId()));
+            return $this->redirectToRoute('acquisition_index');
         }
         $gouvernorats = $em->getRepository('GeoTunisieBundle:Gouvernorat')->findAll();
         return $this->render('@Bien/Acquisition/new.html.twig', array(
@@ -148,19 +148,21 @@ class AcquisitionController extends Controller
      */
     public function editAction(Request $request, Acquisition $acquisition)
     {
+        $em = $this->getDoctrine()->getManager();
         $editForm = $this->createForm(AcquisitionType::class, $acquisition);
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($editForm->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($acquisition);
             $em->flush();
-            return $this->redirectToRoute('acquisition_show', array('id' => $acquisition->getId()));
+            return $this->redirectToRoute('acquisition_index');
         }
-
+        $gouvernorats = $em->getRepository('GeoTunisieBundle:Gouvernorat')->findAll();
         return $this->render('@Bien/Acquisition/edit.html.twig', array(
             'acquisition' => $acquisition,
             'form' => $editForm->createView(),
+            'gouvernorats' => $gouvernorats,
         ));
     }
 

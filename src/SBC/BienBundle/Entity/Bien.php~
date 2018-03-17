@@ -186,8 +186,6 @@ class Bien implements \JsonSerializable
     private $exterieur;
 
 
-
-
     /**
      * @var bool
      *
@@ -223,9 +221,9 @@ class Bien implements \JsonSerializable
     private $agency;
 
     /**
- * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\TypeBien")
- * @ORM\JoinColumn(nullable=true)
- */
+     * @ORM\ManyToOne(targetEntity="SBC\BienBundle\Entity\TypeBien")
+     * @ORM\JoinColumn(nullable=true)
+     */
     private $typeBien;
 
     /**
@@ -285,14 +283,14 @@ class Bien implements \JsonSerializable
 
     /**
      * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="representant_id", referencedColumnName="id")
      * @Assert\Valid()
      */
     private $representants;
 
     /**
      * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\ProprietaireSelf", mappedBy="bien", cascade={"persist", "merge", "remove"})
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="locataire_id", referencedColumnName="id")
      * @Assert\Valid()
      */
     private $locataires;
@@ -551,14 +549,16 @@ class Bien implements \JsonSerializable
     private $margeNegociation;
 
 
-
-
-
     /**
      * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Contrat", mappedBy="bien", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(name="contrat_id", referencedColumnName="id")
      */
     private $contrats;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SBC\BienBundle\Entity\Evaluation", mappedBy="bien", cascade={"persist", "merge", "remove"})
+     */
+    private $evaluation;
 
     /**
      * @ORM\ManyToMany(targetEntity="SBC\BienBundle\Entity\Commodite", cascade={"persist"})
@@ -596,6 +596,7 @@ class Bien implements \JsonSerializable
         $this->owners = new ArrayCollection();
         $this->procurations = new ArrayCollection();
         $this->representants = new ArrayCollection();
+        $this->evaluation = new ArrayCollection();
 
         $this->coveredArea = 0;
         $this->totalArea = 0;
@@ -1445,7 +1446,7 @@ class Bien implements \JsonSerializable
 
     public function addProcuration(Procuration $procuration)
     {
-
+        $procuration->setBien($this);
         $procuration->setBien($this);
         $this->procurations[] = $procuration;
 
@@ -1468,8 +1469,6 @@ class Bien implements \JsonSerializable
     {
         return $this->procurations;
     }
-
-    
 
 
     /**
@@ -2274,7 +2273,6 @@ class Bien implements \JsonSerializable
         return $this->commision;
     }
 
-    
 
     /**
      * Add paper
@@ -2358,29 +2356,7 @@ class Bien implements \JsonSerializable
         return $this->titre;
     }
 
-    /**
-     * Set representants
-     *
-     * @param string $representants
-     *
-     * @return Bien
-     */
-    public function setRepresentants($representants)
-    {
-        $this->representants = $representants;
-
-        return $this;
-    }
-
-    /**
-     * Get representants
-     *
-     * @return string
-     */
-    public function getRepresentants()
-    {
-        return $this->representants;
-    }
+   
 
     /**
      * Set societePoste
@@ -2527,7 +2503,6 @@ class Bien implements \JsonSerializable
     }
 
 
-
     /**
      * Set piece
      *
@@ -2598,5 +2573,123 @@ class Bien implements \JsonSerializable
     public function getLoisir()
     {
         return $this->loisir;
+    }
+
+    /**
+     * Set representantscomme
+     *
+     * @param string $representantscomme
+     *
+     * @return Bien
+     */
+    public function setRepresentantscomme($representantscomme)
+    {
+        $this->representantscomme = $representantscomme;
+
+        return $this;
+    }
+
+    /**
+     * Get representantscomme
+     *
+     * @return string
+     */
+    public function getRepresentantscomme()
+    {
+        return $this->representantscomme;
+    }
+
+    /**
+     * Add representant
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $representant
+     *
+     * @return Bien
+     */
+    public function addRepresentant(\SBC\BienBundle\Entity\ProprietaireSelf $representant)
+    {
+        $representant->setBien($this);
+        $this->representants[] = $representant;
+
+        return $this;
+    }
+
+    /**
+     * Remove representant
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $representant
+     */
+    public function removeRepresentant(\SBC\BienBundle\Entity\ProprietaireSelf $representant)
+    {
+        $this->representants->removeElement($representant);
+    }
+
+    /**
+     * Add locataire
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $locataire
+     *
+     * @return Bien
+     */
+    public function addLocataire(\SBC\BienBundle\Entity\ProprietaireSelf $locataire)
+    {
+        $this->locataires[] = $locataire;
+
+        return $this;
+    }
+
+    /**
+     * Remove locataire
+     *
+     * @param \SBC\BienBundle\Entity\ProprietaireSelf $locataire
+     */
+    public function removeLocataire(\SBC\BienBundle\Entity\ProprietaireSelf $locataire)
+    {
+        $this->locataires->removeElement($locataire);
+    }
+
+    /**
+     * Get locataires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLocataires()
+    {
+        return $this->locataires;
+    }
+
+    /**
+     * Add evaluation
+     *
+     * @param \SBC\BienBundle\Entity\Evaluation $evaluation
+     *
+     * @return Bien
+     */
+    public function addEvaluation(\SBC\BienBundle\Entity\Evaluation $evaluation)
+    {
+        $evaluation->setBien($this);
+        $this->evaluation[] = $evaluation;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluation
+     *
+     * @param \SBC\BienBundle\Entity\Evaluation $evaluation
+     */
+    public function removeEvaluation(\SBC\BienBundle\Entity\Evaluation $evaluation)
+    {
+        $this->evaluation->removeElement($evaluation);
+    }
+
+    /**
+     * Get evaluation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvaluation()
+    {
+        return $this->evaluation;
     }
 }

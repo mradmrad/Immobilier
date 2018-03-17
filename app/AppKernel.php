@@ -16,7 +16,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-
             new Vich\UploaderBundle\VichUploaderBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new FOS\UserBundle\FOSUserBundle(),
@@ -25,7 +24,6 @@ class AppKernel extends Kernel
             new SBC\UserBundle\UserBundle(),
             new SBC\PersonnelBundle\PersonnelBundle(),
             new SBC\GeoTunisieBundle\GeoTunisieBundle(),
-
             new SBC\AddressBundle\AddressBundle(),
             new SBC\BienBundle\BienBundle(),
             new SBC\TiersBundle\TiersBundle(),

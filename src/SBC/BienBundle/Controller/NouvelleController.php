@@ -72,10 +72,10 @@ class NouvelleController extends Controller
         $form = $this->createForm(NouvelleType::class, $nouvelle);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $em->persist($nouvelle);
             $em->flush();
-            return $this->redirectToRoute('nouvelle_show', array('id' => $nouvelle->getId()));
+            return $this->redirectToRoute('nouvelle_index');
         }
 
         $gouvernorats = $em->getRepository('GeoTunisieBundle:Gouvernorat')->findAll();
@@ -138,7 +138,7 @@ class NouvelleController extends Controller
         $editForm = $this->createForm(NouvelleType::class, $nouvelle);
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($editForm->isSubmitted()) {
             foreach ($editForm->get('pictures')->getData() as $picture) {
                 if ($picture->getDescription() == null) {
                     $nouvelle->removePicture($picture);
@@ -150,7 +150,7 @@ class NouvelleController extends Controller
 
             $em->persist($nouvelle);
             $em->flush();
-            return $this->redirectToRoute('nouvelle_show', array('id' => $nouvelle->getId()));
+            return $this->redirectToRoute('nouvelle_index');
         }
 
         $gouvernorats = $em->getRepository('GeoTunisieBundle:Gouvernorat')->findAll();
